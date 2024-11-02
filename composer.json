@@ -1,0 +1,19 @@
+{
+    "name": "mati9/proyecto_stylo-reserva",
+    "description": "Proyecto de Título Inacap - StyloReserva",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "MVC\\": "./",
+            "Controllers\\": "./controllers",
+            "Model\\": "./models"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matias - Yustin - Nicola",
+            "email": "mgutierrezz.dev@gmail.com"
+        }
+    ],
+    "require": {}
+}

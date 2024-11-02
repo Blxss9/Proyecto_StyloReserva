@@ -38,10 +38,17 @@ class Router
         }
 
 
-        if ($fn) {
-            call_user_func($fn, $this);
+        // if ($fn) {
+        //     call_user_func($fn, $this);
+        // } else {
+        //     $this->render('404'); // Cargar una vista personalizada para errores 404
+        // }
+
+        if ( $fn ) {
+            // Call user fn va a llamar una función cuando no sabemos cual sera
+            call_user_func($fn, $this); // This es para pasar argumentos
         } else {
-            $this->render('404'); // Cargar una vista personalizada para errores 404
+            echo "Página no encontrada o ruta no válida";
         }
     }
 

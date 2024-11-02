@@ -1,0 +1,25 @@
+{
+  "name": "proyecto_styloreserva",
+  "version": "1.0.0",
+  "description": "Aplicación Web StyloReserva - Proyecto de Título",
+  "author": "Matías / Yustin / Nicola",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "gulp"
+  },
+  "keywords": [
+    "barbería",
+    "reservación",
+    "salones de belleza",
+    "peluquería"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "gulp": "^5.0.0",
+    "gulp-postcss": "^10.0.0",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14"
+  }
+}

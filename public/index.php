@@ -12,6 +12,7 @@ use MVC\Router;
 // Crea una nueva instancia del enrutador
 $router = new Router();
 
+// Ruta Landing Page
 $router->get('/', [LandingController::class, 'index']);
 
 

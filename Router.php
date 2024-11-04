@@ -23,9 +23,7 @@ class Router
         // Proteger Rutas...
         session_start();
 
-        // Arreglo de rutas protegidas...
-        // $rutas_protegidas = ['/admin', '/propiedades/crear', '/propiedades/actualizar', '/propiedades/eliminar', '/vendedores/crear', '/vendedores/actualizar', '/vendedores/eliminar'];
-
+    
         // $auth = $_SESSION['login'] ?? null;
 
         $currentUrl = $_SERVER['PATH_INFO'] ?? '/';
@@ -38,18 +36,18 @@ class Router
         }
 
 
-        // if ($fn) {
-        //     call_user_func($fn, $this);
-        // } else {
-        //     $this->render('404'); // Cargar una vista personalizada para errores 404
-        // }
-
-        if ( $fn ) {
-            // Call user fn va a llamar una función cuando no sabemos cual sera
-            call_user_func($fn, $this); // This es para pasar argumentos
+        if ($fn) {
+            call_user_func($fn, $this);
         } else {
-            echo "Página no encontrada o ruta no válida";
+            $this->render('error404'); // Cargar una vista personalizada para errores 404
         }
+
+        // if ( $fn ) {
+        //     // Call user fn va a llamar una función cuando no sabemos cual sera
+        //     call_user_func($fn, $this); // This es para pasar argumentos
+        // } else {
+        //     echo "Página no encontrada o ruta no válida";
+        // }
     }
 
     public function render($view, $datos = [])

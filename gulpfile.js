@@ -2,62 +2,41 @@ import path from 'path';
 import fs from 'fs';
 import { glob } from 'glob';
 import { src, dest, watch, series } from 'gulp';
-import postcss from 'gulp-postcss';
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
+import * as dartSass from 'sass';
+import gulpSass from 'gulp-sass';
 import terser from 'gulp-terser';
 import sharp from 'sharp';
-import { deleteSync } from 'del';  // Importa deleteSync en lugar de del
+import { deleteAsync as del } from 'del';
 
-// Definir rutas de archivos
+const sass = gulpSass(dartSass);
+
 const paths = {
-    css: 'src/css/tailwind.css',  // Archivo fuente de Tailwind CSS
-    js: 'src/js/**/*.js',          // Todos los archivos JS en src/js
-    images: 'src/img/**/*.{png,jpg}'  // Todas las imágenes en src/img
+    scss: 'src/scss/**/*.scss',
+    js: 'src/js/**/*.js'
 };
 
-// Tarea para limpiar las carpetas de CSS, JS, e imágenes
-export async function clean() {
-    deleteSync([
-        'public/build/css/**', 
-        'public/build/js/**', 
-        'public/build/img/**', 
-        '!public/build' // Mantiene la carpeta build
-    ]);
-}
-
-
-// Tarea CSS para compilar Tailwind
+// Tarea para compilar SASS a CSS
 export function css(done) {
-    src(paths.css, { sourcemaps: true })
-        .pipe(postcss([tailwindcss, autoprefixer])) // Compila Tailwind con PostCSS y Autoprefixer
+    src(paths.scss, { sourcemaps: true })
+        .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
         .pipe(dest('./public/build/css', { sourcemaps: '.' }));
     done();
 }
 
-// Tarea JS para minificar
+// Tarea para minificar JavaScript
 export function js(done) {
     src(paths.js)
-        .pipe(terser())  // Minifica JavaScript
+        .pipe(terser())
         .pipe(dest('./public/build/js'));
     done();
 }
 
-// Tarea de procesamiento de imágenes con Sharp
-export async function imagenes(done) {
-    const srcDir = './src/img';
-    const buildDir = './public/build/img';
-    const images = await glob('./src/img/**/*');
-
-    images.forEach(file => {
-        const relativePath = path.relative(srcDir, path.dirname(file));
-        const outputSubDir = path.join(buildDir, relativePath);
-        procesarImagenes(file, outputSubDir);
-    });
-    done();
+// Tarea para limpiar la carpeta de imágenes en build
+function cleanImages() {
+    return del(['./public/build/img/**', '!./public/build/img']);
 }
 
-// Función para procesar imágenes individuales
+// Función para procesar y convertir imágenes
 function procesarImagenes(file, outputSubDir) {
     if (!fs.existsSync(outputSubDir)) {
         fs.mkdirSync(outputSubDir, { recursive: true });
@@ -66,9 +45,11 @@ function procesarImagenes(file, outputSubDir) {
     const extName = path.extname(file);
 
     if (extName.toLowerCase() === '.svg') {
+        // Copia el archivo SVG sin cambios
         const outputFile = path.join(outputSubDir, `${baseName}${extName}`);
         fs.copyFileSync(file, outputFile);
     } else {
+        // Procesa imágenes en otros formatos y genera versiones .jpeg, .webp y .avif
         const outputFile = path.join(outputSubDir, `${baseName}${extName}`);
         const outputFileWebp = path.join(outputSubDir, `${baseName}.webp`);
         const outputFileAvif = path.join(outputSubDir, `${baseName}.avif`);
@@ -80,12 +61,26 @@ function procesarImagenes(file, outputSubDir) {
     }
 }
 
-// Tarea de desarrollo para observar cambios
+// Tarea para procesar imágenes después de limpiar la carpeta de destino
+export const processImages = series(cleanImages, async function imagenes(done) {
+    const srcDir = './src/img';
+    const buildDir = './public/build/img';
+    const images = await glob('./src/img/**/*');
+
+    images.forEach(file => {
+        const relativePath = path.relative(srcDir, path.dirname(file));
+        const outputSubDir = path.join(buildDir, relativePath);
+        procesarImagenes(file, outputSubDir);
+    });
+    done();
+});
+
+// Tarea para observar cambios
 export function dev() {
-    watch(paths.css, series(clean, css));               // Limpia y compila CSS
-    watch(paths.js, series(clean, js));                 // Limpia y minifica JS
-    watch(paths.images, series(clean, imagenes));       // Limpia y procesa imágenes
+    watch(paths.scss, css);
+    watch(paths.js, js);
+    watch('src/img/**/*.{png,jpg}', processImages);
 }
 
 // Tarea predeterminada
-export default series(clean, js, css, imagenes, dev);
+export default series(js, css, processImages, dev);

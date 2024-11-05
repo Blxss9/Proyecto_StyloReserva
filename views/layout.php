@@ -9,7 +9,7 @@ $esError404 = $esError404 ?? false;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StyloReserva</title>
+    <title><?php echo $titulo ?? 'StyloReserva'; ?></title> <!-- Título dinámico o valor predeterminado --></title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;700;900&display=swap" rel="stylesheet">
     <!-- <link href="/build/css/tailwind.css" rel="stylesheet"> -->
      
@@ -25,7 +25,6 @@ $esError404 = $esError404 ?? false;
 
     <body>
         <?php echo $contenido; ?>
-        <script src="/js/flowbite.min.js"></script>
+        <script src="/build/js/flowbite.min.js"></script>
     </body>
-    
 </html>

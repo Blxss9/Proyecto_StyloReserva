@@ -39,8 +39,14 @@ class Router
         if ($fn) {
             call_user_func($fn, $this);
         } else {
+            $titulo = "Página No Encontrada"; // Título para la página de error 404
             $esError404 = true; // Define la variable para la vista error404
-            $this->render('error404', ['esError404' => $esError404]); // Cargar una vista personalizada para errores 404
+
+            // Pasa ambas variables al render de error404
+            $this->render('error404', [
+                'titulo' => $titulo,
+                'esError404' => $esError404
+            ]);
         }
 
         // if ( $fn ) {

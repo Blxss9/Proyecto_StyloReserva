@@ -15,7 +15,7 @@
       
       <!-- Error content -->
       <div class="space-y-6 max-w-lg text-center md:text-left">
-        <h2 class="text-amber-500 text-3xl font-medium">404</h2>
+        <h2 class="text-amber-500 text-2xl font-medium">Error 404</h2>
         <h1 class="text-6xl font-bold text-white">Página no encontrada ⚠️</h1>
         <p class="text-xl text-white font-medium">
           Lo sentimos, no pudimos encontrar la página que estás buscando.
@@ -27,7 +27,7 @@
     </div>
 
     <!-- Right image -->
-    <div class="hidden md:block w-1/2 bg-cover bg-center" style="background-image: url('https://barberiacapital.mx/cdn/shop/articles/Barberia_2018_Monterrey_003.jpg?v=1672800428&width=2048');">
+    <div class="hidden md:block w-1/2 bg-cover bg-center" style="background-image: url('/build/img/barberia1.jpg');">
       <div class="h-full bg-black bg-opacity-10"></div>
     </div>
   </div>

@@ -61,7 +61,7 @@ function versionWebp() {
     return src(paths.imagenes)
         .pipe(webp())
         .pipe(dest('public/build/img'))
-        .pipe(notify({ message: 'Imagen Completada' }));
+        .pipe(notify({ message: 'Imagen en formato WebP Completada' }));
 }
 
 // Función para vigilar cambios en archivos SCSS, JS e Imágenes

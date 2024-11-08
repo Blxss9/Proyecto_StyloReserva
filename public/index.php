@@ -15,6 +15,9 @@ $router = new Router();
 // Ruta Landing Page
 $router->get('/', [LandingController::class, 'index']);
 
+// Ruta Login
+$router->get('/login', [\Controllers\LoginController::class, 'index']);
+
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

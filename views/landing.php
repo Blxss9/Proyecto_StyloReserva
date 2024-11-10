@@ -1,4 +1,5 @@
 <body class="bg-gray-900">
+  
   <!-- Navbar -->
   <nav class="bg-black/40 fixed w-full z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -9,16 +10,16 @@
           <img src="/build/img/logo.svg" alt="logo_barberia" class="h-20">
           </a>
 
-          <span class="ml-2 text-white text-xl font-bold">Barbería Elite</span>
+          <span class="ml-2 text-white text-xl font-bold">Stylo Reserva</span>
         </div>
 
         <!-- Desktop Menu -->
         <div class="hidden md:block">
           <div class="m-2 flex items-center space-x-8 font-bold">
-            <a href="#" class="text-white hover:text-amber-500 transition-colors">Inicio</a>
+            <a href="/" class="text-white hover:text-amber-500 transition-colors">Inicio</a>
             <a href="#seccionServicios" class="text-white hover:text-amber-500 transition-colors">Servicios</a>
             <a href="#seccionNosotros" class="text-white hover:text-amber-500 transition-colors">Nosotros</a>
-            <a href="#" class="text-white hover:text-amber-500 transition-colors">Contacto</a>
+            <a href="#seccionContacto" class="text-white hover:text-amber-500 transition-colors">Contacto</a>
           </div>
         </div>
         
@@ -39,6 +40,8 @@
   </nav>
 
   <!-- Hero Section -->
+
+
   <div class="relative min-h-screen">
     <!-- Background Image with Overlay -->
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat object-cover" style="background-image: url('/build/img/barberia1.jpg');">
@@ -47,6 +50,36 @@
 
     <!-- Content -->
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12 min-h-screen flex items-center">
+      <!-- Botón de volver al inicio -->
+    <button id="backToTop" class="fixed bottom-5 right-5 bg-amber-500 text-white p-3 rounded-full shadow-lg hover:bg-amber-600 transition-opacity duration-300 opacity-0 z-50">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript para mostrar/ocultar y hacer scroll hacia arriba -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToTopButton = document.getElementById('backToTop');
+            // Mostrar el botón cuando se desplaza hacia abajo
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 200) {
+                    backToTopButton.classList.remove('opacity-0');
+                    backToTopButton.classList.add('opacity-100');
+                } else {
+                    backToTopButton.classList.remove('opacity-100');
+                    backToTopButton.classList.add('opacity-0');
+                }
+            });
+
+            // Scroll hacia arriba al hacer clic en el botón
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+
       <div class="w-full text-center mt-10 sm:text-left">
       <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 sm:mb-8">
             Estilo y <span class="text-amber-500">Elegancia</span>
@@ -56,10 +89,10 @@
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 mt-12 mb-8 sm:mb-12">
-          <button class="bg-amber-500 text-black px-6 sm:px-8 py-3 rounded-full font-semibold hover:bg-amber-400 transition-colors duration-300 flex items-center justify-center">
+          <a href="/login" class="bg-amber-500 text-black px-6 sm:px-8 py-3 rounded-full font-semibold hover:bg-amber-400 transition-colors duration-300 flex items-center justify-center">
             <i class="fa-solid fa-calendar-days mr-2"></i>
             Reservar Cita
-          </button>
+          <a/>
           <button id="openModal" class="border-2 border-amber-500 text-white px-6 sm:px-8 py-3 rounded-full font-semibold hover:bg-amber-500/10 transition-colors duration-300 flex items-center justify-center">
             <i class="fa-regular fa-clock mr-2" style="color: #ffffff;"></i>
             Ver Horarios
@@ -137,7 +170,7 @@
         <div class="relative overflow-hidden rounded-lg shadow-lg flex justify-center">
             <div class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory max-w-4xl" id="serviceSlider">
                 <!-- Tarjeta de servicio -->
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center">
+                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
                     <div class="text-center mb-4">
                         <i class="fa-solid fa-cut text-amber-500 text-4xl"></i>
                     </div>
@@ -145,28 +178,28 @@
                     <p class="text-gray-600 text-center">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                 </div>
                 <!-- Repite esta estructura para más servicios -->
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center">
+                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
                     <div class="text-center mb-4">
                         <i class="fa-solid fa-diamond text-amber-500 text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Coloración Capilar</h3>
                     <p class="text-gray-600 text-center">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                 </div>
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center">
+                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
                     <div class="text-center mb-4">
                         <i class="fa-solid fa-diamond text-amber-500 text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Degradados</h3>
                     <p class="text-gray-600 text-center">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                 </div>
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center">
+                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
                     <div class="text-center mb-4">
                         <i class="fa-solid fa-diamond text-amber-500 text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Corte barba</h3>
                     <p class="text-gray-600 text-center">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                 </div>
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center">
+                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
                     <div class="text-center mb-4">
                         <i class="fa-solid fa-scissors text-amber-500 text-4xl"></i>
                     </div>
@@ -196,53 +229,55 @@
 <!-- Script para flechas de navegación en bucle -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const slider = document.getElementById('serviceSlider');
-        const nextButton = document.getElementById('nextSlide');
-        const prevButton = document.getElementById('prevSlide');
+    const slider = document.getElementById('serviceSlider');
+    const serviceCards = document.querySelectorAll('.service-card');
+    const nextButton = document.getElementById('nextSlide');
+    const prevButton = document.getElementById('prevSlide');
+    let currentIndex = 0;
+    const cardWidth = serviceCards[0].offsetWidth + 16; // Ajuste por margen/padding
 
-        nextButton.addEventListener('click', () => {
-            if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth) {
-                slider.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                slider.scrollBy({
-                    left: slider.clientWidth,
-                    behavior: 'smooth'
-                });
-            }
+    // Función para mover el slider
+    function moveSlider(index) {
+        slider.scrollTo({
+            left: index * cardWidth,
+            behavior: 'smooth'
         });
+    }
 
-        prevButton.addEventListener('click', () => {
-            if (slider.scrollLeft === 0) {
-                slider.scrollTo({ left: slider.scrollWidth, behavior: 'smooth' });
-            } else {
-                slider.scrollBy({
-                    left: -slider.clientWidth,
-                    behavior: 'smooth'
-                });
-            }
-        });
-        
+    // Navegación con botones
+    nextButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % serviceCards.length;
+        moveSlider(currentIndex);
     });
+
+    prevButton.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + serviceCards.length) % serviceCards.length;
+        moveSlider(currentIndex);
+    });
+
+    // Animación automática
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % serviceCards.length;
+        moveSlider(currentIndex);
+    }, 3000); // Intervalo de 3 segundos para la animación automática
+});
+
 </script>
 
 
 
 <!-- Sección Nosotros -->
-<section id="seccionNosotros" class="py-24 bg-gray-100 w-full mt-10 rounded-lg shadow-lg opacity-0 transform translate-y-10 transition-opacity duration-1000 ease-in-out">
+<section id="seccionNosotros" class="py-24 bg-gray-100 w-full mt-12 rounded-lg shadow-lg">
     <div class="container mx-auto px-8 sm:px-10 lg:px-16">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-amber-500 mb-4">Sobre Nosotros</h2>
-            <p class="text-gray-600 text-lg">Conoce más sobre nuestra historia y experiencia en el arte de la barbería.</p>
-        </div>
-        <div class="flex flex-col lg:flex-row items-center justify-between lg:space-x-16">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
             <!-- Imagen con overlay de video -->
-            <div class="relative mb-8 lg:mb-0 w-full lg:w-1/2">
-                <img src="/build/img/barberia2.jpg" alt="Barbería" class="rounded-lg shadow-lg w-full">
+            <div class="relative w-full h-auto flex justify-center lg:justify-start">
+                <img src="/build/img/barberia2.jpg" alt="Barbería" class="rounded-lg shadow-lg w-3/4 lg:w-full">
             </div>
             <!-- Texto -->
-            <div class="max-w-lg w-full lg:w-1/2">
-                <h3 class="text-3xl font-bold text-gray-800 mb-4">25 Años de Experiencia</h3>
-                <p class="text-gray-600 mb-8 leading-relaxed">
+            <div class="flex flex-col justify-center">
+                <h2 class="text-4xl font-bold text-amber-500 mb-6">Sobre Nosotros</h2>
+                <p class="text-gray-600 text-lg mb-8 leading-relaxed">
                     En Barbería Elite, llevamos 25 años perfeccionando el arte del cuidado masculino. Nuestro compromiso es ofrecer un servicio de excelencia que combine tradición y modernidad, asegurando que cada cliente viva una experiencia única.
                 </p>
                 <a href="#contact" class="bg-amber-500 text-white py-3 px-8 rounded-full font-semibold hover:bg-amber-600 transition-colors">Contáctanos</a>
@@ -250,6 +285,7 @@
         </div>
     </div>
 </section>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -269,6 +305,92 @@
         observer.observe(seccionNosotros);
     });
 </script>
+
+<section id="testimonials" class="py-24 bg-gray-900 text-white mt-12 rounded-lg">
+    <div class="container mx-auto px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-amber-500 mb-4">Testimonios</h2>
+            <p class="text-gray-400 text-lg">Lo que dicen nuestros clientes sobre nosotros</p>
+        </div>
+        <!-- Contenedor del carrusel -->
+        <div class="relative overflow-hidden rounded-lg shadow-lg">
+            <div id="testimonialSlider" class="flex overflow-hidden scroll-smooth snap-x snap-mandatory">
+                <!-- Tarjeta de testimonio -->
+                <div class="flex-none w-full md:w-1/3 bg-gray-800 rounded-lg p-6 mx-2 snap-center testimonial-card">
+                    <p class="text-gray-300 italic mb-4">"El mejor servicio que he recibido. Definitivamente volveré. El personal es muy profesional y atento."</p>
+                    <h3 class="text-lg font-bold text-amber-500">John Doe</h3>
+                </div>
+                <div class="flex-none w-full md:w-1/3 bg-gray-800 rounded-lg p-6 mx-2 snap-center testimonial-card">
+                    <p class="text-gray-300 italic mb-4">"Excelente ambiente y atención al detalle. Recomendado para cualquiera que busque un cambio de estilo."</p>
+                    <h3 class="text-lg font-bold text-amber-500">Jane Smith</h3>
+                </div>
+                <div class="flex-none w-full md:w-1/3 bg-gray-800 rounded-lg p-6 mx-2 snap-center testimonial-card">
+                    <p class="text-gray-300 italic mb-4">"Un lugar increíble, el servicio es de primera y los resultados siempre superan mis expectativas."</p>
+                    <h3 class="text-lg font-bold text-amber-500">Alex Brown</h3>
+                </div>
+                <div class="flex-none w-full md:w-1/3 bg-gray-800 rounded-lg p-6 mx-2 snap-center testimonial-card">
+                    <p class="text-gray-300 italic mb-4">"Un lugar increíble, el servicio es de primera y los resultados siempre superan mis expectativas."</p>
+                    <h3 class="text-lg font-bold text-amber-500">Nicola Montero</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript para animación del carrusel -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.getElementById('testimonialSlider');
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    const cardWidth = testimonialCards[0].offsetWidth + 16; // Ajuste por margen/padding
+    let currentPosition = 0;
+
+    // Clonar los elementos para crear la ilusión de bucle infinito
+    testimonialCards.forEach(card => {
+        const clone = card.cloneNode(true);
+        slider.appendChild(clone);
+    });
+
+    // Función para mover el carrusel de manera continua
+    function animateSlider() {
+        currentPosition += 0.8; // Velocidad de desplazamiento, ajustable
+        slider.scrollLeft = currentPosition;
+
+        // Clonar el primer elemento al final si se alcanza el último clon visible
+        if (currentPosition >= slider.scrollWidth - slider.offsetWidth) {
+            currentPosition = 0; // Reiniciar la posición al principio para mantener el desplazamiento continuo
+        }
+
+        requestAnimationFrame(animateSlider);
+    }
+
+    // Iniciar la animación
+    animateSlider();
+});
+</script>
+
+
+<section id="seccionContacto" class="text-gray-900 body-font relative rounded-lg ">
+  <div class="absolute inset-0 bg-gray-300 rounded-lg" bis_skin_checked="1">
+    <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=INACAP+Puente+Alto+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.6);"></iframe>
+  </div>
+  <div class="container px-5 py-24 mx-auto flex mt-12 rounded-lg" bis_skin_checked="1">
+    <div class="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md" bis_skin_checked="1">
+      <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Contactanos!</h2>
+      <p class="leading-relaxed mb-5 text-gray-600">Post-ironic portland shabby chic echo park, banjo fashion axe</p>
+      <div class="relative mb-4" bis_skin_checked="1">
+        <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
+        <input type="email" id="email" name="email" class="w-full bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+      </div>
+      <div class="relative mb-4" bis_skin_checked="1">
+        <label for="message" class="leading-7 text-sm text-gray-600">Mensaje</label>
+        <textarea id="message" name="message" class="w-full bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+      </div>
+      <button class="text-white bg-yellow-500 border-0 py-2 px-6 focus:outline-none hover:bg-yellow-600 rounded text-lg">Enviar</button>
+      <p class="text-xs text-gray-500 mt-3">Chicharrones blog helvetica normcore iceland tousled brook viral artisan.</p>
+    </div>
+  </div>
+</section>
 
       </div>
     </div>
@@ -308,8 +430,8 @@
         </div>
         <div class="flex">
           <p class="mr-1 text-slate-100">Dirección:</p>
-          <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" aria-label="Our address" title="Our address" class="text-violet-50 hover:text-violet-400">
-            312 Lovely Street, NY
+          <a href="https://www.google.com/maps/place/INACAP+Puente+Alto/@-33.5857476,-70.5836709,17z/data=!3m1!4b1!4m6!3m5!1s0x9662d718a032972d:0x45da5699698e2261!8m2!3d-33.5857476!4d-70.5811013!16s%2Fg%2F11bw6199yw?entry=ttu&g_ep=EgoyMDI0MTEwNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" aria-label="Our address" title="Our address" class="text-violet-50 hover:text-violet-400">
+          Av. Concha y Toro 2730, 8150215 Puente Alto.
           </a>
         </div>
       </div>
@@ -323,7 +445,7 @@
               ></path>
             </svg>
           </a>
-          <a href="/" class="text-slate-100 hover:text-fuchsia-500">
+          <a href="/" class="text-slate-100 hover:text-fuchsia-600">
             <svg viewBox="0 0 30 30" fill="currentColor" class="h-6">
               <circle cx="15" cy="15" r="4"></circle>
               <path

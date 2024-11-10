@@ -56,7 +56,7 @@
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 mt-12 mb-8 sm:mb-12">
-          <button class="bg-amber-500 text-black px-6 sm:px-8 py-3 rounded-full font-semibold hover:bg-amber-400 transition-colors duration-300 flex items-center justify-center">
+          <button class="bg-amber-500 text-black px-6 sm:px-8 py-3 rounded-full font-semibold hover:bg-amber-400 transition-colors duration-300 flex items-center justify-center" onclick="window.location.href='/login'">
             <i class="fa-solid fa-calendar-days mr-2"></i>
             Reservar Cita
           </button>

@@ -1,57 +1,55 @@
-<!-- component -->
-<style>
-    .login_img_section {
-        background: linear-gradient(rgba(2, 2, 2, .7), rgba(0, 0, 0, .7)), url("https://joseppons.com/formacion/wp-content/uploads/2020/11/servicios-salon-barberia.jpeg") center center;
-    }
-</style>
-<div class="h-screen flex">
-    <div class="hidden lg:flex w-full lg:w-1/2 login_img_section
-        justify-around items-center">
-        <div
-            class=" 
-                bg-black 
-                    opacity-20 
-                    inset-0 
-                    z-0">
+<!-- Vista de Login -->
+<section class="h-screen flex">
+    <!-- Imagen de fondo en el lado izquierdo -->
+    <div class="hidden lg:flex w-1/2 bg-cover" style="background-image: url('/build/img/barber-background.jpg');">
+        <div class="bg-black opacity-50 w-full h-full"></div> <!-- Superposición oscura -->
+    </div>
 
+    <!-- Formulario de Login en el lado derecho -->
+    <div class="flex flex-col justify-center w-full lg:w-1/2 p-8 bg-gray-900 text-white relative">
+        <!-- Botón de Home -->
+        <div class="absolute top-6 left-1/2 transform -translate-x-1/2">
+            <a href="/" class="flex items-center text-sm text-black bg-white px-2 py-1 rounded hover:bg-gray-200 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                Home
+            </a>
         </div>
-        <div class="w-full mx-auto px-20 flex-col items-center space-y-6">
-            <h1 class="text-white font-bold text-4xl font-sans">Stylo Reserva</h1>
-            <p class="text-white mt-1">The simplest app to use</p>
-            <div class="flex justify-center lg:justify-start mt-6">
-                <a href="/" class="hover:bg-indigo-700 hover:text-white hover:-translate-y-1 transition-all duration-500 bg-white text-indigo-800 mt-4 px-4 py-2 rounded-2xl font-bold mb-2">Inicio</a>
+
+        <div class="w-full max-w-md mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+            <h2 class="text-4xl lg:text-5xl font-bold text-center mb-6">Iniciar Sesión</h2>
+            <p class="text-center text-gray-300 mb-8 text-sm lg:text-lg">Bienvenido, ingresa tus datos para continuar</p>
+
+            <!-- Formulario de Login -->
+            <form id="formLogin" action="/login" method="POST">
+                <!-- Campo de Email -->
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-300 text-sm lg:text-base">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" placeholder="Tu correo electrónico" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <!-- Campo de Password -->
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-300 text-sm lg:text-base">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="Tu contraseña" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <!-- Olvidé mi contraseña -->
+                <div class="flex items-center justify-end mb-6">
+                    <a href="/olvide" class="text-sm text-blue-500 hover:underline">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <!-- Botón de Login -->
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 lg:py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors text-sm lg:text-lg">Login</button>
+            </form>
+
+            <!-- Enlaces adicionales -->
+            <div class="flex justify-between mt-6 text-gray-300 text-sm lg:text-base">
+                <a href="/crear-cuenta" class="hover:underline">¿No tienes una cuenta? Crear Cuenta</a>
             </div>
         </div>
     </div>
-    <div class="flex w-full lg:w-1/2 justify-center items-center bg-white space-y-8">
-        <div class="w-full px-8 md:px-32 lg:px-24">
-            <form class="bg-white rounded-md shadow-2xl p-5">
-                <h1 class="text-gray-800 font-bold text-2xl mb-1">Iniciar Sesion</h1>
-                <p class="text-sm font-normal text-gray-600 mb-8">Bienvenido</p>
-                <div class="flex items-center border-2 mb-8 py-2 px-3 rounded-2xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                    </svg>
-                    <input id="email" class=" pl-2 w-full outline-none border-none" type="email" name="email" placeholder="Email Address" />
-                </div>
-                <div class="flex items-center border-2 mb-12 py-2 px-3 rounded-2xl ">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                    </svg>
-                    <input class="pl-2 w-full outline-none border-none" type="password" name="password" id="password" placeholder="Password" />
+</section>
 
-                </div>
-                <button type="submit" class="block w-full bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">Login</button>
-                <div class="flex justify-between mt-4">
-                    <a href="/crear-cuenta" class="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all">Forgot Password ?<a/>
-
-                    <a href="#" class="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all">Don't have an account yet?</a>
-                </div>
-
-            </form>
-        </div>
-
-    </div>
-
-</div>
 

@@ -306,6 +306,66 @@
     });
 </script>
 
+<!-- Sección de Precios -->
+<section id="seccionPrecios" class="py-24 bg-white rounded-lg mt-12">
+    <div class="container mx-auto px-8 sm:px-10 lg:px-16 text-center">
+        <h2 class="text-4xl font-bold text-amber-600 mb-4">Nuestros Precios</h2>
+        <p class="text-gray-600 text-lg mb-12">Descubre nuestros servicios y tarifas exclusivas para ...</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Tarjeta de Servicio 1 -->
+            <div class="relative rounded-lg shadow-lg overflow-hidden bg-cover bg-center p-6" style="background-image: url('/build/img/hair-wash.jpg');">
+                <div class="absolute inset-0 bg-black opacity-70"></div>
+                <div class="relative z-10 text-center text-white">
+                    <h3 class="text-3xl font-bold mb-4">Lavado de Cabello</h3>
+                    <hr class="border-gray-500 mb-4">
+                    <ul class="space-y-2 mb-6">
+                        <li id="precioLavado1" class="flex justify-between"><span>Lavado Básico</span><span>$10</span></li>
+                        <li id="precioLavado2" class="flex justify-between"><span>Lavado y Masaje</span><span>$15</span></li>
+                        <li id="precioLavado3" class="flex justify-between"><span>Hidratante </span><span>$20</span></li>
+                        <li id="precioLavado4" class="flex justify-between"><span>Lavado y Estilo</span><span>$18</span></li>
+                    </ul>
+                    <a href="/login" class="bg-amber-600 text-black px-6 py-2 rounded-full font-semibold hover:bg-amber-700 transition-colors">Agendar Cita</a>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Servicio 2 -->
+            <div class="relative rounded-lg shadow-lg overflow-hidden bg-cover bg-center p-6" style="background-image: url('/build/img/hair-cutting.jpg');">
+                <div class="absolute inset-0 bg-black opacity-70"></div>
+                <div class="relative z-10 text-center text-white">
+                    <h3 class="text-3xl font-bold mb-4">Corte de Cabello</h3>
+                    <hr class="border-gray-500 mb-4">
+                    <ul class="space-y-2 mb-6">
+                        <li id="precioCorte1" class="flex justify-between"><span>Corte Clásico</span><span>$20</span></li>
+                        <li id="precioCorte2" class="flex justify-between"><span>Corte Moderno</span><span>$25</span></li>
+                        <li id="precioCorte3" class="flex justify-between"><span>Corte con Diseño</span><span>$30</span></li>
+                        <li id="precioCorte4" class="flex justify-between"><span>Recorte y Estilo</span><span>$22</span></li>
+                    </ul>
+                    <a href="/login" class="bg-amber-600 text-black px-6 py-2 rounded-full font-semibold hover:bg-amber-700 transition-colors">Agendar Cita</a>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Servicio 3 -->
+            <div class="relative rounded-lg shadow-lg overflow-hidden bg-cover bg-center p-6" style="background-image: url('/build/img/hair-trimming.jpg');">
+                <div class="absolute inset-0 bg-black opacity-70"></div>
+                <div class="relative z-10 text-center text-white">
+                    <h3 class="text-3xl font-bold mb-4">Recorte de Barba</h3>
+                    <hr class="border-gray-500 mb-4">
+                    <ul class="space-y-2 mb-6">
+                        <li id="precioBarba1" class="flex justify-between"><span>Recorte Básico</span><span>$12</span></li>
+                        <li id="precioBarba2" class="flex justify-between"><span>Recorte Full</span><span>$15</span></li>
+                        <li id="precioBarba3" class="flex justify-between"><span>Afeitado Clásico</span><span>$18</span></li>
+                        <li id="precioBarba4" class="flex justify-between"><span>Estilo de Barba</span><span>$20</span></li>
+                    </ul>
+                    <a href="/login" class="bg-amber-600 text-black px-6 py-2 rounded-full font-semibold hover:bg-amber-700 transition-colors">Agendar Cita</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Sección de Testimonios -->
 <section id="testimonials" class="py-24 bg-gray-900 text-white mt-12 rounded-lg">
     <div class="container mx-auto px-8">
         <div class="text-center mb-12">
@@ -370,6 +430,8 @@
 </script>
 
 
+
+<!-- Sección de Contacto -->
 <section id="seccionContacto" class="text-gray-900 body-font relative rounded-lg ">
   <div class="absolute inset-0 bg-gray-300 rounded-lg" bis_skin_checked="1">
     <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=INACAP+Puente+Alto+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.6);"></iframe>

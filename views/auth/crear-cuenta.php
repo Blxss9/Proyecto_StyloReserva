@@ -1,8 +1,12 @@
+<?php 
+    include_once __DIR__."/../templates/alertas.php";
+?>
+
 <!-- Vista de Crear Cuenta -->
 <section class="h-screen flex">
     <!-- Imagen de fondo en el lado izquierdo -->
-    <div class="hidden lg:flex w-1/2 bg-cover" style="background-image: url('/build/img/barber-background.jpg');">
-        <div class="bg-black opacity-50 w-full h-full"></div> <!-- Superposición oscura -->
+    <div class="hidden lg:flex w-1/2 bg-cover" style="background-image: url('/build/img/barberia2.jpg'); background-position: center;">
+        <div class="bg-black opacity-20 w-full h-full"></div> <!-- Superposición oscura -->
     </div>
 
     <!-- Formulario en el lado derecho -->
@@ -22,35 +26,36 @@
             <p class="text-center text-gray-300 mb-8 text-sm lg:text-lg">Llena el siguiente formulario para crear una cuenta</p>
 
             <!-- Formulario -->
+            
             <form id="formCrearCuenta" action="/crear-cuenta" method="POST">
                 <!-- Campo de Nombre -->
                 <div class="mb-4">
                     <label for="nombre" class="block text-gray-300 text-sm lg:text-base">Nombre</label>
-                    <input type="text" id="nombre" name="nombre" placeholder="Tu Nombre" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
+                    <input type="text" id="nombre" name="nombre" placeholder="Tu Nombre" value="<?php echo s($usuario->nombre); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
                 </div>
 
                 <!-- Campo de Apellido -->
                 <div class="mb-4">
                     <label for="apellido" class="block text-gray-300 text-sm lg:text-base">Apellido</label>
-                    <input type="text" id="apellido" name="apellido" placeholder="Tu Apellido" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
+                    <input type="text" id="apellido" name="apellido" placeholder="Tu Apellido" value="<?php echo s($usuario->apellido); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
                 </div>
 
                 <!-- Campo de Teléfono -->
                 <div class="mb-4">
                     <label for="telefono" class="block text-gray-300 text-sm lg:text-base">Teléfono</label>
-                    <input type="tel" id="telefono" name="telefono" placeholder="Tu Teléfono" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
+                    <input type="tel" id="telefono" name="telefono" placeholder="Tu Teléfono" value="<?php echo s($usuario->telefono); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
                 </div>
 
                 <!-- Campo de Email -->
                 <div class="mb-4">
                     <label for="email" class="block text-gray-300 text-sm lg:text-base">E-mail</label>
-                    <input type="email" id="email" name="email" placeholder="Tu E-mail" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
+                    <input type="email" id="email" name="email" placeholder="Tu E-mail" value="<?php echo s($usuario->email); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
                 </div>
 
                 <!-- Campo de Password -->
                 <div class="mb-6">
                     <label for="password" class="block text-gray-300 text-sm lg:text-base">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Tu Password" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
+                    <input type="password" id="password" name="password" placeholder="Tu Password" value="<?php echo s($usuario->password); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
                 </div>
 
                 <!-- Botón de Crear Cuenta -->

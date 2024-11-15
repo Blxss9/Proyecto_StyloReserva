@@ -83,16 +83,16 @@ class ActiveRecord {
     // Sincroniza BD con Objetos en memoria
     public function sincronizar($args=[]) { 
         foreach($args as $key => $value) {
-          if(property_exists($this, $key) && !is_null($value)) {
+            if(property_exists($this, $key) && !is_null($value)) {
             $this->$key = $value;
-          }
+        }
         }
     }
 
     // Registros - CRUD
     public function guardar() {
         $resultado = '';
-        if(!is_null($this->id)) {
+        if(!is_null($this->id_usuario)) {
             // actualizar
             $resultado = $this->actualizar();
         } else {

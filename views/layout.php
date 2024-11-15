@@ -14,7 +14,7 @@ $esError404 = $esError404 ?? false;
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="/build/css/tailwind.css" rel="stylesheet">
-     
+    
     <?php if ($esLandingPage || $esError404): ?>
         <!-- Estilos de Tailwind para la landing page -->
         <link href="/build/css/tailwind.css" rel="stylesheet">

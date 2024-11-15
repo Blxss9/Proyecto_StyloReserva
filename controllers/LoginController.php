@@ -1,6 +1,7 @@
 <?php
 namespace Controllers;
 
+use classes\Email;
 use Model\Usuario;
 use MVC\Router;
 
@@ -32,22 +33,64 @@ class LoginController {
         $titulo = "StyloReserva | Crear Cuenta";
         $usuario = new Usuario;
 
+        // Alertas vacías
+        $alertas = [];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-
             $usuario->sincronizar($_POST);
             $alertas = $usuario->validarNuevaCuenta();
 
-            debuguear($alertas);
-            
+            // Revisar que alertas está vacío
+            if(empty($alertas)) {
+                    //verificar que el usuario no este registrado
+                    $resultado = $usuario->existeUsuario();
+
+                    if($resultado->num_rows) {
+                        $alertas = Usuario::getAlertas();
+            } else {
+                // hashear el password
+                $usuario->hashPassword();
+
+                // generar un token unico
+                $usuario->crearToken();
+
+                // Envio de email
+                $email = new Email($usuario->nombre, $usuario->email, $usuario->token);
+                
+                $email->enviarConfirmacion();
+
+                //crear el usuario
+                $resultado = $usuario->guardar();
+                if($resultado) {
+                    header('Location: /mensaje');
+                }
+
+                debuguear($usuario);
+            }
         }
+    }
         $router->render('/auth/crear-cuenta', [
             'titulo' => $titulo,
-            'usuario' => $usuario
+            'usuario' => $usuario,
+            'alertas' => $alertas
         ]);
-    
+    }
 
+    public static function mensaje(Router $router) {
         
-        
+        $router->render('/auth/mensaje');
+    }
+    public static function confirmar(Router $router){
+        $alertas = [];
+        $token= s($_GET['token']); 
+
+        debuguear($token);
+
+        //Renderizar la vista
+        $router->render('auth/confirmar-cuenta', [
+            'alertas'=>$alertas
+        ]);
     }
 }
+
+
 

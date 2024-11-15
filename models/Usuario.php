@@ -5,7 +5,7 @@ namespace Model;
 class Usuario extends ActiveRecord {
     // BD
     protected static $tabla = 'usuarios';
-    protected static $columnasDB = ['id_usuario', 'nombre', 'apellido', 'email', 'password', 'telefono', 'admin', 'fecha_creacion', 'ultima_actualizacion'];
+    protected static $columnasDB = ['id_usuario', 'nombre', 'apellido', 'email', 'password', 'telefono', 'admin', 'fecha_creacion', 'ultima_actualizacion', 'confirmado', 'token'];
 
     public $id_usuario;
     public $nombre;
@@ -16,6 +16,8 @@ class Usuario extends ActiveRecord {
     public $admin;
     public $fecha_creacion;
     public $ultima_actualizacion;
+    public $confirmado;
+    public $token;
 
     public function __construct($args = []) {
         // Asignar valores a las propiedades de la clase con los argumentos
@@ -28,6 +30,8 @@ class Usuario extends ActiveRecord {
         $this->admin = $args['admin'] ?? '0';
         $this->fecha_creacion = $args['fecha_creacion'] ?? '';
         $this->ultima_actualizacion = $args['ultima_actualizacion'] ?? '';
+        $this->confirmado = $args['confirmado'] ?? '0';
+        $this->token = $args['token'] ?? '';
     }
 
     // Mensajes de validación para la creación de una cuenta
@@ -84,9 +88,9 @@ class Usuario extends ActiveRecord {
     // Revisa si el usuario ya existe
     public function existeUsuario() {
         $query = "SELECT * FROM " . self::$tabla . " WHERE email = '" . $this->email . "' LIMIT 1";
-
+        
         $resultado = self::$db->query($query);
-
+        
         if ($resultado->num_rows) {
             self::$alertas['error'][] = 'El usuario ya está registrado';
         }
@@ -107,6 +111,10 @@ class Usuario extends ActiveRecord {
         } else {
             return true;
         }
+    }
+
+    public function crearToken(){
+        $this->token = uniqid();
     }
 }
 

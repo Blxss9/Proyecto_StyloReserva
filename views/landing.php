@@ -433,7 +433,7 @@
 
 <!-- Sección de Contacto -->
 <section id="seccionContacto" class="text-gray-900 body-font relative rounded-lg ">
-  <div class="absolute inset-0 bg-gray-300 rounded-lg" bis_skin_checked="1">
+<div class="absolute inset-0 bg-gray-100 rounded-lg" bis_skin_checked="1">
     <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=INACAP+Puente+Alto+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.6);"></iframe>
   </div>
   <div class="container px-5 py-24 mx-auto flex mt-12 rounded-lg" bis_skin_checked="1">

@@ -33,11 +33,14 @@
                 <p class="text-gray-400 mb-6">Ingresa tu dirección de correo electrónico para recibir instrucciones para recuperar tu contraseña.</p>
 
                 <!-- Formulario -->
-                <form id="formRecuperarPassword" action="/recuperar-password" method="POST">
+                <form id="formRecuperarPassword" action="/olvide" method="POST">
+                    <?php 
+                        include_once __DIR__ . "/../templates/alertas.php";
+                    ?>
                     
                     <!-- Campo de Email -->
                     <label for="email" class="block text-gray-400 mb-1">Correo Electrónico</label>
-                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo" class="w-full px-4 py-2 mb-4 rounded bg-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo" class="w-full px-4 py-2 mb-4 rounded bg-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" >
 
                     <!-- Botón de Enviar Instrucciones -->
                     <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition-colors">

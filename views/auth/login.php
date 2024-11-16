@@ -5,10 +5,12 @@
         <div class="bg-black opacity-50 w-full h-full"></div> <!-- Superposición oscura -->
     </div>
 
+    
+
     <!-- Formulario de Login en el lado derecho -->
     <div class="flex flex-col justify-center w-full lg:w-1/2 p-8 bg-gray-900 text-white relative">
         <!-- Botón de Home -->
-        <div class="absolute top-6 left-1/2 transform -translate-x-1/2">
+        <div class="absolute top-4 right-4 transform -translate-x-1/2">
             <a href="/" class="flex items-center text-sm text-black bg-white px-2 py-1 rounded hover:bg-gray-200 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 24 24" stroke="none">
                     <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
@@ -23,16 +25,19 @@
 
             <!-- Formulario de Login -->
             <form id="formLogin" action="/login" method="POST">
+            <?php 
+                include_once __DIR__ . "/../templates/alertas.php";
+            ?>
                 <!-- Campo de Email -->
                 <div class="mb-4">
                     <label for="email" class="block text-gray-300 text-sm lg:text-base">Correo Electrónico</label>
-                    <input type="email" id="email" name="email" placeholder="Tu correo electrónico" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
+                    <input type="email" id="email" name="email" placeholder="Tu correo electrónico" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" >
                 </div>
 
                 <!-- Campo de Password -->
                 <div class="mb-6">
                     <label for="password" class="block text-gray-300 text-sm lg:text-base">Contraseña</label>
-                    <input type="password" id="password" name="password" placeholder="Tu contraseña" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" required>
+                    <input type="password" id="password" name="password" placeholder="Tu contraseña" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" >
                 </div>
 
                 <!-- Olvidé mi contraseña -->

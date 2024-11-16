@@ -2,7 +2,7 @@
 @use 'base/mixins' as m;
 
 .alerta{
-    padding: calc(v.$separacion / 10);
+    padding: calc(v.$separacion / 20);
     color: v.$blanco;
     width: 100%;
     display: block;

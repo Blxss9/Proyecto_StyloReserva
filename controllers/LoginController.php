@@ -13,7 +13,53 @@ class LoginController {
     }
 
     public static function login(Router $router) {
-        $router->render('auth/login');
+        $alertas = [];
+
+        $auth = new Usuario;
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $auth = new Usuario($_POST);
+
+            $alertas = $auth->validarLogin();
+            
+            if(empty($alertas)){
+                //verificar si el usuario existe
+                $usuario = Usuario::where('email', $auth->email);
+
+                if($usuario){
+                    //verificar si el password es correcto
+                    if($usuario->comprobarPasswordAndVerificado(password: $auth->password)){
+                        // Autenticar el usuario
+                        if (session_status() === PHP_SESSION_NONE) {
+                            session_start();
+                        }
+
+                        $_SESSION['id'] = $usuario->id;
+                        $_SESSION['nombre'] = $usuario->nombre . " " . $usuario->apellido;
+                        $_SESSION['email'] = $usuario->email;
+                        $_SESSION['login'] = true;
+
+
+                        // Redireccionamiento
+                        if($usuario->admin === "1") {
+                            $_SESSION['admin'] = $usuario->admin ?? null;
+                            header('Location: /admin');
+                        } else {
+                            header('Location: /cita');
+                        }
+                        exit;
+                    }
+                    }else{
+                        Usuario::setAlerta('error', 'El usuario no existe');
+                    }
+            }
+
+        }
+
+        $alertas = Usuario::getAlertas();
+        $router->render('auth/login', [
+        'alertas' => $alertas,
+    ]);
     }
 
     public static function logout() {

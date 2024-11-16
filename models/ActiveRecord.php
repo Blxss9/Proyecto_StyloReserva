@@ -128,11 +128,18 @@ class ActiveRecord {
         return $resultado;
     }
     
-    public static function where($columna, $valor): ActiveRecord {
+    public static function where($columna, $valor): ?ActiveRecord {
         $query = "SELECT * FROM " . static::$tabla . " WHERE " . $columna . " = '" . self::$db->escape_string($valor) . "'";
         $resultado = self::consultarSQL($query);
-        return array_shift($resultado);
+    
+        // Verificar si hay resultados antes de retornar
+        if (!empty($resultado)) {
+            return array_shift($resultado); // Retornar el primer registro como objeto
+        }
+    
+        return null; // Retornar null si no hay resultados
     }
+    
     
 
     //Consulta plana de sql:

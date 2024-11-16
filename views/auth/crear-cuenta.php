@@ -10,7 +10,7 @@
     <!-- Formulario en el lado derecho -->
     <div class="flex flex-col justify-center w-full lg:w-1/2 p-8 bg-gray-900 text-white relative">
         <!-- Botón de Home -->
-        <div class="absolute top-6 left-1/2 transform -translate-x-1/2">
+        <div class="absolute top-4 right-4 transform -translate-x-1/2">
             <a href="/" class="flex items-center text-sm text-black bg-white px-2 py-1 rounded hover:bg-gray-200 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 24 24" stroke="none">
                     <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>

@@ -4,6 +4,8 @@
 require_once __DIR__ . '/../includes/app.php';
 
 // Se importan los controladores
+
+use Controllers\CitaController;
 use Controllers\LandingController;
 
 // Usa el enrutador de la aplicación
@@ -35,6 +37,9 @@ $router->post('/crear-cuenta', [LoginController::class, 'crear']);
 // Confirmar Cuenta
 $router->get('/confirmar-cuenta', [LoginController::class, 'confirmar']);
 $router->get('/mensaje', [LoginController::class, 'mensaje']);
+
+//Area Privada
+$router->get('/cita', [CitaController::class, 'index']);
 
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador

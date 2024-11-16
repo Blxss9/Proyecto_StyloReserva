@@ -42,22 +42,24 @@
                     <input type="text" id="apellido" name="apellido" placeholder="Tu Apellido" value="<?php echo s($usuario->apellido); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" >
                 </div>
 
-                <!-- Campo de Teléfono -->
-                <div class="mb-4">
-                    <label for="telefono" class="block text-gray-300 text-sm lg:text-base">Teléfono</label>
-                    <input type="tel" id="telefono" name="telefono" placeholder="Tu Teléfono" value="<?php echo s($usuario->telefono); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" >
-                </div>
-
                 <!-- Campo de Email -->
                 <div class="mb-4">
                     <label for="email" class="block text-gray-300 text-sm lg:text-base">E-mail</label>
                     <input type="email" id="email" name="email" placeholder="Tu E-mail" value="<?php echo s($usuario->email); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" >
                 </div>
 
+                 <!-- Campo de Teléfono -->
+                <div class="mb-4">
+                    <label for="telefono" class="block text-gray-300 text-sm lg:text-base">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="Tu Teléfono" value="<?php echo s($usuario->telefono); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500">
+                    <p id="error-telefono" class="text-red-500 text-sm hidden">El teléfono debe contener exactamente 9 dígitos</p>
+                </div>
+
                 <!-- Campo de Password -->
                 <div class="mb-6">
                     <label for="password" class="block text-gray-300 text-sm lg:text-base">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Tu Password" value="<?php echo s($usuario->password); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500" >
+                    <input type="password" id="password" name="password" placeholder="Tu Password" value="<?php echo s($usuario->password); ?>" class="w-full px-4 py-2 lg:py-3 rounded-md border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500">
+                    <p id="error-password" class="text-red-500 text-sm hidden">El password debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial</p>
                 </div>
 
                 <!-- Botón de Crear Cuenta -->
@@ -78,3 +80,31 @@
         </div>
     </div>
 </section>
+
+<script>
+    function validarFormulario() {
+        let valido = true;
+
+        // Validar Teléfono
+        const telefono = document.getElementById('telefono').value;
+        const errorTelefono = document.getElementById('error-telefono');
+        if (!/^\d{9}$/.test(telefono)) {
+            errorTelefono.classList.remove('hidden');
+            valido = false;
+        } else {
+            errorTelefono.classList.add('hidden');
+        }
+
+        // Validar Password
+        const password = document.getElementById('password').value;
+        const errorPassword = document.getElementById('error-password');
+        if (!/^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/.test(password)) {
+            errorPassword.classList.remove('hidden');
+            valido = false;
+        } else {
+            errorPassword.classList.add('hidden');
+        }
+
+        return valido;
+    }
+</script>

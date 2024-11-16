@@ -1,7 +1,8 @@
 <?php
-namespace Model;
-class ActiveRecord {
 
+namespace Model;
+
+class ActiveRecord {
     // Base de Datos
     protected static $db;
     protected static $tabla = '';
@@ -19,7 +20,6 @@ class ActiveRecord {
         static::$alertas[$tipo][] = $mensaje;
     }
 
-    // Validación
     public static function getAlertas() {
         return static::$alertas;
     }
@@ -31,172 +31,110 @@ class ActiveRecord {
 
     // Consulta SQL para crear un objeto en Memoria
     public static function consultarSQL($query) {
-        // Consultar la base de datos
         $resultado = self::$db->query($query);
-
-        // Iterar los resultados
         $array = [];
-        while($registro = $resultado->fetch_assoc()) {
+        while ($registro = $resultado->fetch_assoc()) {
             $array[] = static::crearObjeto($registro);
         }
-
-        // liberar la memoria
         $resultado->free();
-
-        // retornar los resultados
         return $array;
     }
 
-    // Crea el objeto en memoria que es igual al de la BD
     protected static function crearObjeto($registro) {
         $objeto = new static;
-
-        foreach($registro as $key => $value ) {
-            if(property_exists( $objeto, $key  )) {
+        foreach ($registro as $key => $value) {
+            if (property_exists($objeto, $key)) {
                 $objeto->$key = $value;
             }
         }
-
         return $objeto;
     }
 
-    // Identificar y unir los atributos de la BD
     public function atributos() {
         $atributos = [];
-        foreach(static::$columnasDB as $columna) {
-            if($columna === 'id') continue;
+        foreach (static::$columnasDB as $columna) {
+            if ($columna === 'id_usuario') continue; // Ignorar clave primaria
             $atributos[$columna] = $this->$columna;
         }
         return $atributos;
     }
 
-    // Sanitizar los datos antes de guardarlos en la BD
     public function sanitizarAtributos() {
         $atributos = $this->atributos();
         $sanitizado = [];
-        foreach($atributos as $key => $value ) {
+        foreach ($atributos as $key => $value) {
             $sanitizado[$key] = self::$db->escape_string($value);
         }
         return $sanitizado;
     }
 
-    // Sincroniza BD con Objetos en memoria
-    public function sincronizar($args=[]) { 
-        foreach($args as $key => $value) {
-          if(property_exists($this, $key) && !is_null($value)) {
-            $this->$key = $value;
-          }
+    public function sincronizar($args = []) { 
+        foreach ($args as $key => $value) {
+            if (property_exists($this, $key) && !is_null($value)) {
+                $this->$key = $value;
+            }
         }
     }
 
-    // Registros - CRUD
     public function guardar(): mixed {
-        $resultado = '';
-    
-        // Validar si `id` existe para decidir si se crea o actualiza
         if (!empty($this->id_usuario)) {
-            // Actualizar registro
-            $resultado = $this->actualizar();
+            // Actualizar registro existente
+            $this->ultima_actualizacion = date('Y-m-d H:i:s'); // Actualiza la fecha
+            return $this->actualizar();
         } else {
-            // Crear un nuevo registro
-            $resultado = $this->crear();
+            // Crear nuevo registro
+            $this->fecha_creacion = date('Y-m-d H:i:s'); // Fecha de creación
+            $this->ultima_actualizacion = date('Y-m-d H:i:s'); // Fecha inicial de última actualización
+            return $this->crear();
         }
-    
-        return $resultado;
     }
-    
 
-    // Todos los registros
     public static function all() {
         $query = "SELECT * FROM " . static::$tabla;
-        $resultado = self::consultarSQL($query);
-        return $resultado;
+        return self::consultarSQL($query);
     }
 
-    // Busca un registro por su id
-    public static function find($id_usuario): ActiveRecord {
+    public static function find($id_usuario): ?ActiveRecord {
         $query = "SELECT * FROM " . static::$tabla . " WHERE id_usuario = " . self::$db->escape_string($id_usuario);
         $resultado = self::consultarSQL($query);
         return array_shift($resultado);
     }
-    
 
-    // Obtener Registros con cierta cantidad
-    public static function get($limite): array {
-        $query = "SELECT * FROM " . static::$tabla . " LIMIT " . self::$db->escape_string($limite);
-        $resultado = self::consultarSQL($query);
-        return $resultado;
-    }
-    
     public static function where($columna, $valor): ?ActiveRecord {
-        $query = "SELECT * FROM " . static::$tabla . " WHERE " . $columna . " = '" . self::$db->escape_string($valor) . "'";
+        $query = "SELECT * FROM " . static::$tabla . " WHERE " . $columna . " = '" . self::$db->escape_string($valor) . "' LIMIT 1";
         $resultado = self::consultarSQL($query);
-    
-        // Verificar si hay resultados antes de retornar
-        if (!empty($resultado)) {
-            return array_shift($resultado); // Retornar el primer registro como objeto
-        }
-    
-        return null; // Retornar null si no hay resultados
-    }
-    
-    
-
-    //Consulta plana de sql:
-    public static function SQL($query) {
-        $resultado = self::consultarSQL($query);
-        return $resultado;
+        return array_shift($resultado) ?? null;
     }
 
-    // crea un nuevo registro
     public function crear() {
-        // Sanitizar los datos
         $atributos = $this->sanitizarAtributos();
-
-        // Insertar en la base de datos
-        $query = " INSERT INTO " . static::$tabla . " ( ";
+        $query = "INSERT INTO " . static::$tabla . " ( ";
         $query .= join(', ', array_keys($atributos));
-        $query .= " ) VALUES (' "; 
+        $query .= " ) VALUES (' ";
         $query .= join("', '", array_values($atributos));
         $query .= " ') ";
-
-        //return json_encode(['query' => $query]);
-
-        // Resultado de la consulta
         $resultado = self::$db->query($query);
         return [
-           'resultado' =>  $resultado,
-           'id_usuario' => self::$db->insert_id
+            'resultado' => $resultado,
+            'id_usuario' => self::$db->insert_id
         ];
     }
 
-    // Actualizar el registro
     public function actualizar() {
-        // Sanitizar los datos
         $atributos = $this->sanitizarAtributos();
-
-        // Iterar para ir agregando cada campo de la BD
         $valores = [];
-        foreach($atributos as $key => $value) {
+        foreach ($atributos as $key => $value) {
             $valores[] = "{$key}='{$value}'";
         }
-
-        // Consulta SQL
-        $query = "UPDATE " . static::$tabla ." SET ";
-        $query .=  join(', ', $valores );
+        $query = "UPDATE " . static::$tabla . " SET ";
+        $query .= join(', ', $valores);
         $query .= " WHERE id_usuario = '" . self::$db->escape_string($this->id_usuario) . "' ";
-        $query .= " LIMIT 1 "; 
-
-        // Actualizar BD
-        $resultado = self::$db->query($query);
-        return $resultado;
+        $query .= " LIMIT 1 ";
+        return self::$db->query($query);
     }
 
-    // Eliminar un Registro por su ID
     public function eliminar() {
-        $query = "DELETE FROM "  . static::$tabla . " WHERE id_usuario = " . self::$db->escape_string($this->id_usuario) . " LIMIT 1";
-        $resultado = self::$db->query($query);
-        return $resultado;
+        $query = "DELETE FROM " . static::$tabla . " WHERE id_usuario = " . self::$db->escape_string($this->id_usuario) . " LIMIT 1";
+        return self::$db->query($query);
     }
-
 }

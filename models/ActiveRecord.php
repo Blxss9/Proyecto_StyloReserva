@@ -2,7 +2,7 @@
 namespace Model;
 class ActiveRecord {
 
-    // Base DE DATOS
+    // Base de Datos
     protected static $db;
     protected static $tabla = '';
     protected static $columnasDB = [];
@@ -83,24 +83,28 @@ class ActiveRecord {
     // Sincroniza BD con Objetos en memoria
     public function sincronizar($args=[]) { 
         foreach($args as $key => $value) {
-            if(property_exists($this, $key) && !is_null($value)) {
+          if(property_exists($this, $key) && !is_null($value)) {
             $this->$key = $value;
-        }
+          }
         }
     }
 
     // Registros - CRUD
-    public function guardar() {
+    public function guardar(): mixed {
         $resultado = '';
-        if(!is_null($this->id_usuario)) {
-            // actualizar
+    
+        // Validar si `id` existe para decidir si se crea o actualiza
+        if (!empty($this->id_usuario)) {
+            // Actualizar registro
             $resultado = $this->actualizar();
         } else {
-            // Creando un nuevo registro
+            // Crear un nuevo registro
             $resultado = $this->crear();
         }
+    
         return $resultado;
     }
+    
 
     // Todos los registros
     public static function all() {
@@ -110,17 +114,31 @@ class ActiveRecord {
     }
 
     // Busca un registro por su id
-    public static function find($id) {
-        $query = "SELECT * FROM " . static::$tabla  ." WHERE id = {$id}";
+    public static function find($id_usuario): ActiveRecord {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE id_usuario = " . self::$db->escape_string($id_usuario);
         $resultado = self::consultarSQL($query);
-        return array_shift( $resultado ) ;
+        return array_shift($resultado);
     }
+    
 
     // Obtener Registros con cierta cantidad
-    public static function get($limite) {
-        $query = "SELECT * FROM " . static::$tabla . " LIMIT {$limite}";
+    public static function get($limite): array {
+        $query = "SELECT * FROM " . static::$tabla . " LIMIT " . self::$db->escape_string($limite);
         $resultado = self::consultarSQL($query);
-        return array_shift( $resultado ) ;
+        return $resultado;
+    }
+    
+    public static function where($columna, $valor): ActiveRecord {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE " . $columna . " = '" . self::$db->escape_string($valor) . "'";
+        $resultado = self::consultarSQL($query);
+        return array_shift($resultado);
+    }
+    
+
+    //Consulta plana de sql:
+    public static function SQL($query) {
+        $resultado = self::consultarSQL($query);
+        return $resultado;
     }
 
     // crea un nuevo registro
@@ -135,11 +153,13 @@ class ActiveRecord {
         $query .= join("', '", array_values($atributos));
         $query .= " ') ";
 
+        //return json_encode(['query' => $query]);
+
         // Resultado de la consulta
         $resultado = self::$db->query($query);
         return [
            'resultado' =>  $resultado,
-           'id' => self::$db->insert_id
+           'id_usuario' => self::$db->insert_id
         ];
     }
 
@@ -157,7 +177,7 @@ class ActiveRecord {
         // Consulta SQL
         $query = "UPDATE " . static::$tabla ." SET ";
         $query .=  join(', ', $valores );
-        $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
+        $query .= " WHERE id_usuario = '" . self::$db->escape_string($this->id_usuario) . "' ";
         $query .= " LIMIT 1 "; 
 
         // Actualizar BD
@@ -167,7 +187,7 @@ class ActiveRecord {
 
     // Eliminar un Registro por su ID
     public function eliminar() {
-        $query = "DELETE FROM "  . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
+        $query = "DELETE FROM "  . static::$tabla . " WHERE id_usuario = " . self::$db->escape_string($this->id_usuario) . " LIMIT 1";
         $resultado = self::$db->query($query);
         return $resultado;
     }

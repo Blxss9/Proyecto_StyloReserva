@@ -37,7 +37,7 @@ class Email{
 
         $contenido = '<html>';
         $contenido .= "<p><strong>Hola " . $this->nombre . "</strong> Haz cerado tu cuenta en stylo Reserva, debes confirmar tu cuenta oprimiendo el siguiente enlace</p>";
-        $contenido .= "<p>Presiona aquí: <a href='http://localhost5000/confirmar-cuenta?token=" . $this->token . "'>Confirmar Cuenta</a></p>";
+        $contenido .= "<p>Presiona aquí: <a href='http://localhost:5000/confirmar-cuenta?token=" . $this->token . "'>Confirmar Cuenta</a></p>";
 
         $contenido .= "<p>Si no has sido tu, ignora este mensaje</p>";
         $contenido .= '</html>';

@@ -5,9 +5,9 @@ namespace Model;
 class Usuario extends ActiveRecord {
     // BD
     protected static $tabla = 'usuarios';
-    protected static $columnasDB = ['id_usuario', 'nombre', 'apellido', 'email', 'password', 'telefono', 'admin', 'confirmado', 'token', 'fecha_creacion', 'ultima_actualizacion'];
+    protected static $columnasDB = ['id', 'nombre', 'apellido', 'email', 'password', 'telefono', 'admin', 'confirmado', 'token', 'fecha_creacion', 'ultima_actualizacion'];
 
-    public $id_usuario;
+    public $id;
     public $nombre;
     public $apellido;
     public $email;
@@ -20,7 +20,7 @@ class Usuario extends ActiveRecord {
     public $ultima_actualizacion;
 
     public function __construct($args = []) {
-        $this->id_usuario = $args['id_usuario'] ?? null;
+        $this->id = $args['id'] ?? null;
         $this->nombre = $args['nombre'] ?? '';
         $this->apellido = $args['apellido'] ?? '';
         $this->email = $args['email'] ?? '';

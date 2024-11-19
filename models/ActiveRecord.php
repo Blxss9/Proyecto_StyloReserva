@@ -53,7 +53,7 @@ class ActiveRecord {
     public function atributos() {
         $atributos = [];
         foreach (static::$columnasDB as $columna) {
-            if ($columna === 'id_usuario') continue; // Ignorar clave primaria
+            if ($columna === 'id') continue; // Ignorar clave primaria
             $atributos[$columna] = $this->$columna;
         }
         return $atributos;
@@ -77,7 +77,7 @@ class ActiveRecord {
     }
 
     public function guardar(): mixed {
-        if (!empty($this->id_usuario)) {
+        if (!empty($this->id)) {
             // Actualizar registro existente
             $this->ultima_actualizacion = date('Y-m-d H:i:s'); // Actualiza la fecha
             return $this->actualizar();
@@ -94,8 +94,8 @@ class ActiveRecord {
         return self::consultarSQL($query);
     }
 
-    public static function find($id_usuario): ?ActiveRecord {
-        $query = "SELECT * FROM " . static::$tabla . " WHERE id_usuario = " . self::$db->escape_string($id_usuario);
+    public static function find($id): ?ActiveRecord {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE id = " . self::$db->escape_string($id);
         $resultado = self::consultarSQL($query);
         return array_shift($resultado);
     }
@@ -116,7 +116,7 @@ class ActiveRecord {
         $resultado = self::$db->query($query);
         return [
             'resultado' => $resultado,
-            'id_usuario' => self::$db->insert_id
+            'id' => self::$db->insert_id
         ];
     }
 
@@ -128,13 +128,13 @@ class ActiveRecord {
         }
         $query = "UPDATE " . static::$tabla . " SET ";
         $query .= join(', ', $valores);
-        $query .= " WHERE id_usuario = '" . self::$db->escape_string($this->id_usuario) . "' ";
+        $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
         $query .= " LIMIT 1 ";
         return self::$db->query($query);
     }
 
     public function eliminar() {
-        $query = "DELETE FROM " . static::$tabla . " WHERE id_usuario = " . self::$db->escape_string($this->id_usuario) . " LIMIT 1";
+        $query = "DELETE FROM " . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
         return self::$db->query($query);
     }
 }

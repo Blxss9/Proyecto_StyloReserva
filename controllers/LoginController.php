@@ -32,7 +32,7 @@ class LoginController {
                             session_start();
                         }
 
-                        $_SESSION['id_usuario'] = $usuario->id_usuario;
+                        $_SESSION['id'] = $usuario->id;
                         $_SESSION['nombre'] = $usuario->nombre . " " . $usuario->apellido;
                         $_SESSION['email'] = $usuario->email;
                         $_SESSION['admin'] = $usuario->admin;

@@ -1,6 +1,6 @@
 <?php
 
-$db = mysqli_connect('localhost', 'root', '', 'bd_styloreserva');
+$db = mysqli_connect('localhost', 'root', '', 'app_styloreserva');
 
 
 if (!$db) {

@@ -1,5 +1,6 @@
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-3xl mx-auto px-4">
+        <h1 class="text-3xl font-bold text-center"value="<?php echo $nombre; ?>">Bienvenido <?php echo $nombre; ?></h1>
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Crear Nueva Cita</h1>
         <p class="text-center text-gray-600 mb-8">Elige tus servicios y coloca tus datos</p>
 
@@ -43,17 +44,7 @@
                 <p class="text-center text-gray-600 mb-6">Selecciona la fecha y hora de tu cita</p>
                 
                 <form class="space-y-6">
-                    <div>
-                        <label class="block text-gray-700 mb-2" for="nombre">Nombre</label>
-                        <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            id="nombre"
-                            type="text"
-                            placeholder="Tu Nombre"
-                            value="<?php echo $nombre; ?>"
-                            disabled
-                        />
-                    </div>
-
+                    
                     <div>
                         <label class="block text-gray-700 mb-2" for="fecha">Fecha</label>
                         <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

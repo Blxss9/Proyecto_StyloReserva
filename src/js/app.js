@@ -61,10 +61,11 @@ function mostrarServicios(servicios) {
     // Limpiar el HTML previo
     contenedorServicios.innerHTML = '';
     
-    console.log('Servicios recibidos:', servicios); // Debug
-    
     servicios.forEach(servicio => {
         const { id, nombre_servicio, precio } = servicio;
+
+        // Formatear el precio como número entero
+        const precioFormateado = parseInt(precio).toLocaleString('es-CL');
 
         const servicioDiv = document.createElement('DIV');
         servicioDiv.classList.add('servicio');
@@ -72,7 +73,7 @@ function mostrarServicios(servicios) {
 
         servicioDiv.innerHTML = `
             <p class="nombre-servicio">${nombre_servicio}</p>
-            <p class="precio-servicio">$${precio}</p>
+            <p class="precio-servicio">$${precioFormateado}</p>
         `;
 
         servicioDiv.onclick = () => seleccionarServicio(servicio);

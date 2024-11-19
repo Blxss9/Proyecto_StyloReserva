@@ -49,7 +49,7 @@
     </div>
 
     <!-- Content -->
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12 min-h-screen flex items-center">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-8 min-h-screen flex items-center">
       <!-- Botón de volver al inicio -->
     <button id="backToTop" class="fixed bottom-5 right-5 bg-amber-500 text-white p-3 rounded-full shadow-lg hover:bg-amber-600 transition-opacity duration-300 opacity-0 z-50">
         <i class="fa-solid fa-arrow-up"></i>
@@ -84,7 +84,7 @@
       <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 sm:mb-8">
             Estilo y <span class="text-amber-500">Elegancia</span>
         </h1>
-        <p class="text-gray-300 text-base mt-16 sm:text-lg mb-8 sm:mb-10">
+        <p class="text-gray-300 text-base mt-8 sm:text-lg mb-8 sm:mb-10">
             El lugar donde tu estilo evoluciona. Con técnicas que unen lo clásico y lo contemporáneo, realizamos tu imagen a otro nivel.
         </p>
 
@@ -458,92 +458,92 @@
     </div>
   </div>
 
-  <footer>
-    <div class="px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
-    <div class="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4">
-      <div class="sm:col-span-2">
-        <a href="/" aria-label="Go home" title="Company" class="inline-flex items-center">
-          <svg class="w-8 text-deep-purple-accent-400" viewBox="0 0 24 24" stroke-linejoin="round" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" stroke="currentColor" fill="none">
-            <rect x="3" y="1" width="7" height="12"></rect>
-            <rect x="3" y="17" width="7" height="6"></rect>
-            <rect x="14" y="1" width="7" height="6"></rect>
-            <rect x="14" y="11" width="7" height="12"></rect>
-          </svg>
-          <span class="ml-2 text-xl font-bold tracking-wide text-cyan-700 uppercase">StyloReserva</span>
-        </a>
-        <div class="mt-6 lg:max-w-sm">
-          <p class="text-sm text-slate-100">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
-          </p>
-          <p class="mt-4 text-sm text-slate-100">
-            Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-          </p>
+  <footer class="bg-gray-900 text-white pt-12 pb-8 px-4 relative mt-20">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <!-- Sección Logo y Descripción -->
+        <div class="lg:col-span-2">
+            <div class="flex items-center mb-6">
+                <img src="/build/img/logo.svg" alt="logo_barberia" class="h-12">
+                <span class="ml-3 text-2xl font-bold text-amber-500">StyloReserva</span>
+            </div>
+            <p class="text-gray-400 mb-6">
+                Expertos en el arte del cuidado masculino. Ofrecemos servicios de primera calidad para que luzcas tu mejor versión.
+            </p>
+            <div class="flex space-x-4">
+                <a href="/" class="bg-white/10 hover:bg-amber-500 p-2 rounded-full transition-colors duration-300">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                </a>
+                <a href="/" class="bg-white/10 hover:bg-amber-500 p-2 rounded-full transition-colors duration-300">
+                    <i class="fa-brands fa-instagram text-xl"></i>
+                </a>
+                <a href="/" class="bg-white/10 hover:bg-amber-500 p-2 rounded-full transition-colors duration-300">
+                    <i class="fa-brands fa-facebook text-xl"></i>
+                </a>
+            </div>
         </div>
-      </div>
-      <div class="space-y-2 text-sm">
-        <p class="text-base font-bold tracking-wide text-slate-100">Contacts</p>
-        <div class="flex">
-          <p class="mr-1 text-slate-100">Teléfono:</p>
-          <a href=" tel: 850-123-5021 "  aria-label="Our phone" title="Our phone" class="text-violet-50 hover:text-violet-400">850-123-5021</a>
+
+        <!-- Sección Contacto -->
+        <div>
+            <h3 class="text-lg font-bold text-amber-500 mb-6">Contacto</h3>
+            <ul class="space-y-4">
+                <li class="flex items-center">
+                    <i class="fa-solid fa-phone text-amber-500 mr-3"></i>
+                    <a href="tel:850-123-5021" class="text-gray-400 hover:text-amber-500 transition-colors">
+                        850-123-5021
+                    </a>
+                </li>
+                <li class="flex items-center">
+                    <i class="fa-solid fa-envelope text-amber-500 mr-3"></i>
+                    <a href="mailto:info@styloreserva.com" class="text-gray-400 hover:text-amber-500 transition-colors">
+                        info@styloreserva.com
+                    </a>
+                </li>
+                <li class="flex items-start">
+                    <i class="fa-solid fa-location-dot text-amber-500 mr-3 mt-1"></i>
+                    <a href="https://goo.gl/maps/..." target="_blank" class="text-gray-400 hover:text-amber-500 transition-colors">
+                        Av. Concha y Toro 2730,<br>8150215 Puente Alto
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="flex">
-          <p class="mr-1 text-slate-100">Email:</p>
-          <a href=" mailto:info@lorem.mail" aria-label="Our email" title="Our email" class="text-violet-50 hover:text-violet-400">info@lorem.mail</a>
+
+        <!-- Sección Enlaces Rápidos -->
+        <div>
+            <h3 class="text-lg font-bold text-amber-500 mb-6">Enlaces Rápidos</h3>
+            <ul class="space-y-4">
+                <li>
+                    <a href="/" class="text-gray-400 hover:text-amber-500 transition-colors flex items-center">
+                        <i class="fa-solid fa-chevron-right text-xs mr-2"></i>
+                        Servicios
+                    </a>
+                </li>
+                <li>
+                    <a href="/" class="text-gray-400 hover:text-amber-500 transition-colors flex items-center">
+                        <i class="fa-solid fa-chevron-right text-xs mr-2"></i>
+                        Reservar Cita
+                    </a>
+                </li>
+                <li>
+                    <a href="/" class="text-gray-400 hover:text-amber-500 transition-colors flex items-center">
+                        <i class="fa-solid fa-chevron-right text-xs mr-2"></i>
+                        Política de Privacidad
+                    </a>
+                </li>
+                <li>
+                    <a href="/" class="text-gray-400 hover:text-amber-500 transition-colors flex items-center">
+                        <i class="fa-solid fa-chevron-right text-xs mr-2"></i>
+                        Términos y Condiciones
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="flex">
-          <p class="mr-1 text-slate-100">Dirección:</p>
-          <a href="https://www.google.com/maps/place/INACAP+Puente+Alto/@-33.5857476,-70.5836709,17z/data=!3m1!4b1!4m6!3m5!1s0x9662d718a032972d:0x45da5699698e2261!8m2!3d-33.5857476!4d-70.5811013!16s%2Fg%2F11bw6199yw?entry=ttu&g_ep=EgoyMDI0MTEwNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" aria-label="Our address" title="Our address" class="text-violet-50 hover:text-violet-400">
-          Av. Concha y Toro 2730, 8150215 Puente Alto.
-          </a>
-        </div>
-      </div>
-      <div>
-        <span class="text-base font-bold tracking-wide text-slate-100">Social</span>
-        <div class="flex items-center mt-1 space-x-3">
-          <a href="/" class="text-slate-100 hover:text-sky-400 ">
-            <svg viewBox="0 0 24 24" fill="currentColor" class="h-5">
-              <path
-                d="M24,4.6c-0.9,0.4-1.8,0.7-2.8,0.8c1-0.6,1.8-1.6,2.2-2.7c-1,0.6-2,1-3.1,1.2c-0.9-1-2.2-1.6-3.6-1.6 c-2.7,0-4.9,2.2-4.9,4.9c0,0.4,0,0.8,0.1,1.1C7.7,8.1,4.1,6.1,1.7,3.1C1.2,3.9,1,4.7,1,5.6c0,1.7,0.9,3.2,2.2,4.1 C2.4,9.7,1.6,9.5,1,9.1c0,0,0,0,0,0.1c0,2.4,1.7,4.4,3.9,4.8c-0.4,0.1-0.8,0.2-1.3,0.2c-0.3,0-0.6,0-0.9-0.1c0.6,2,2.4,3.4,4.6,3.4 c-1.7,1.3-3.8,2.1-6.1,2.1c-0.4,0-0.8,0-1.2-0.1c2.2,1.4,4.8,2.2,7.5,2.2c9.1,0,14-7.5,14-14c0-0.2,0-0.4,0-0.6 C22.5,6.4,23.3,5.5,24,4.6z"
-              ></path>
-            </svg>
-          </a>
-          <a href="/" class="text-slate-100 hover:text-fuchsia-600">
-            <svg viewBox="0 0 30 30" fill="currentColor" class="h-6">
-              <circle cx="15" cy="15" r="4"></circle>
-              <path
-                d="M19.999,3h-10C6.14,3,3,6.141,3,10.001v10C3,23.86,6.141,27,10.001,27h10C23.86,27,27,23.859,27,19.999v-10   C27,6.14,23.859,3,19.999,3z M15,21c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S18.309,21,15,21z M22,9c-0.552,0-1-0.448-1-1   c0-0.552,0.448-1,1-1s1,0.448,1,1C23,8.552,22.552,9,22,9z"
-              ></path>
-            </svg>
-          </a>
-          <a href="/" class="text-slate-100 hover:text-blue-600 ">
-            <svg viewBox="0 0 24 24" fill="currentColor" class="h-5">
-              <path
-                d="M22,0H2C0.895,0,0,0.895,0,2v20c0,1.105,0.895,2,2,2h11v-9h-3v-4h3V8.413c0-3.1,1.893-4.788,4.659-4.788 c1.325,0,2.463,0.099,2.795,0.143v3.24l-1.918,0.001c-1.504,0-1.795,0.715-1.795,1.763V11h4.44l-1,4h-3.44v9H22c1.105,0,2-0.895,2-2 V2C24,0.895,23.105,0,22,0z"
-              ></path>
-            </svg>
-          </a>
-        </div>
-        <p class="mt-4 text-sm text-slate-100">
-          Bacon ipsum dolor amet short ribs pig sausage prosciutto chicken spare ribs salami.
+    </div>
+
+    <!-- Línea divisoria -->
+    <div class="max-w-7xl mx-auto border-t border-gray-800 mt-12 pt-8">
+        <p class="text-center text-gray-400 text-sm">
+            © 2024 StyloReserva. Todos los derechos reservados.
         </p>
-      </div>
-    </div>
-    <div class="flex flex-col-reverse justify-between pt-5 pb-10 border-t lg:flex-row">
-      <p class="text-sm text-slate-100">
-        © Copyright 2024 StyloReserva Inc. All rights reserved.
-      </p>
-      <ul class="flex flex-col mb-3 space-y-2 lg:mb-0 sm:space-y-0 sm:space-x-5 sm:flex-row">
-        <li>
-          <a href="/" class="text-sm text-slate-100 transition-colors duration-300 hover:text-deep-purple-accent-400">F.A.Q</a>
-        </li>
-        <li>
-          <a href="/" class="text-sm text-slate-100 transition-colors duration-300 hover:text-deep-purple-accent-400">Privacy Policy</a>
-        </li>
-        <li>
-          <a href="/" class="text-sm text-slate-100 transition-colors duration-300 hover:text-deep-purple-accent-400">Terms &amp; Conditions</a>
-        </li>
-      </ul>
-    </div>
     </div>
   </footer>
 </body>

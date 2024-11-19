@@ -1,0 +1,48 @@
+.servicio {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+        background-color: #eff6ff;
+    }
+    
+    &.seleccionado {
+        background-color: #dbeafe;
+        border: 2px solid #3b82f6;
+    }
+    
+    .nombre-servicio {
+        font-weight: 700;
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .precio-servicio {
+        color: #4b5563;
+        font-weight: 600;
+    }
+}
+
+.contenedor-servicio {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    
+    &:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    
+    p {
+        margin-bottom: 0.5rem;
+        
+        span {
+            font-weight: 700;
+        }
+    }
+}

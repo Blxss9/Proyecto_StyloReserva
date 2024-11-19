@@ -21,6 +21,8 @@ $esError404 = $esError404 ?? false;
 
     <body>
         <?php echo $contenido; ?>
+        
         <script src="/build/js/flowbite.min.js"></script>
+        <script src="/build/js/app.js"></script>
     </body>
 </html>

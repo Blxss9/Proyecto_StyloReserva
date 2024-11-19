@@ -12,6 +12,9 @@ use Controllers\LandingController;
 use Controllers\LoginController;
 use MVC\Router;
 
+// Importar el APIController
+use Controllers\APIController;
+
 // Crea una nueva instancia del enrutador
 $router = new Router();
 
@@ -41,6 +44,10 @@ $router->get('/mensaje', [LoginController::class, 'mensaje']);
 //Area Privada Citas
 $router->get('/cita', [CitaController::class, 'index']);
 
+// API de Citas
+$router->get('/api/servicios', [APIController::class, 'index']);
+$router->post('/api/citas', [APIController::class, 'guardar']);
+$router->post('/api/eliminar', [APIController::class, 'eliminar']);
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

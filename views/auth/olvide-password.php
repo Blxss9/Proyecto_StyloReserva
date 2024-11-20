@@ -32,9 +32,10 @@
                 ¿Olvidaste tu contraseña?
             </h2>
             <p class="text-center text-gray-400 mb-8">
-                No te preocupes, te enviaremos instrucciones a tu correo para restablecerla
+                No te preocupes, te enviaremos instrucciones para restablecerla
             </p>
 
+            <!-- Alertas -->
             <?php include_once __DIR__ . "/../templates/alertas.php"; ?>
 
             <!-- Formulario modernizado -->

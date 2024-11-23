@@ -5,6 +5,10 @@
         <p class="text-center text-gray-600 mb-8">Elige tus servicios y coloca tus datos</p>
 
         <div id="app">
+            <!-- Campos ocultos para ID y nombre del cliente -->
+            <input type="hidden" id="id" value="<?php echo $_SESSION['id'] ?? ''; ?>">
+            <input type="hidden" id="nombre" value="<?php echo $_SESSION['nombre'] ?? ''; ?>">
+            
             <!-- Progress Bar -->
             <div class="mb-8">
                 <div class="flex justify-between">
@@ -33,44 +37,50 @@
             </div>
 
             <!-- Secciones -->
+            <!-- Seccion 1 Servicios     -->
             <div id="paso-1" class="seccion bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Servicios</h2>
                 <p class="text-center text-gray-600 mb-6">Elige tus servicios a continuación</p>
                 <div id="servicios" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
 
+            <!-- Seccion 2 Fecha y Hora -->
             <div id="paso-2" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Fecha y Hora</h2>
                 <p class="text-center text-gray-600 mb-6">Selecciona la fecha y hora de tu cita</p>
                 
-                <form class="space-y-6">
-                    
-                    <div>
-                        <label class="block text-gray-700 mb-2" for="fecha">Fecha</label>
-                        <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            id="fecha"
-                            type="date"
-                            min="<?php echo date('Y-m-d', strtotime('+1 day') ); ?>"
-                        />
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="fecha">Fecha:</label>
+                    <input type="date" id="fecha" class="w-full p-2 border rounded">
+                </div>
 
-                    <div>
-                        <label class="block text-gray-700 mb-2" for="hora">Hora</label>
-                        <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            id="hora"
-                            type="time"
-                        />
+                <div id="horas-disponibles" class="hidden">
+                    <h3 class="text-xl font-semibold mb-4">Horas Disponibles:</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-2">Mañana</h4>
+                            <div id="horas-mañana" class="grid grid-cols-3 gap-2"></div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-2">Tarde</h4>
+                            <div id="horas-tarde" class="grid grid-cols-3 gap-2"></div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-2">Noche</h4>
+                            <div id="horas-noche" class="grid grid-cols-3 gap-2"></div>
+                        </div>
                     </div>
-                    <input type="hidden" id="id" value="<?php echo $id; ?>" >
-                </form>
+                </div>
             </div>
 
+            <!-- Seccion 3 Resumen -->
             <div id="paso-3" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Resumen</h2>
                 <p class="text-center text-gray-600 mb-6">Verifica que la información sea correcta</p>
                 <div id="resumen-cita" class="space-y-4"></div>
             </div>
 
+            <!-- Seccion 4 Pago -->
             <div id="paso-4" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Pago</h2>
                 <p class="text-center text-gray-600 mb-6">Realiza el pago de tu cita</p>

@@ -90,21 +90,22 @@ function paginaSiguiente() {
     btnSiguiente.addEventListener('click', () => {
         if(paso >= pasoFinal) return;
         
-        let resultado = true;
-        
-        if(paso === 3) {
-            resultado = validarResumen();
-        } else if(paso === 2) {
-            resultado = validarFecha();
-        } else if(paso === 1) {
-            resultado = validarServicios();
+        if(paso === 1) {
+            // Validar que se haya seleccionado al menos un servicio
+            if(!validarServicios()) return;
         }
         
-        if(resultado) {
-            paso++;
-            mostrarSeccion();
-            botonesPaginador();
+        if(paso === 2) {
+            // Validar que se haya seleccionado fecha y hora
+            if(!validarFecha()) return;
         }
+        
+        paso++;
+        mostrarSeccion();
+        botonesPaginador();
+        
+        // Actualizar el resumen al cambiar de página
+        mostrarResumen();
     });
 }
 
@@ -217,9 +218,8 @@ function validarServicios() {
 
 function validarFecha() {
     const fecha = document.querySelector('#fecha').value;
-    const hora = document.querySelector('#hora').value;
     
-    if(fecha === '' || hora === '') {
+    if(fecha === '' || !cita.hora) {
         mostrarAlerta('Debes seleccionar fecha y hora', 'error');
         return false;
     }
@@ -253,30 +253,127 @@ function seleccionarServicio(servicio) {
         cita.servicios = [...servicios, servicio];
         divServicio.classList.add('seleccionado');
     }
+    
+    // Actualizar el resumen cada vez que se selecciona o deselecciona un servicio
+    mostrarResumen();
 }
 
 // También necesitamos implementar las funciones de cliente
 function idCliente() {
-    const id = document.querySelector('#id').value;
-    cita.id = id;
+    // Verificar si el elemento existe antes de acceder a su valor
+    const inputId = document.querySelector('#id');
+    if(inputId) {
+        cita.id = inputId.value;
+    }
 }
 
 function nombreCliente() {
-    const nombre = document.querySelector('#nombre').value;
-    cita.nombre = nombre;
+    // Verificar si el elemento existe antes de acceder a su valor
+    const inputNombre = document.querySelector('#nombre');
+    if(inputNombre) {
+        cita.nombre = inputNombre.value;
+    }
 }
 
 function seleccionarFecha() {
     const inputFecha = document.querySelector('#fecha');
+    const horasDisponibles = document.querySelector('#horas-disponibles');
+    
+    if(!inputFecha || !horasDisponibles) {
+        console.error('No se encontraron los elementos necesarios');
+        return;
+    }
+    
+    // Establecer la fecha mínima como hoy
+    const hoy = new Date();
+    const año = hoy.getFullYear();
+    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+    const dia = hoy.getDate().toString().padStart(2, '0');
+    const fechaMinima = `${año}-${mes}-${dia}`;
+    
+    inputFecha.min = fechaMinima;
+    
     inputFecha.addEventListener('input', function(e) {
-        const dia = new Date(e.target.value).getUTCDay();
+        const fechaSeleccionada = new Date(e.target.value + 'T00:00:00');
+        const fechaHoy = new Date(fechaMinima + 'T00:00:00');
         
-        if([6, 0].includes(dia)) {
+        if(fechaSeleccionada < fechaHoy) {
             e.target.value = '';
-            mostrarAlerta('Fines de semana no permitidos', 'error');
+            mostrarAlerta('No puedes seleccionar fechas pasadas', 'error');
+            horasDisponibles.classList.add('hidden');
+            cita.fecha = '';
+            cita.hora = '';
         } else {
-            cita.fecha = e.target.value;
+            const dia = fechaSeleccionada.getUTCDay();
+            
+            if([6, 0].includes(dia)) {
+                e.target.value = '';
+                mostrarAlerta('Fines de semana no permitidos', 'error');
+                horasDisponibles.classList.add('hidden');
+                cita.fecha = '';
+                cita.hora = '';
+            } else {
+                cita.fecha = e.target.value;
+                mostrarHorasDisponibles();
+            }
         }
+        // Actualizar el resumen cuando se selecciona una fecha
+        mostrarResumen();
+    });
+}
+
+function mostrarHorasDisponibles() {
+    const horasDisponibles = document.querySelector('#horas-disponibles');
+    
+    if(!horasDisponibles) {
+        console.error('No se encontró el contenedor de horas disponibles');
+        return;
+    }
+    
+    horasDisponibles.classList.remove('hidden');
+
+    // Definir las horas disponibles por período
+    const horas = {
+        mañana: ['10:00', '10:50', '11:40'],
+        tarde: ['12:30', '15:00', '15:50', '16:40', '17:30'],
+        noche: ['18:20', '19:10']
+    };
+
+    // Limpiar contenedores
+    ['mañana', 'tarde', 'noche'].forEach(periodo => {
+        const contenedor = document.querySelector(`#horas-${periodo}`);
+        if(!contenedor) {
+            console.error(`No se encontró el contenedor para ${periodo}`);
+            return;
+        }
+        
+        contenedor.innerHTML = '';
+        
+        horas[periodo].forEach(hora => {
+            const boton = document.createElement('BUTTON');
+            boton.type = 'button';
+            boton.classList.add('px-4', 'py-2', 'text-sm', 'border', 'rounded', 'hover:bg-blue-500', 'hover:text-white');
+            
+            if(cita.hora === hora) {
+                boton.classList.add('bg-blue-500', 'text-white');
+            }
+            
+            boton.textContent = hora;
+            
+            boton.onclick = function() {
+                document.querySelectorAll('button[type="button"]').forEach(btn => {
+                    btn.classList.remove('bg-blue-500', 'text-white');
+                });
+                
+                this.classList.add('bg-blue-500', 'text-white');
+                cita.hora = hora;
+                
+                // Actualizar el resumen cuando se selecciona una hora
+                mostrarResumen();
+            };
+            
+            contenedor.appendChild(boton);
+        });
     });
 }
 
@@ -302,58 +399,85 @@ function mostrarResumen() {
         resumen.removeChild(resumen.firstChild);
     }
 
+    // Verificar si hay servicios seleccionados y datos completos
     if(Object.values(cita).includes('') || cita.servicios.length === 0) {
         return;
     }
 
     const { nombre, fecha, hora, servicios } = cita;
 
-    // Heading para Servicios
-    const headingServicios = document.createElement('H3');
-    headingServicios.textContent = 'Resumen de Servicios';
-    resumen.appendChild(headingServicios);
+    // Contenedor principal
+    const contenedorResumen = document.createElement('DIV');
+    contenedorResumen.classList.add('p-6', 'space-y-6');
+
+    // Nombre del cliente
+    const nombreCliente = document.createElement('P');
+    nombreCliente.innerHTML = `<span class="font-bold">Nombre:</span> ${nombre}`;
+    nombreCliente.classList.add('text-lg');
+
+    // Contenedor de servicios
+    const contenedorServicios = document.createElement('DIV');
+    contenedorServicios.classList.add('space-y-3');
+
+    // Título de servicios
+    const tituloServicios = document.createElement('H3');
+    tituloServicios.textContent = 'Servicios Seleccionados:';
+    tituloServicios.classList.add('font-bold', 'text-lg', 'mb-3');
+    contenedorServicios.appendChild(tituloServicios);
 
     // Iterando y mostrando los servicios
     servicios.forEach(servicio => {
-        const { nombre, precio } = servicio;
-        const contenedorServicio = document.createElement('DIV');
-        contenedorServicio.classList.add('contenedor-servicio');
-
-        const textoServicio = document.createElement('P');
-        textoServicio.textContent = nombre;
-
-        const precioServicio = document.createElement('P');
-        precioServicio.innerHTML = `<span>Precio:</span> $${precio}`;
-
-        contenedorServicio.appendChild(textoServicio);
-        contenedorServicio.appendChild(precioServicio);
-
-        resumen.appendChild(contenedorServicio);
+        const { nombre_servicio, precio } = servicio;
+        const servicioParrafo = document.createElement('P');
+        // Formatear el precio en formato CLP
+        const precioFormateado = new Intl.NumberFormat('es-CL', {
+            style: 'currency',
+            currency: 'CLP'
+        }).format(precio);
+        servicioParrafo.textContent = `${nombre_servicio} - ${precioFormateado}`;
+        contenedorServicios.appendChild(servicioParrafo);
     });
 
-    // Heading para Cita
-    const headingCita = document.createElement('H3');
-    headingCita.textContent = 'Resumen de Cita';
-    resumen.appendChild(headingCita);
-
-    const nombreCliente = document.createElement('P');
-    nombreCliente.innerHTML = `<span>Nombre:</span> ${nombre}`;
-
-    const fechaFormateada = new Date(fecha).toLocaleDateString('es-ES', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
+    // Formatear la fecha
+    const fechaObj = new Date(fecha);
+    const opciones = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
         day: 'numeric'
-    });
+    };
+    const fechaFormateada = fechaObj.toLocaleDateString('es-CL', opciones);
+    // Capitalizar primera letra
+    const fechaCapitalizada = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+
     const fechaCita = document.createElement('P');
-    fechaCita.innerHTML = `<span>Fecha:</span> ${fechaFormateada}`;
+    fechaCita.innerHTML = `<span class="font-bold">Fecha:</span> ${fechaCapitalizada}`;
+    fechaCita.classList.add('text-lg');
 
     const horaCita = document.createElement('P');
-    horaCita.innerHTML = `<span>Hora:</span> ${hora} Horas`;
+    horaCita.innerHTML = `<span class="font-bold">Hora:</span> ${hora} hrs`;
+    horaCita.classList.add('text-lg');
 
-    resumen.appendChild(nombreCliente);
-    resumen.appendChild(fechaCita);
-    resumen.appendChild(horaCita);
+    // Calcular y mostrar el total
+    const total = servicios.reduce((total, servicio) => total + parseFloat(servicio.precio), 0);
+    const totalFormateado = new Intl.NumberFormat('es-CL', {
+        style: 'currency',
+        currency: 'CLP'
+    }).format(total);
+    
+    const totalParrafo = document.createElement('P');
+    totalParrafo.innerHTML = `<span class="font-bold">Total:</span> ${totalFormateado}`;
+    totalParrafo.classList.add('text-xl', 'mt-6');
+
+    // Agregar al contenedor principal
+    contenedorResumen.appendChild(nombreCliente);
+    contenedorResumen.appendChild(contenedorServicios);
+    contenedorResumen.appendChild(fechaCita);
+    contenedorResumen.appendChild(horaCita);
+    contenedorResumen.appendChild(totalParrafo);
+
+    // Agregar al resumen
+    resumen.appendChild(contenedorResumen);
 }
 
 // ... Resto de las funciones existentes ...

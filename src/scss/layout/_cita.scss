@@ -45,4 +45,26 @@
             font-weight: 700;
         }
     }
+
+    .hora-disponible {
+        transition: all 300ms ease;
+    }
+
+    .hora-disponible:hover {
+    background-color: #3b82f6;
+    color: white;
+        cursor: pointer;
+    }
+
+    
+}
+
+.hora-disponible {
+    transition: all 300ms ease;
+}
+
+.hora-disponible:hover {
+    background-color: #3b82f6;
+    color: white;
+    cursor: pointer;
 }

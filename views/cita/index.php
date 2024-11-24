@@ -86,9 +86,59 @@
 
             <!-- Seccion 4 Pago -->
             <div id="paso-4" class="seccion hidden bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold mb-4">Pago</h2>
-                <p class="text-start text-gray-600 mb-6">Selecciona la como deseas pagar</p>
+                <h2 class="text-2xl font-semibold mb-4">Método de Pago</h2>
+                <p class="text-start text-gray-600 mb-8">Selecciona cómo deseas realizar el pago</p>
                 
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Opción de pago en establecimiento -->
+                    <div class="payment-option relative">
+                        <input type="radio" name="payment-method" value="local" id="local" class="absolute opacity-0 w-full h-full cursor-pointer z-10">
+                        <label for="local" class="block p-6 bg-white border-2 rounded-xl cursor-pointer transition-all hover:shadow-lg hover:border-blue-500">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-store text-4xl text-blue-500"></i>
+                            </div>
+                            <div class="text-center">
+                                <h3 class="font-semibold text-lg mb-2">Pago en Establecimiento</h3>
+                                <p class="text-gray-600 text-sm">
+                                    Paga en efectivo o con tarjeta cuando llegues a tu cita
+                                </p>
+                                <div class="mt-4 flex justify-center space-x-2">
+                                    <i class="fas fa-money-bill-wave text-green-500"></i>
+                                    <i class="fas fa-credit-card text-gray-600"></i>
+                                </div>
+                            </div>
+                            <div class="absolute top-4 right-4 opacity-0 text-blue-500 transition-opacity payment-check">
+                                <i class="fas fa-check-circle text-xl"></i>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Opción de PayPal -->
+                    <div class="payment-option relative">
+                        <input type="radio" name="payment-method" value="paypal" id="paypal" class="absolute opacity-0 w-full h-full cursor-pointer z-10">
+                        <label for="paypal" class="block p-6 bg-white border-2 rounded-xl cursor-pointer transition-all hover:shadow-lg hover:border-blue-500">
+                            <div class="text-center mb-4">
+                                <i class="fab fa-paypal text-4xl text-[#003087]"></i>
+                            </div>
+                            <div class="text-center">
+                                <h3 class="font-semibold text-lg mb-2">Pago anticipado con PayPal</h3>
+                                <p class="text-gray-600 text-sm">
+                                    Paga ahora de forma segura con PayPal
+                                </p>
+                                <div class="mt-4 flex justify-center space-x-2">
+                                    <i class="fas fa-lock text-yellow-500"></i>
+                                    <i class="fas fa-shield-alt text-blue-500"></i>
+                                </div>
+                            </div>
+                            <div class="absolute top-4 right-4 opacity-0 text-blue-500 transition-opacity payment-check">
+                                <i class="fas fa-check-circle text-xl"></i>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Contenedor para el botón de PayPal -->
+                <div id="paypal-button-container" class="hidden mt-8 max-w-md mx-auto"></div>
             </div>
 
             <!-- Botones de navegación -->
@@ -104,9 +154,3 @@
     </div>
 </div>
 
-<?php 
-    $script = "
-        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        <script src='/build/js/app.js'></script>
-    ";
-?>

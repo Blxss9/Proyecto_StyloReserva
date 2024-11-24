@@ -79,6 +79,7 @@ function mostrarServicios(servicios) {
     servicios.forEach(servicio => {
         const { id, nombre_servicio, precio, tiempo_estimado } = servicio;
         const precioFormateado = parseInt(precio).toLocaleString('es-CL');
+        const tiempoFormateado = formatearTiempo(parseInt(tiempo_estimado));
 
         const servicioDiv = document.createElement('DIV');
         servicioDiv.classList.add('servicio');
@@ -93,7 +94,7 @@ function mostrarServicios(servicios) {
         servicioDiv.innerHTML = `
             <p class="nombre-servicio">${nombre_servicio}</p>
             <p class="precio-servicio">$${precioFormateado}</p>
-            <p class="tiempo-servicio text-sm text-gray-600">Duración: ${tiempo_estimado} minutos</p>
+            <p class="tiempo-servicio text-sm text-gray-600">Duración: ${tiempoFormateado}</p>
         `;
 
         servicioDiv.onclick = () => seleccionarServicio(servicio);

@@ -92,7 +92,9 @@
                 <div class="grid md:grid-cols-2 gap-6">
                     <!-- Opción de pago en establecimiento -->
                     <div class="payment-option relative">
-                        <input type="radio" name="payment-method" value="local" id="local" class="absolute opacity-0 w-full h-full cursor-pointer z-10">
+                        <input type="radio" name="payment-method" value="local" id="local" 
+                            class="absolute opacity-0 w-full h-full cursor-pointer z-10" 
+                            onchange="actualizarBotonConfirmar()">
                         <label for="local" class="block p-6 bg-white border-2 rounded-xl cursor-pointer transition-all hover:shadow-lg hover:border-blue-500">
                             <div class="text-center mb-4">
                                 <i class="fas fa-store text-4xl text-blue-500"></i>
@@ -115,7 +117,9 @@
 
                     <!-- Opción de PayPal -->
                     <div class="payment-option relative">
-                        <input type="radio" name="payment-method" value="paypal" id="paypal" class="absolute opacity-0 w-full h-full cursor-pointer z-10">
+                        <input type="radio" name="payment-method" value="paypal" id="paypal" 
+                            class="absolute opacity-0 w-full h-full cursor-pointer z-10"
+                            onchange="actualizarBotonConfirmar()">
                         <label for="paypal" class="block p-6 bg-white border-2 rounded-xl cursor-pointer transition-all hover:shadow-lg hover:border-blue-500">
                             <div class="text-center mb-4">
                                 <i class="fab fa-paypal text-4xl text-[#003087]"></i>
@@ -135,6 +139,15 @@
                             </div>
                         </label>
                     </div>
+                </div>
+
+                <!-- Botón de confirmar pago -->
+                <div class="mt-8 text-center">
+                    <button id="confirmar-pago" 
+                        class="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed" 
+                        disabled>
+                        Confirmar Cita
+                    </button>
                 </div>
 
                 <!-- Contenedor para el botón de PayPal -->

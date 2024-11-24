@@ -151,18 +151,19 @@ function botonesPaginador() {
     if(!btnAnterior || !btnSiguiente) return;
 
     if(paso === 1) {
-        btnAnterior.classList.add('opacity-50');
-        btnAnterior.disabled = true;
+        // Ocultar el botón anterior en el paso 1
+        btnAnterior.classList.add('hidden');
     } else {
+        btnAnterior.classList.remove('hidden');
         btnAnterior.classList.remove('opacity-50');
         btnAnterior.disabled = false;
     }
 
     if(paso === 4) {
-        btnSiguiente.classList.add('opacity-50');
-        btnSiguiente.textContent = 'Confirmar';
-        btnSiguiente.disabled = true;
+        // Ocultar el botón siguiente en el paso 4
+        btnSiguiente.classList.add('hidden');
     } else {
+        btnSiguiente.classList.remove('hidden');
         btnSiguiente.classList.remove('opacity-50');
         btnSiguiente.disabled = false;
         btnSiguiente.textContent = 'Siguiente »';
@@ -254,6 +255,125 @@ function tabs() {
             }
         });
     });
+}
+
+function actualizarBotonConfirmar() {
+    const metodoPagoSeleccionado = document.querySelector('input[name="payment-method"]:checked');
+    const botonConfirmar = document.getElementById('confirmar-pago');
+    
+    botonConfirmar.disabled = !metodoPagoSeleccionado;
+
+    // Actualizar visual de las opciones seleccionadas
+    document.querySelectorAll('.payment-option').forEach(option => {
+        const check = option.querySelector('.payment-check');
+        if (option.querySelector('input').checked) {
+            check.classList.add('opacity-100');
+            option.querySelector('label').classList.add('border-blue-500');
+        } else {
+            check.classList.remove('opacity-100');
+            option.querySelector('label').classList.remove('border-blue-500');
+        }
+    });
+
+    // Agregar el evento click al botón de confirmar
+    botonConfirmar.onclick = async () => {
+        // Deshabilitar el botón inmediatamente
+        botonConfirmar.disabled = true;
+        botonConfirmar.textContent = 'Procesando...';
+        
+        // Deshabilitar las opciones de pago
+        document.querySelectorAll('input[name="payment-method"]').forEach(input => {
+            input.disabled = true;
+        });
+
+        const metodoPago = document.querySelector('input[name="payment-method"]:checked').value;
+        
+        if (metodoPago === 'local') {
+            try {
+                // Mostrar modal de confirmación con SweetAlert2
+                const resultado = await Swal.fire({
+                    title: '¿Confirmar cita?',
+                    html: `
+                        <p class="mb-4">Has seleccionado pago en establecimiento.</p>
+                        <p class="text-sm text-gray-600">
+                            Recuerda que deberás realizar el pago al momento de llegar a tu cita.
+                        </p>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, confirmar cita',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+
+                if (resultado.isConfirmed) {
+                    // Preparar los datos para enviar
+                    const datos = new FormData();
+                    datos.append('fecha', cita.fecha);
+                    datos.append('hora', cita.hora);
+                    datos.append('usuarioId', cita.id);
+                    datos.append('servicios', cita.servicios.map(servicio => servicio.id));
+                    datos.append('pago', metodoPago);
+                    datos.append('estado', 'pendiente');
+
+                    // Realizar la petición para guardar la cita
+                    const url = '/api/citas';
+                    const respuesta = await fetch(url, {
+                        method: 'POST',
+                        body: datos
+                    });
+                    const resultado = await respuesta.json();
+
+                    if(resultado.resultado) {
+                        // Limpiar el LocalStorage inmediatamente
+                        localStorage.removeItem('cita');
+                        localStorage.removeItem('paso');
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Cita Confirmada!',
+                            text: 'Tu cita ha sido agendada correctamente',
+                            confirmButtonText: 'OK',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false
+                        }).then(() => {
+                            window.location.href = '/';
+                        });
+                    }
+                } else {
+                    // Si el usuario cancela, reactivar el botón y las opciones
+                    botonConfirmar.disabled = false;
+                    botonConfirmar.textContent = 'Confirmar Cita';
+                    document.querySelectorAll('input[name="payment-method"]').forEach(input => {
+                        input.disabled = false;
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un error al guardar la cita',
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then(() => {
+                    // Reactivar el botón y las opciones en caso de error
+                    botonConfirmar.disabled = false;
+                    botonConfirmar.textContent = 'Confirmar Cita';
+                    document.querySelectorAll('input[name="payment-method"]').forEach(input => {
+                        input.disabled = false;
+                    });
+                });
+            }
+        } else if (metodoPago === 'paypal') {
+            // Lógica para PayPal
+            document.querySelector('#paypal-button-container').classList.remove('hidden');
+        }
+    };
 }
 
 function validarServicios() {

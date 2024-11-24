@@ -13,27 +13,44 @@ class APIController {
     }
 
     public static function guardar() {
-        
-        // Almacena la Cita y devuelve el ID
-        $cita = new Cita($_POST);
-        $resultado = $cita->guardar();
+        try {
+            // Crear la cita
+            $cita = new Cita([
+                'fecha' => $_POST['fecha'],
+                'hora' => $_POST['hora'],
+                'usuarioId' => $_POST['usuarioId'],
+                'pago' => $_POST['pago'],
+                'estado' => $_POST['estado']
+            ]);
+            
+            $resultado = $cita->guardar();
 
-        $id = $resultado['id'];
-
-        // Almacena la Cita y el Servicio
-
-        // Almacena los Servicios con el ID de la Cita
-        $idServicios = explode(",", $_POST['servicios']);
-        foreach($idServicios as $idServicio) {
-            $args = [
-                'citaId' => $id,
-                'servicioId' => $idServicio
-            ];
-            $citaServicio = new CitaServicio($args);
-            $citaServicio->guardar();
+            if($resultado['resultado']) {
+                $idCita = $resultado['id'];
+                
+                // Almacenar los servicios
+                $servicios = explode(',', $_POST['servicios']);
+                
+                foreach($servicios as $servicioId) {
+                    $citaServicio = new CitaServicio([
+                        'citaId' => $idCita,
+                        'servicioId' => $servicioId
+                    ]);
+                    $citaServicio->guardar();
+                }
+                
+                // Enviar respuesta exitosa
+                echo json_encode(['resultado' => true]);
+            } else {
+                throw new \Exception('Error al guardar la cita');
+            }
+            
+        } catch(\Exception $e) {
+            echo json_encode([
+                'resultado' => false,
+                'error' => $e->getMessage()
+            ]);
         }
-
-        echo json_encode(['resultado' => $resultado]);
     }
 
     public static function eliminar() {

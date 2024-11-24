@@ -44,14 +44,14 @@
             <!-- Seccion 1 Servicios     -->
             <div id="paso-1" class="seccion bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl">
                 <h2 class="text-2xl font-semibold mb-4 text-gray-800">Servicios Disponibles</h2>
-                <p class="text-center text-gray-600 mb-8">Selecciona los servicios que deseas agendar</p>
+                <p class="text-start text-gray-600 mb-8">Selecciona los servicios que deseas agendar</p>
                 <div id="servicios" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
             <!-- Seccion 2 Fecha y Hora -->
             <div id="paso-2" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Fecha y Hora</h2>
-                <p class="text-center text-gray-600 mb-6">Selecciona la fecha y hora de tu cita</p>
+                <p class="text-start text-gray-600 mb-6">Selecciona la fecha y hora de tu cita</p>
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="fecha">Fecha:</label>
@@ -80,14 +80,14 @@
             <!-- Seccion 3 Resumen -->
             <div id="paso-3" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Resumen</h2>
-                <p class="text-center text-gray-600 mb-6">Verifica que la información sea correcta</p>
+                <p class="text-start text-gray-600 mb-6">Verifica que la información sea correcta</p>
                 <div id="resumen-cita" class="space-y-4"></div>
             </div>
 
             <!-- Seccion 4 Pago -->
             <div id="paso-4" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Pago</h2>
-                <p class="text-center text-gray-600 mb-6">Realiza el pago de tu cita</p>
+                <p class="text-center text-gray-600 mb-6">Selecciona la forma de pago</p>
                 <!-- Aquí irá el formulario de pago -->
             </div>
 

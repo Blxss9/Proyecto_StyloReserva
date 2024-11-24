@@ -10,25 +10,57 @@ const cita = {
     servicios: []
 }
 
+function cargarDatosGuardados() {
+    const citaGuardada = localStorage.getItem('cita');
+    const pasoGuardado = localStorage.getItem('paso');
+    
+    if (citaGuardada) {
+        const citaObj = JSON.parse(citaGuardada);
+        Object.assign(cita, citaObj);
+        
+        if(paso === 1) {
+            cita.servicios.forEach(servicio => {
+                const divServicio = document.querySelector(`[data-id-servicio="${servicio.id}"]`);
+                if(divServicio) {
+                    divServicio.classList.add('seleccionado');
+                }
+            });
+        }
+        
+        if(paso === 2 && cita.fecha) {
+            const inputFecha = document.querySelector('#fecha');
+            if(inputFecha) {
+                inputFecha.value = cita.fecha;
+                mostrarHorasDisponibles();
+            }
+        }
+    }
+    
+    if (pasoGuardado) {
+        paso = parseInt(pasoGuardado);
+        mostrarSeccion();
+        mostrarResumen();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    cargarDatosGuardados();
     iniciarApp();
 });
 
 function iniciarApp() {
-    mostrarSeccion(); // Muestra y oculta las secciones
-    tabs(); // Cambia la sección cuando se presionen los tabs
-    botonesPaginador(); // Agrega o quita los botones del paginador
+    mostrarSeccion();
+    tabs();
+    botonesPaginador();
     paginaSiguiente();
     paginaAnterior();
     
-    consultarAPI(); // Consulta la API en el backend de PHP
+    consultarAPI();
     
-    idCliente(); // Añade el id del cliente al objeto de cita
-    nombreCliente(); // Añade el nombre del cliente al objeto de cita
-    seleccionarFecha(); // Añade la fecha de la cita en el objeto
-    seleccionarHora(); // Añade la hora de la cita en el objeto
-    
-    mostrarResumen(); // Muestra el resumen de la cita
+    idCliente();
+    nombreCliente();
+    seleccionarFecha();
+    seleccionarHora();
 }
 
 async function consultarAPI() {
@@ -181,6 +213,8 @@ function mostrarSeccion() {
     if(progreso) {
         progreso.style.width = `${(paso / pasoFinal) * 100}%`;
     }
+    
+    localStorage.setItem('paso', paso);
 }
 
 function mostrarAlerta(mensaje, tipo) {
@@ -279,7 +313,7 @@ function seleccionarServicio(servicio) {
         divServicio.classList.add('seleccionado');
     }
     
-    // Actualizar el resumen cada vez que se selecciona o deselecciona un servicio
+    localStorage.setItem('cita', JSON.stringify(cita));
     mostrarResumen();
 }
 
@@ -304,10 +338,7 @@ function seleccionarFecha() {
     const inputFecha = document.querySelector('#fecha');
     const horasDisponibles = document.querySelector('#horas-disponibles');
     
-    if(!inputFecha || !horasDisponibles) {
-        console.error('No se encontraron los elementos necesarios');
-        return;
-    }
+    if(!inputFecha || !horasDisponibles) return;
     
     // Establecer la fecha mínima como hoy
     const hoy = new Date();
@@ -318,9 +349,16 @@ function seleccionarFecha() {
     
     inputFecha.min = fechaMinima;
     
+    // Si hay una fecha guardada, establecerla
+    if(cita.fecha) {
+        inputFecha.value = cita.fecha;
+        mostrarHorasDisponibles();
+    }
+    
     inputFecha.addEventListener('input', function(e) {
-        const fechaSeleccionada = new Date(e.target.value + 'T00:00:00');
-        const fechaHoy = new Date(fechaMinima + 'T00:00:00');
+        const [añoSel, mesSel, diaSel] = e.target.value.split('-');
+        const fechaSeleccionada = new Date(añoSel, mesSel - 1, diaSel);
+        const fechaHoy = new Date(año, mes - 1, dia);
         
         if(fechaSeleccionada < fechaHoy) {
             e.target.value = '';
@@ -329,7 +367,7 @@ function seleccionarFecha() {
             cita.fecha = '';
             cita.hora = '';
         } else {
-            const dia = fechaSeleccionada.getUTCDay();
+            const dia = fechaSeleccionada.getDay();
             
             if([6, 0].includes(dia)) {
                 e.target.value = '';
@@ -342,8 +380,8 @@ function seleccionarFecha() {
                 mostrarHorasDisponibles();
             }
         }
-        // Actualizar el resumen cuando se selecciona una fecha
         mostrarResumen();
+        localStorage.setItem('cita', JSON.stringify(cita));
     });
 }
 
@@ -393,7 +431,7 @@ function mostrarHorasDisponibles() {
                 this.classList.add('bg-blue-500', 'text-white');
                 cita.hora = hora;
                 
-                // Actualizar el resumen cuando se selecciona una hora
+                localStorage.setItem('cita', JSON.stringify(cita));
                 mostrarResumen();
             };
             
@@ -419,6 +457,8 @@ function seleccionarHora() {
 function mostrarResumen() {
     const resumen = document.querySelector('#resumen-cita');
 
+    if(!resumen) return;
+
     // Limpiar el contenido
     while(resumen.firstChild) {
         resumen.removeChild(resumen.firstChild);
@@ -426,6 +466,10 @@ function mostrarResumen() {
 
     // Verificar si hay servicios seleccionados y datos completos
     if(Object.values(cita).includes('') || cita.servicios.length === 0) {
+        const mensajeError = document.createElement('P');
+        mensajeError.classList.add('text-center', 'text-gray-600', 'mt-5');
+        mensajeError.textContent = 'Faltan datos por completar';
+        resumen.appendChild(mensajeError);
         return;
     }
 
@@ -463,16 +507,20 @@ function mostrarResumen() {
         contenedorServicios.appendChild(servicioParrafo);
     });
 
-    // Formatear la fecha
-    const fechaObj = new Date(fecha);
+    // Modificar la parte de formateo de fecha
+    const [año, mes, dia] = fecha.split('-');
+    
+    // Crear la fecha sin UTC
+    const fechaObj = new Date(año, mes - 1, dia);
+    
     const opciones = { 
         weekday: 'long', 
         year: 'numeric', 
         month: 'long', 
         day: 'numeric'
     };
+    
     const fechaFormateada = fechaObj.toLocaleDateString('es-CL', opciones);
-    // Capitalizar primera letra
     const fechaCapitalizada = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
 
     const fechaCita = document.createElement('P');
@@ -492,7 +540,7 @@ function mostrarResumen() {
     
     const totalParrafo = document.createElement('P');
     totalParrafo.innerHTML = `<span class="font-bold">Total:</span> ${totalFormateado}`;
-    totalParrafo.classList.add('text-xl', 'mt-6');
+    totalParrafo.classList.add('text-lg', 'mt-6');
 
     // Agregar al contenedor principal
     contenedorResumen.appendChild(nombreCliente);
@@ -503,6 +551,15 @@ function mostrarResumen() {
 
     // Agregar al resumen
     resumen.appendChild(contenedorResumen);
+
+    // Habilitar el botón de confirmar si estamos en el paso 3
+    if(paso === 3) {
+        const btnSiguiente = document.querySelector('#siguiente');
+        if(btnSiguiente) {
+            btnSiguiente.classList.remove('opacity-50');
+            btnSiguiente.disabled = false;
+        }
+    }
 }
 
 // ... Resto de las funciones existentes ...

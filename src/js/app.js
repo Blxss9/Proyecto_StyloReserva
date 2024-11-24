@@ -201,9 +201,34 @@ function tabs() {
     const botones = document.querySelectorAll('.step-button');
     botones.forEach(boton => {
         boton.addEventListener('click', function(e) {
-            paso = parseInt(e.target.dataset.paso);
-            mostrarSeccion();
-            botonesPaginador();
+            const pasoSeleccionado = parseInt(e.target.dataset.paso);
+            
+            // Si intenta retroceder, permitirlo
+            if (pasoSeleccionado < paso) {
+                paso = pasoSeleccionado;
+                mostrarSeccion();
+                botonesPaginador();
+                return;
+            }
+
+            // Validaciones para avanzar
+            if (paso === 1 && !validarServicios()) {
+                return;
+            }
+
+            if (paso === 2 && !validarFecha()) {
+                return;
+            }
+
+            // Si todas las validaciones pasan, permitir el cambio
+            if (pasoSeleccionado - paso === 1) {
+                paso = pasoSeleccionado;
+                mostrarSeccion();
+                botonesPaginador();
+            } else {
+                // Si intenta saltar más de una sección, mostrar alerta
+                mostrarAlerta('Por favor, complete los pasos en orden', 'error');
+            }
         });
     });
 }

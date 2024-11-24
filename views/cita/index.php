@@ -1,8 +1,12 @@
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-3xl mx-auto px-4">
-        <h1 class="text-3xl font-bold text-center"value="<?php echo $nombre; ?>">Bienvenido <?php echo $nombre; ?></h1>
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Crear Nueva Cita</h1>
-        <p class="text-center text-gray-600 mb-8">Elige tus servicios y coloca tus datos</p>
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8">
+    <div class="max-w-4xl mx-auto px-4">
+        <h1 class="text-4xl font-bold text-center mb-0 text-gray-800 animate-fade-in" value="<?php echo $nombre; ?>">
+            ¡Bienvenido <?php echo $nombre; ?>!
+        </h1>
+        <h2 class="text-2xl font-medium text-center text-gray-600 mb-12 mt-2">
+            Sigue los pasos para agendar tu cita
+        </h2>
+        
 
         <div id="app">
             <!-- Campos ocultos para ID y nombre del cliente -->
@@ -10,11 +14,11 @@
             <input type="hidden" id="nombre" value="<?php echo $_SESSION['nombre'] ?? ''; ?>">
             
             <!-- Progress Bar -->
-            <div class="mb-8">
+            <div class="mb-12">
                 <div class="flex justify-between">
-                    <div class="w-1/4 text-center">
-                        <button data-paso="1" class="step-button w-10 h-10 rounded-full bg-blue-500 text-white font-bold mb-2 mx-auto">1</button>
-                        <span class="text-sm">Servicios</span>
+                    <div class="w-1/4 text-center relative">
+                        <button data-paso="1" class="step-button w-12 h-12 rounded-full bg-blue-500 text-white font-bold mb-3 mx-auto transform hover:scale-105 transition-transform">1</button>
+                        <span class="text-sm font-medium">Servicios</span>
                     </div>
                     <div class="w-1/4 text-center">
                         <button data-paso="2" class="step-button w-10 h-10 rounded-full bg-gray-300 text-gray-600 font-bold mb-2 mx-auto">2</button>
@@ -30,18 +34,18 @@
                     </div>
                 </div>
                 <div class="relative pt-4">
-                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                        <div id="progress" class="w-1/4 shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-500"></div>
+                    <div class="overflow-hidden h-3 mb-4 text-xs flex rounded-full bg-gray-200">
+                        <div id="progress" class="w-1/4 shadow-lg flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-500"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Secciones -->
             <!-- Seccion 1 Servicios     -->
-            <div id="paso-1" class="seccion bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold mb-4">Servicios</h2>
-                <p class="text-center text-gray-600 mb-6">Elige tus servicios a continuación</p>
-                <div id="servicios" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            <div id="paso-1" class="seccion bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Servicios Disponibles</h2>
+                <p class="text-center text-gray-600 mb-8">Selecciona los servicios que deseas agendar</p>
+                <div id="servicios" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
             <!-- Seccion 2 Fecha y Hora -->
@@ -88,11 +92,11 @@
             </div>
 
             <!-- Botones de navegación -->
-            <div class="flex justify-between mt-6">
-                <button id="anterior" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            <div class="flex justify-between mt-8 gap-4">
+                <button id="anterior" class="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all transform hover:-translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none">
                     &laquo; Anterior
                 </button>
-                <button id="siguiente" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <button id="siguiente" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all transform hover:translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none">
                     Siguiente &raquo;
                 </button>
             </div>

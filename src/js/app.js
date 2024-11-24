@@ -17,23 +17,6 @@ function cargarDatosGuardados() {
     if (citaGuardada) {
         const citaObj = JSON.parse(citaGuardada);
         Object.assign(cita, citaObj);
-        
-        if(paso === 1) {
-            cita.servicios.forEach(servicio => {
-                const divServicio = document.querySelector(`[data-id-servicio="${servicio.id}"]`);
-                if(divServicio) {
-                    divServicio.classList.add('seleccionado');
-                }
-            });
-        }
-        
-        if(paso === 2 && cita.fecha) {
-            const inputFecha = document.querySelector('#fecha');
-            if(inputFecha) {
-                inputFecha.value = cita.fecha;
-                mostrarHorasDisponibles();
-            }
-        }
     }
     
     if (pasoGuardado) {
@@ -95,13 +78,17 @@ function mostrarServicios(servicios) {
     
     servicios.forEach(servicio => {
         const { id, nombre_servicio, precio } = servicio;
-
-        // Formatear el precio como número entero
         const precioFormateado = parseInt(precio).toLocaleString('es-CL');
 
         const servicioDiv = document.createElement('DIV');
         servicioDiv.classList.add('servicio');
         servicioDiv.dataset.idServicio = id;
+
+        // Verificar si el servicio está en la cita guardada
+        const estaSeleccionado = cita.servicios.some(servicioGuardado => servicioGuardado.id === id);
+        if (estaSeleccionado) {
+            servicioDiv.classList.add('seleccionado');
+        }
 
         servicioDiv.innerHTML = `
             <p class="nombre-servicio">${nombre_servicio}</p>

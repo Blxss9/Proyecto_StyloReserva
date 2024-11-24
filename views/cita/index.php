@@ -87,7 +87,7 @@
             <!-- Seccion 4 Pago -->
             <div id="paso-4" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Pago</h2>
-                <p class="text-center text-gray-600 mb-6">Selecciona la forma de pago</p>
+                <p class="text-start text-gray-600 mb-6">Selecciona la como deseas pagar</p>
                 <!-- Aquí irá el formulario de pago -->
             </div>
 

@@ -77,7 +77,7 @@ function mostrarServicios(servicios) {
     contenedorServicios.innerHTML = '';
     
     servicios.forEach(servicio => {
-        const { id, nombre_servicio, precio } = servicio;
+        const { id, nombre_servicio, precio, tiempo_estimado } = servicio;
         const precioFormateado = parseInt(precio).toLocaleString('es-CL');
 
         const servicioDiv = document.createElement('DIV');
@@ -93,6 +93,7 @@ function mostrarServicios(servicios) {
         servicioDiv.innerHTML = `
             <p class="nombre-servicio">${nombre_servicio}</p>
             <p class="precio-servicio">$${precioFormateado}</p>
+            <p class="tiempo-servicio text-sm text-gray-600">Duración: ${tiempo_estimado} minutos</p>
         `;
 
         servicioDiv.onclick = () => seleccionarServicio(servicio);
@@ -441,6 +442,24 @@ function seleccionarHora() {
     });
 }
 
+function formatearTiempo(minutos) {
+    const horas = Math.floor(minutos / 60);
+    const minutosRestantes = minutos % 60;
+    
+    let resultado = '';
+    
+    if (horas > 0) {
+        resultado += `${horas} ${horas === 1 ? 'hora' : 'horas'}`;
+    }
+    
+    if (minutosRestantes > 0) {
+        if (horas > 0) resultado += ' y ';
+        resultado += `${minutosRestantes} ${minutosRestantes === 1 ? 'minuto' : 'minutos'}`;
+    }
+    
+    return resultado || '0 minutos';
+}
+
 function mostrarResumen() {
     const resumen = document.querySelector('#resumen-cita');
 
@@ -481,18 +500,38 @@ function mostrarResumen() {
     tituloServicios.classList.add('font-bold', 'text-lg', 'mb-3');
     contenedorServicios.appendChild(tituloServicios);
 
+    // Variables para calcular totales
+    let tiempoTotal = 0;
+    let precioTotal = 0;
+
     // Iterando y mostrando los servicios
     servicios.forEach(servicio => {
-        const { nombre_servicio, precio } = servicio;
+        const { nombre_servicio, precio, tiempo_estimado } = servicio;
         const servicioParrafo = document.createElement('P');
+        
+        // Sumar al tiempo total
+        tiempoTotal += parseInt(tiempo_estimado);
+        // Sumar al precio total
+        precioTotal += parseFloat(precio);
+        
         // Formatear el precio en formato CLP
         const precioFormateado = new Intl.NumberFormat('es-CL', {
             style: 'currency',
             currency: 'CLP'
         }).format(precio);
-        servicioParrafo.textContent = `${nombre_servicio} - ${precioFormateado}`;
+        
+        // Formatear el tiempo estimado
+        const tiempoFormateado = formatearTiempo(parseInt(tiempo_estimado));
+        
+        servicioParrafo.textContent = `${nombre_servicio} - ${precioFormateado} (${tiempoFormateado})`;
         contenedorServicios.appendChild(servicioParrafo);
     });
+
+    // Agregar tiempo total estimado con formato
+    const tiempoTotalParrafo = document.createElement('P');
+    const tiempoTotalFormateado = formatearTiempo(tiempoTotal);
+    tiempoTotalParrafo.innerHTML = `<span class="font-bold">Tiempo Total Estimado:</span> ${tiempoTotalFormateado}`;
+    tiempoTotalParrafo.classList.add('bg-blue-50', 'rounded-lg', 'text-lg', 'mt-4');
 
     // Modificar la parte de formateo de fecha
     const [año, mes, dia] = fecha.split('-');
@@ -519,19 +558,19 @@ function mostrarResumen() {
     horaCita.classList.add('text-lg');
 
     // Calcular y mostrar el total
-    const total = servicios.reduce((total, servicio) => total + parseFloat(servicio.precio), 0);
     const totalFormateado = new Intl.NumberFormat('es-CL', {
         style: 'currency',
         currency: 'CLP'
-    }).format(total);
+    }).format(precioTotal);
     
     const totalParrafo = document.createElement('P');
-    totalParrafo.innerHTML = `<span class="font-bold">Total:</span> ${totalFormateado}`;
-    totalParrafo.classList.add('text-lg', 'mt-6');
+    totalParrafo.innerHTML = `<span class="font-bold">Total a Pagar:</span> ${totalFormateado}`;
+    totalParrafo.classList.add('bg-gray-100', 'p-4', 'rounded-lg', 'text-lg', 'mt-6', 'text-center');
 
     // Agregar al contenedor principal
     contenedorResumen.appendChild(nombreCliente);
     contenedorResumen.appendChild(contenedorServicios);
+    contenedorResumen.appendChild(tiempoTotalParrafo);
     contenedorResumen.appendChild(fechaCita);
     contenedorResumen.appendChild(horaCita);
     contenedorResumen.appendChild(totalParrafo);

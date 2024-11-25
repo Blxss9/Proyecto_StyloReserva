@@ -118,7 +118,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
-                        <div id="pago-paypal" class="px-4 pb-4">
+                        <div id="pago-paypal" class="hidden px-4 pb-4">
                             <p class="text-gray-600 mb-4">Realiza el pago ahora y asegura tu cita.</p>
                             <div id="paypal-button-container" class="min-h-[150px]"></div>
                             <p id="result-message" class="mt-4 text-center"></p>

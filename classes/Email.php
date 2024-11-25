@@ -35,9 +35,12 @@ class Email{
         $mail->isHTML(true);
         $mail->CharSet = 'UTF-8';
 
+        $confirmationLink = URL_BASE . "/confirmar-cuenta?token=" . $this->token;
+        error_log('Enlace de confirmación generado: ' . $confirmationLink);
+        
         $contenido = '<html>';
         $contenido .= "<p><strong>Hola " . $this->nombre . "</strong> Has creado tu cuenta en StyloReserva, debes confirmar tu cuenta en el siguiente enlace</p>";
-        $contenido .= "<p>Presiona aquí: <a href='http://localhost:5000/confirmar-cuenta?token=" . $this->token . "'>Confirmar Cuenta</a></p>";
+        $contenido .= "<p>Presiona aquí: <a href='" . $confirmationLink . "'>Confirmar Cuenta</a></p>";
 
         $contenido .= "<p>Si no has sido tú, ignora este mensaje</p>";
         $contenido .= '</html>';

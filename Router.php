@@ -24,6 +24,14 @@ class Router
         $currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
         $method = $_SERVER['REQUEST_METHOD'];
 
+        // Separar la URL base de los parámetros GET
+        $splitURL = explode('?', $currentUrl);
+        $currentUrl = $splitURL[0];
+
+        // Agregar log para depuración
+        error_log('URL base: ' . $currentUrl);
+        error_log('Método HTTP: ' . $method);
+
         // Verificar si es una ruta de API
         $esRutaApi = strpos($currentUrl, '/api/') === 0;
         
@@ -31,13 +39,9 @@ class Router
             header('Content-Type: application/json');
         }
 
-        // Extraer parámetros de URL para rutas dinámicas
-        if (strpos($currentUrl, '/api/orders/capture/') === 0) {
-            $currentUrl = '/api/orders/capture/:id';
-        }
-
         if ($method === 'GET') {
             $fn = $this->getRoutes[$currentUrl] ?? null;
+            error_log('Ruta encontrada en GET: ' . ($fn ? 'sí' : 'no'));
         } else {
             $fn = $this->postRoutes[$currentUrl] ?? null;
         }
@@ -46,13 +50,13 @@ class Router
             try {
                 call_user_func($fn, $this);
             } catch (\Exception $e) {
+                error_log('Error en la ruta: ' . $e->getMessage());
                 if ($esRutaApi) {
                     echo json_encode([
                         'status' => 'error',
                         'message' => $e->getMessage()
                     ]);
                 } else {
-                    // Manejo de errores para vistas normales
                     $this->render('error', [
                         'titulo' => 'Error',
                         'mensaje' => $e->getMessage()
@@ -60,6 +64,7 @@ class Router
                 }
             }
         } else {
+            error_log('Ruta no encontrada: ' . $currentUrl);
             if ($esRutaApi) {
                 http_response_code(404);
                 echo json_encode([

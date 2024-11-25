@@ -103,12 +103,11 @@ class LoginController {
     }
 
     public static function recuperar(Router $router) {
-        
         $alertas = [];
         $error = false;
+        $exito = false;
 
         $token = s($_GET['token']);
-
         $usuario = Usuario::where('token', $token);
 
         if(empty($usuario)) {
@@ -128,16 +127,17 @@ class LoginController {
 
                 $resultado = $usuario->guardar();
                 if($resultado) {
-                    header('Location: /login');
+                    $exito = true;
+                    Usuario::setAlerta('exito', 'La contraseña se ha actualizado correctamente. Serás redirigido al login en 3 segundos.');
                 }
-
             }
         }
 
         $alertas = Usuario::getAlertas();
         $router->render('auth/recuperar-password', [
             'alertas' => $alertas,
-            'error' => $error
+            'error' => $error,
+            'exito' => $exito
         ]);
     }
 
@@ -184,8 +184,12 @@ class LoginController {
     public static function confirmar(Router $router) {
         $alertas = [];
         $token = s($_GET['token'] ?? '');
-
+        
+        error_log('Token recibido: ' . $token);
+        
         $usuario = Usuario::where('token', $token);
+        
+        error_log('Usuario encontrado: ' . ($usuario ? 'sí' : 'no'));
 
         if (!$usuario) {
             Usuario::setAlerta('error', 'Token no válido');

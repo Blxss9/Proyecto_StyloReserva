@@ -12,3 +12,5 @@ date_default_timezone_set('America/Santiago');
 use Model\ActiveRecord;
 ActiveRecord::setDB($db);
 
+define('URL_BASE', 'http://localhost:5000');  // Ajusta esto según tu puerto
+

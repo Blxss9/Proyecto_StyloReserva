@@ -77,3 +77,15 @@
         </div>
     </div>
 </section>
+
+<?php if($exito): ?>
+    <div class="acciones">
+        <a href="/login" class="boton">Ir al Login</a>
+    </div>
+    
+    <script>
+        setTimeout(function() {
+            window.location.href = '/login';
+        }, 3000);
+    </script>
+<?php endif; ?>

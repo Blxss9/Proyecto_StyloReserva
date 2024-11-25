@@ -20,7 +20,7 @@ class Cita extends ActiveRecord {
         $this->fecha = $args['fecha'] ?? '';
         $this->hora = $args['hora'] ?? '';
         $this->usuarioId = $args['usuarioId'] ?? '';
-        $this->created_at = $args['created_at'] ?? '';
+        $this->created_at = date('Y-m-d H:i:s');
         $this->pago = $args['pago'] ?? '';
         $this->estado = $args['estado'] ?? '';
     }

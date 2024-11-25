@@ -600,24 +600,18 @@ function initPayPal() {
                             icon: 'success',
                             title: '¡Pago Exitoso!',
                             text: 'Tu cita ha sido agendada y pagada correctamente',
-                            showDenyButton: true,
                             showCancelButton: true,
                             confirmButtonText: 'Ver Comprobante',
-                            denyButtonText: 'Nueva Cita',
-                            cancelButtonText: 'Salir',
+                            cancelButtonText: 'Nueva Cita',
                             confirmButtonColor: '#3085d6',
-                            denyButtonColor: '#2563eb',
                             cancelButtonColor: '#6b7280'
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 // Ir al comprobante
                                 window.location.href = resultado.comprobanteUrl;
-                            } else if (result.isDenied) {
+                            } else {
                                 // Recargar la página para nueva cita
                                 window.location.reload();
-                            } else {
-                                // Salir al inicio
-                                window.location.href = '/';
                             }
                         });
                     }
@@ -714,30 +708,102 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Configurar el botón de agendar
 document.getElementById('btn-agendar')?.addEventListener('click', async () => {
-    // Aquí puedes agregar la lógica para agendar la cita
-    // Por ejemplo, hacer una petición a tu API
-    try {
-        const response = await fetch('/api/citas', {
-            method: 'POST',
-            body: JSON.stringify(cita)
-        });
-        const resultado = await response.json();
-        
-        if(resultado.resultado) {
-            Swal.fire({
-                icon: 'success',
-                title: '¡Cita Agendada!',
-                text: 'Tu cita ha sido agendada correctamente'
-            }).then(() => {
-                window.location.reload();
-            });
+    // Mostrar modal de confirmación
+    Swal.fire({
+        title: '¿Confirmar Cita?',
+        html: `
+            <div class="text-left">
+                <p class="mb-2"><strong>Fecha:</strong> ${formatearFecha(cita.fecha)}</p>
+                <p class="mb-2"><strong>Hora:</strong> ${cita.hora}</p>
+                <p class="mb-2"><strong>Servicios:</strong></p>
+                <ul class="list-disc pl-5">
+                    ${cita.servicios.map(servicio => 
+                        `<li>${servicio.nombre_servicio} - ${formatearPrecio(servicio.precio)}</li>`
+                    ).join('')}
+                </ul>
+                <p class="mt-2"><strong>Total:</strong> ${formatearPrecio(calcularTotal(cita.servicios))}</p>
+            </div>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Sí, Confirmar',
+        cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch('/api/citas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ...cita,
+                        servicios: cita.servicios.map(s => s.id).join(','),
+                        pago: 'PENDING',
+                        estado: 'pendiente'
+                    })
+                });
+
+                const resultado = await response.json();
+                
+                if(resultado.resultado) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Cita Agendada!',
+                        text: 'Tu cita ha sido agendada correctamente, nos contactaremos contigo para confirmar tu asistencia.',
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        confirmButtonText: 'Nueva Cita',
+                        confirmButtonColor: '#3085d6',
+                        footer: '<a href="/" class="text-gray-500 hover:text-gray-700">Volver al inicio</a>'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Recargar para nueva cita
+                            window.location.reload();
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un error al agendar la cita'
+                });
+            }
         }
-    } catch (error) {
-        console.error(error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un error al agendar la cita'
-        });
-    }
+    });
 });
+
+// Función auxiliar para formatear la fecha
+function formatearFecha(fecha) {
+    const opciones = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+    
+    let fechaFormateada = new Date(fecha).toLocaleDateString('es-ES', opciones);
+    // Capitalizar la primera letra
+    return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+}
+
+// Función auxiliar para formatear precio en CLP
+function formatearPrecio(precio) {
+    return new Intl.NumberFormat('es-CL', {
+        style: 'currency',
+        currency: 'CLP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(precio);
+}
+
+// Función auxiliar para calcular el total
+function calcularTotal(servicios) {
+    return servicios.reduce((total, servicio) => 
+        total + parseFloat(servicio.precio), 0
+    );
+}

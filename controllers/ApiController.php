@@ -13,27 +13,43 @@ class APIController {
     }
 
     public static function guardar() {
+        $datos = json_decode(file_get_contents('php://input'), true);
         
         // Almacena la Cita y devuelve el ID
-        $cita = new Cita($_POST);
+        $cita = new Cita([
+            'fecha' => $datos['fecha'],
+            'hora' => $datos['hora'],
+            'usuarioId' => $datos['id'],
+            'pago' => $datos['pago'] ?? 'PENDING',
+            'estado' => $datos['estado'] ?? 'pendiente'
+        ]);
+        
         $resultado = $cita->guardar();
 
-        $id = $resultado['id'];
-
-        // Almacena la Cita y el Servicio
-
-        // Almacena los Servicios con el ID de la Cita
-        $idServicios = explode(",", $_POST['servicios']);
-        foreach($idServicios as $idServicio) {
-            $args = [
-                'citaId' => $id,
-                'servicioId' => $idServicio
-            ];
-            $citaServicio = new CitaServicio($args);
-            $citaServicio->guardar();
+        if ($resultado['resultado']) {
+            $idCita = $resultado['id'];
+            
+            // Almacena los Servicios con el ID de la Cita
+            $idServicios = explode(",", $datos['servicios']);
+            foreach($idServicios as $idServicio) {
+                $args = [
+                    'citaId' => $idCita,
+                    'servicioId' => $idServicio
+                ];
+                $citaServicio = new CitaServicio($args);
+                $citaServicio->guardar();
+            }
+            
+            echo json_encode([
+                'resultado' => true,
+                'mensaje' => 'Cita agendada correctamente'
+            ]);
+        } else {
+            echo json_encode([
+                'resultado' => false,
+                'mensaje' => 'Error al agendar la cita'
+            ]);
         }
-
-        echo json_encode(['resultado' => $resultado]);
     }
 
     public static function eliminar() {

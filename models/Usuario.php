@@ -29,8 +29,17 @@ class Usuario extends ActiveRecord {
         $this->admin = $args['admin'] ?? '0';
         $this->confirmado = $args['confirmado'] ?? '0';
         $this->token = $args['token'] ?? '';
-        $this->fecha_creacion = $args['fecha_creacion'] ?? '';
-        $this->ultima_actualizacion = $args['ultima_actualizacion'] ?? '';
+        
+        // Establecer fechas automáticamente
+        if(!isset($args['id'])) {
+            // Si es un nuevo usuario
+            $this->fecha_creacion = date('Y-m-d H:i:s');
+            $this->ultima_actualizacion = date('Y-m-d H:i:s');
+        } else {
+            // Si es una actualización
+            $this->fecha_creacion = $args['fecha_creacion'] ?? date('Y-m-d H:i:s');
+            $this->ultima_actualizacion = date('Y-m-d H:i:s');
+        }
     }
 
     // Validaciones

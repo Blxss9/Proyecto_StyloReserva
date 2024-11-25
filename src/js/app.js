@@ -135,12 +135,9 @@ function botonesPaginador() {
     }
 
     if(paso === 4) {
-        btnSiguiente.classList.add('opacity-50');
-        btnSiguiente.textContent = 'Confirmar';
-        btnSiguiente.disabled = true;
+        btnSiguiente.classList.add('hidden');
     } else {
-        btnSiguiente.classList.remove('opacity-50');
-        btnSiguiente.disabled = false;
+        btnSiguiente.classList.remove('hidden');
         btnSiguiente.textContent = 'Siguiente »';
     }
 }
@@ -544,7 +541,9 @@ function toggleAccordion(id) {
     } else {
         arrow.style.transform = 'rotate(180deg)';
         // Reinicializa PayPal si es necesario
-        if (id === 'pago-paypal') {
+        if (id === 'pago-paypal' && !content.classList.contains('hidden')) {
+            const paypalContainer = document.getElementById('paypal-button-container');
+            paypalContainer.innerHTML = ''; // Limpia el contenedor
             initPayPal();
         }
     }

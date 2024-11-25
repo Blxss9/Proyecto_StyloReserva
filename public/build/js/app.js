@@ -528,18 +528,114 @@ function toggleAccordion(id) {
     const content = document.getElementById(id);
     const arrow = document.getElementById(`arrow-${id.split('-')[1]}`);
     
-    // Cerrar todos los acordeones
+    // Oculta todos los contenidos
     document.querySelectorAll('[id^="pago-"]').forEach(elem => {
         if (elem.id !== id) {
             elem.classList.add('hidden');
-            document.getElementById(`arrow-${elem.id.split('-')[1]}`).classList.remove('rotate-180');
         }
     });
     
-    // Alternar el acordeón seleccionado
+    // Muestra/oculta el contenido seleccionado
     content.classList.toggle('hidden');
-    arrow.classList.toggle('rotate-180');
+    
+    // Rota la flecha
+    if (content.classList.contains('hidden')) {
+        arrow.style.transform = 'rotate(0deg)';
+    } else {
+        arrow.style.transform = 'rotate(180deg)';
+        // Reinicializa PayPal si es necesario
+        if (id === 'pago-paypal') {
+            initPayPal();
+        }
+    }
 }
+
+// Función para inicializar PayPal
+function initPayPal() {
+    if (window.paypal) {
+        paypal.Buttons({
+            createOrder: async () => {
+                try {
+                    const response = await fetch('/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            servicios: cita.servicios,
+                            fecha: cita.fecha,
+                            hora: cita.hora,
+                            usuarioId: cita.id
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Error al crear la orden');
+                    }
+
+                    const data = await response.json();
+                    return data.id;
+                } catch (error) {
+                    console.error('Error:', error);
+                    mostrarAlerta('Error al procesar el pago', 'error');
+                }
+            },
+            onApprove: async (data) => {
+                try {
+                    const response = await fetch(`/api/orders/capture/${data.orderID}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Error en la captura del pago');
+                    }
+
+                    const resultado = await response.json();
+                    
+                    if (resultado.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Pago Completado!',
+                            text: resultado.message
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        throw new Error(resultado.message || 'Error desconocido');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message
+                    });
+                }
+            },
+            onError: (err) => {
+                console.error('Error PayPal:', err);
+                mostrarAlerta('Error en el proceso de pago', 'error');
+            }
+        }).render('#paypal-button-container');
+    } else {
+        console.error('PayPal SDK no está cargado');
+        mostrarAlerta('Error al cargar PayPal', 'error');
+    }
+}
+
+// Inicializar PayPal cuando se carga la página
+document.addEventListener('DOMContentLoaded', function() {
+    // ... resto del código de inicialización ...
+    
+    // Inicializar PayPal si estamos en el paso de pago
+    if (paso === 4) {
+        initPayPal();
+    }
+});
 
 // Configurar el botón de agendar
 document.getElementById('btn-agendar')?.addEventListener('click', async () => {
@@ -570,61 +666,4 @@ document.getElementById('btn-agendar')?.addEventListener('click', async () => {
         });
     }
 });
-
-// Configuración de PayPal
-window.paypal?.Buttons({
-    style: {
-        shape: "pill",
-        layout: "vertical",
-        color: "gold",
-        label: "paypal",
-    },
-    
-    createOrder: async () => {
-        try {
-            const response = await fetch("/api/orders", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    cart: [{
-                        id: "YOUR_PRODUCT_ID",
-                        quantity: "YOUR_PRODUCT_QUANTITY",
-                    }],
-                }),
-            });
-
-            const orderData = await response.json();
-            return orderData.id || Promise.reject(orderData);
-        } catch (error) {
-            console.error(error);
-            mostrarAlerta('No se pudo iniciar el pago con PayPal', 'error');
-        }
-    },
-
-    onApprove: async (data, actions) => {
-        try {
-            const response = await fetch(`/api/orders/${data.orderID}/capture`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const orderData = await response.json();
-            const transaction = orderData?.purchase_units?.[0]?.payments?.captures?.[0];
-            
-            if (transaction?.status === 'COMPLETED') {
-                // Aquí puedes agregar la lógica para guardar la cita
-                document.getElementById('result-message').textContent = '¡Pago completado! Tu cita ha sido agendada.';
-            }
-        } catch (error) {
-            console.error(error);
-            document.getElementById('result-message').textContent = 'Hubo un error al procesar el pago.';
-        }
-    },
-}).render("#paypal-button-container");
-
-// ... Resto de las funciones existentes ...
 //# sourceMappingURL=app.js.map

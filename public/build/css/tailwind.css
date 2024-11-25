@@ -1190,6 +1190,10 @@ input[type="range"]::-ms-fill-lower {
   min-height: 100vh;
 }
 
+.min-h-\[150px\] {
+  min-height: 150px;
+}
+
 .w-1\/2 {
   width: 50%;
 }

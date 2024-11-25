@@ -590,22 +590,25 @@ function initPayPal() {
                     });
 
                     if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || 'Error en la captura del pago');
+                        throw new Error('Error en la captura del pago');
                     }
 
                     const resultado = await response.json();
                     
                     if (resultado.status === 'success') {
+                        // Mostrar el comprobante
+                        mostrarComprobante(resultado.comprobante);
+                        
                         Swal.fire({
                             icon: 'success',
                             title: '¡Pago Completado!',
-                            text: resultado.message
+                            text: resultado.message,
+                            confirmButtonText: 'Ver Comprobante',
+                            allowOutsideClick: false
                         }).then(() => {
-                            window.location.reload();
+                            // Mostrar modal con el comprobante
+                            document.getElementById('modal-comprobante').classList.remove('hidden');
                         });
-                    } else {
-                        throw new Error(resultado.message || 'Error desconocido');
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -625,6 +628,67 @@ function initPayPal() {
         console.error('PayPal SDK no está cargado');
         mostrarAlerta('Error al cargar PayPal', 'error');
     }
+}
+
+function mostrarComprobante(datos) {
+    const modalHTML = `
+        <div id="modal-comprobante" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="mt-3 text-center">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Comprobante de Pago</h3>
+                    <div class="mt-2 px-7 py-3">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-2">
+                                <span class="font-bold">Número de Orden:</span> 
+                                ${datos.ordenId}
+                            </p>
+                            <p class="text-sm text-gray-600 mb-2">
+                                <span class="font-bold">Fecha:</span> 
+                                ${datos.fecha}
+                            </p>
+                            <p class="text-sm text-gray-600 mb-2">
+                                <span class="font-bold">Hora:</span> 
+                                ${datos.hora}
+                            </p>
+                            <p class="text-sm text-gray-600 mb-2">
+                                <span class="font-bold">Total Pagado:</span> 
+                                ${datos.total}
+                            </p>
+                            <div class="mt-3">
+                                <h4 class="font-bold text-sm mb-2">Servicios:</h4>
+                                ${datos.servicios.map(servicio => `
+                                    <p class="text-sm text-gray-600">
+                                        ${servicio.nombre} - ${servicio.precio}
+                                    </p>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="items-center px-4 py-3">
+                        <button id="btn-descargar" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            Descargar PDF
+                        </button>
+                        <button id="btn-cerrar" class="mt-3 px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Agregar el modal al DOM
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // Agregar event listeners
+    document.getElementById('btn-cerrar').addEventListener('click', () => {
+        document.getElementById('modal-comprobante').remove();
+        window.location.reload();
+    });
+
+    document.getElementById('btn-descargar').addEventListener('click', () => {
+        descargarComprobantePDF(datos);
+    });
 }
 
 // Inicializar PayPal cuando se carga la página

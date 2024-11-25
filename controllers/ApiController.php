@@ -118,10 +118,7 @@ class APIController {
     }
 
     public static function captureOrder() {
-        // Forzar tipo de contenido JSON
         header('Content-Type: application/json');
-        error_reporting(E_ALL);
-        ini_set('display_errors', 0);
         
         try {
             // Log para debugging
@@ -193,6 +190,9 @@ class APIController {
                 $resultado = $cita->guardar();
                 
                 if ($resultado['resultado']) {
+                    $servicios = [];
+                    $total = 0;
+                    
                     // Guardar servicios
                     if (isset($_SESSION['paypal_order']['servicios'])) {
                         foreach ($_SESSION['paypal_order']['servicios'] as $servicio) {
@@ -201,14 +201,31 @@ class APIController {
                                 'servicioId' => $servicio['id']
                             ]);
                             $citaServicio->guardar();
+                            
+                            // Agregar al array de servicios para el comprobante
+                            $servicios[] = [
+                                'nombre' => $servicio['nombre_servicio'],
+                                'precio' => number_format($servicio['precio'], 0, ',', '.')
+                            ];
+                            $total += floatval($servicio['precio']);
                         }
                     }
+                    
+                    // Preparar datos del comprobante
+                    $comprobante = [
+                        'ordenId' => $paypalData['id'],
+                        'fecha' => date('d/m/Y', strtotime($cita->fecha)),
+                        'hora' => $cita->hora,
+                        'total' => '$' . number_format($total, 0, ',', '.'),
+                        'servicios' => $servicios
+                    ];
                     
                     unset($_SESSION['paypal_order']);
                     
                     echo json_encode([
                         'status' => 'success',
-                        'message' => '¡Pago completado! Tu cita ha sido agendada.'
+                        'message' => '¡Pago completado! Tu cita ha sido agendada.',
+                        'comprobante' => $comprobante
                     ]);
                     return;
                 }

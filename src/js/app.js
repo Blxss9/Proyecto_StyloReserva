@@ -62,10 +62,9 @@ function mostrarServicios(servicios) {
     contenedorServicios.innerHTML = '';
     
     servicios.forEach(servicio => {
-        const { id, nombre_servicio, precio } = servicio;
-
-        // Formatear el precio como número entero
+        const { id, nombre_servicio, precio, tiempo_estimado } = servicio;
         const precioFormateado = parseInt(precio).toLocaleString('es-CL');
+        const tiempoFormateado = formatearTiempo(parseInt(tiempo_estimado));
 
         const servicioDiv = document.createElement('DIV');
         servicioDiv.classList.add('servicio');
@@ -74,10 +73,10 @@ function mostrarServicios(servicios) {
         servicioDiv.innerHTML = `
             <p class="nombre-servicio">${nombre_servicio}</p>
             <p class="precio-servicio">$${precioFormateado}</p>
+            <p class="tiempo-servicio">Duración: ${tiempoFormateado}</p>
         `;
 
         servicioDiv.onclick = () => seleccionarServicio(servicio);
-
         contenedorServicios.appendChild(servicioDiv);
     });
 }
@@ -416,6 +415,20 @@ function seleccionarHora() {
     });
 }
 
+function formatearTiempo(minutos) {
+    if (minutos >= 60) {
+        const horas = Math.floor(minutos / 60);
+        const minutosRestantes = minutos % 60;
+        
+        if (minutosRestantes === 0) {
+            return `${horas} ${horas === 1 ? 'hora' : 'horas'}`;
+        } else {
+            return `${horas} ${horas === 1 ? 'hora' : 'horas'} y ${minutosRestantes} ${minutosRestantes === 1 ? 'minuto' : 'minutos'}`;
+        }
+    }
+    return `${minutos} ${minutos === 1 ? 'minuto' : 'minutos'}`;
+}
+
 function mostrarResumen() {
     const resumen = document.querySelector('#resumen-cita');
 
@@ -452,16 +465,23 @@ function mostrarResumen() {
 
     // Iterando y mostrando los servicios
     servicios.forEach(servicio => {
-        const { nombre_servicio, precio } = servicio;
+        const { nombre_servicio, precio, tiempo_estimado } = servicio;
         const servicioParrafo = document.createElement('P');
-        // Formatear el precio en formato CLP
         const precioFormateado = new Intl.NumberFormat('es-CL', {
             style: 'currency',
             currency: 'CLP'
         }).format(precio);
-        servicioParrafo.textContent = `${nombre_servicio} - ${precioFormateado}`;
+        const tiempoFormateado = formatearTiempo(parseInt(tiempo_estimado));
+        servicioParrafo.textContent = `${nombre_servicio} - ${tiempoFormateado} - ${precioFormateado}`;
         contenedorServicios.appendChild(servicioParrafo);
     });
+
+    // Calcular y mostrar el tiempo total
+    const tiempoTotal = servicios.reduce((total, servicio) => total + parseInt(servicio.tiempo_estimado), 0);
+    const tiempoParrafo = document.createElement('P');
+    const tiempoTotalFormateado = formatearTiempo(tiempoTotal);
+    tiempoParrafo.innerHTML = `<span class="font-bold">Tiempo Total:</span> ${tiempoTotalFormateado}`;
+    tiempoParrafo.classList.add('text-lg', 'mt-3');
 
     // Formatear la fecha
     const fechaObj = new Date(fecha);
@@ -499,6 +519,7 @@ function mostrarResumen() {
     contenedorResumen.appendChild(contenedorServicios);
     contenedorResumen.appendChild(fechaCita);
     contenedorResumen.appendChild(horaCita);
+    contenedorResumen.appendChild(tiempoParrafo);
     contenedorResumen.appendChild(totalParrafo);
 
     // Agregar al resumen

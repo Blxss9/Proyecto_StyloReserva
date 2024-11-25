@@ -87,8 +87,44 @@
             <!-- Seccion 4 Pago -->
             <div id="paso-4" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Pago</h2>
-                <p class="text-center text-gray-600 mb-6">Realiza el pago de tu cita</p>
-                <!-- Aquí irá el formulario de pago -->
+                <p class="text-center text-gray-600 mb-6">Selecciona tu método de pago preferido</p>
+                
+                <!-- Acordeón de opciones de pago -->
+                <div class="space-y-4">
+                    <!-- Opción 1: Pago en establecimiento -->
+                    <div class="border rounded-lg">
+                        <button class="w-full px-4 py-3 text-left font-medium flex justify-between items-center focus:outline-none" 
+                                onclick="toggleAccordion('pago-establecimiento')">
+                            <span>Pago en establecimiento</span>
+                            <svg class="w-5 h-5 transform transition-transform" id="arrow-establecimiento" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="pago-establecimiento" class="hidden px-4 pb-4">
+                            <p class="text-gray-600 mb-4">Realiza el pago directamente en nuestro local al momento de tu cita.</p>
+                            <button id="btn-agendar" 
+                                    class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+                                Agendar Cita
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Opción 2: Pago con PayPal -->
+                    <div class="border rounded-lg">
+                        <button class="w-full px-4 py-3 text-left font-medium flex justify-between items-center focus:outline-none"
+                                onclick="toggleAccordion('pago-paypal')">
+                            <span>Pago anticipado con PayPal</span>
+                            <svg class="w-5 h-5 transform transition-transform" id="arrow-paypal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="pago-paypal" class="hidden px-4 pb-4">
+                            <p class="text-gray-600 mb-4">Realiza el pago ahora y asegura tu cita.</p>
+                            <div id="paypal-button-container"></div>
+                            <p id="result-message" class="mt-4 text-center"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Botones de navegación -->
@@ -104,9 +140,3 @@
     </div>
 </div>
 
-<?php 
-    $script = "
-        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        <script src='/build/js/app.js'></script>
-    ";
-?>

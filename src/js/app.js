@@ -524,4 +524,106 @@ function mostrarResumen() {
     resumen.appendChild(contenedorResumen);
 }
 
+function toggleAccordion(id) {
+    const content = document.getElementById(id);
+    const arrow = document.getElementById(`arrow-${id.split('-')[1]}`);
+    
+    // Cerrar todos los acordeones
+    document.querySelectorAll('[id^="pago-"]').forEach(elem => {
+        if (elem.id !== id) {
+            elem.classList.add('hidden');
+            document.getElementById(`arrow-${elem.id.split('-')[1]}`).classList.remove('rotate-180');
+        }
+    });
+    
+    // Alternar el acordeón seleccionado
+    content.classList.toggle('hidden');
+    arrow.classList.toggle('rotate-180');
+}
+
+// Configurar el botón de agendar
+document.getElementById('btn-agendar')?.addEventListener('click', async () => {
+    // Aquí puedes agregar la lógica para agendar la cita
+    // Por ejemplo, hacer una petición a tu API
+    try {
+        const response = await fetch('/api/citas', {
+            method: 'POST',
+            body: JSON.stringify(cita)
+        });
+        const resultado = await response.json();
+        
+        if(resultado.resultado) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Cita Agendada!',
+                text: 'Tu cita ha sido agendada correctamente'
+            }).then(() => {
+                window.location.reload();
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al agendar la cita'
+        });
+    }
+});
+
+// Configuración de PayPal
+window.paypal?.Buttons({
+    style: {
+        shape: "pill",
+        layout: "vertical",
+        color: "gold",
+        label: "paypal",
+    },
+    
+    createOrder: async () => {
+        try {
+            const response = await fetch("/api/orders", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    cart: [{
+                        id: "YOUR_PRODUCT_ID",
+                        quantity: "YOUR_PRODUCT_QUANTITY",
+                    }],
+                }),
+            });
+
+            const orderData = await response.json();
+            return orderData.id || Promise.reject(orderData);
+        } catch (error) {
+            console.error(error);
+            mostrarAlerta('No se pudo iniciar el pago con PayPal', 'error');
+        }
+    },
+
+    onApprove: async (data, actions) => {
+        try {
+            const response = await fetch(`/api/orders/${data.orderID}/capture`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const orderData = await response.json();
+            const transaction = orderData?.purchase_units?.[0]?.payments?.captures?.[0];
+            
+            if (transaction?.status === 'COMPLETED') {
+                // Aquí puedes agregar la lógica para guardar la cita
+                document.getElementById('result-message').textContent = '¡Pago completado! Tu cita ha sido agendada.';
+            }
+        } catch (error) {
+            console.error(error);
+            document.getElementById('result-message').textContent = 'Hubo un error al procesar el pago.';
+        }
+    },
+}).render("#paypal-button-container");
+
 // ... Resto de las funciones existentes ...

@@ -303,7 +303,7 @@ function actualizarBotonConfirmar() {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, confirmar cita',
+                    confirmButtonText: 'Sí, agendar',
                     cancelButtonText: 'Cancelar',
                     allowOutsideClick: false,
                     allowEscapeKey: false

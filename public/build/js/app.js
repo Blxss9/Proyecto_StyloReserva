@@ -595,18 +595,30 @@ function initPayPal() {
                     const resultado = await response.json();
                     
                     if (resultado.status === 'success') {
-                        // Mostrar el comprobante
-                        mostrarComprobante(resultado.comprobante);
-                        
+                        // Mostrar alerta con opciones
                         Swal.fire({
                             icon: 'success',
-                            title: '¡Pago Completado!',
-                            text: resultado.message,
+                            title: '¡Pago Exitoso!',
+                            text: 'Tu cita ha sido agendada y pagada correctamente',
+                            showDenyButton: true,
+                            showCancelButton: true,
                             confirmButtonText: 'Ver Comprobante',
-                            allowOutsideClick: false
-                        }).then(() => {
-                            // Mostrar modal con el comprobante
-                            document.getElementById('modal-comprobante').classList.remove('hidden');
+                            denyButtonText: 'Nueva Cita',
+                            cancelButtonText: 'Salir',
+                            confirmButtonColor: '#3085d6',
+                            denyButtonColor: '#2563eb',
+                            cancelButtonColor: '#6b7280'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Ir al comprobante
+                                window.location.href = resultado.comprobanteUrl;
+                            } else if (result.isDenied) {
+                                // Recargar la página para nueva cita
+                                window.location.reload();
+                            } else {
+                                // Salir al inicio
+                                window.location.href = '/';
+                            }
                         });
                     }
                 } catch (error) {

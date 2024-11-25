@@ -220,12 +220,13 @@ class APIController {
                         'servicios' => $servicios
                     ];
                     
-                    unset($_SESSION['paypal_order']);
+                    // Guardar el comprobante en la sesión
+                    $_SESSION['comprobante'] = $comprobante;
                     
                     echo json_encode([
                         'status' => 'success',
-                        'message' => '¡Pago completado! Tu cita ha sido agendada.',
-                        'comprobante' => $comprobante
+                        'message' => 'Pago procesado correctamente',
+                        'comprobanteUrl' => '/comprobante'
                     ]);
                     return;
                 }

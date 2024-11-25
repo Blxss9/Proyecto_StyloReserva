@@ -129,11 +129,9 @@ function botonesPaginador() {
     if(!btnAnterior || !btnSiguiente) return;
 
     if(paso === 1) {
-        btnAnterior.classList.add('opacity-50');
-        btnAnterior.disabled = true;
+        btnAnterior.classList.add('hidden');
     } else {
-        btnAnterior.classList.remove('opacity-50');
-        btnAnterior.disabled = false;
+        btnAnterior.classList.remove('hidden');
     }
 
     if(paso === 4) {

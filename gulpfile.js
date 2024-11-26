@@ -12,7 +12,6 @@ import notify from 'gulp-notify';
 import cache from 'gulp-cache';
 import clean from 'gulp-clean';
 import webp from 'gulp-webp';
-import plumber from 'gulp-plumber';
 
 // Asignar `sass` a `gulpSass`
 const sass = gulpSass(dartSass);
@@ -23,14 +22,13 @@ const { src, dest, watch, series, parallel } = gulp;
 // Rutas de los archivos fuente
 const paths = {
     scss: 'src/scss/**/*.scss',
-    js: 'src/js/app.js',
+    js: 'src/js/**/*.js',
     imagenes: 'src/img/**/*'
 };
 
 // Función para compilar SASS a CSS
 function css() {
     return src(paths.scss)
-        .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass())
         .pipe(postcss([autoprefixer(), cssnano()]))
@@ -41,25 +39,13 @@ function css() {
 
 // Función para minificar y concatenar JavaScript
 function javascript() {
-    return src(paths.js, { allowEmpty: true })
-        .pipe(plumber({
-            errorHandler: function(err) {
-                notify.onError({
-                    title: "Error en JavaScript",
-                    message: "Error: <%= error.message %>"
-                })(err);
-                this.emit('end');
-            }
-        }))
+    return src(paths.js)
         .pipe(sourcemaps.init())
-        .pipe(terser({
-            mangle: {
-                toplevel: true
-            }
-        }))
+        .pipe(concat('app.js'))
+        .pipe(terser())
         .pipe(sourcemaps.write('.'))
         .pipe(dest('public/build/js'))
-        .pipe(notify({ message: 'JavaScript compilado correctamente' }));
+        .pipe(notify({ message: 'JS Minificado' }));
 }
 
 // Función para optimizar imágenes
@@ -80,14 +66,13 @@ function versionWebp() {
 
 // Función para vigilar cambios en archivos SCSS, JS e Imágenes
 function watchArchivos() {
-    watch(paths.scss, { interval: 1000 }, css);
-    watch(paths.js, { interval: 1000 }, javascript);
-    watch(paths.imagenes, { interval: 1000 }, imagenes);
-    watch(paths.imagenes, { interval: 1000 }, versionWebp);
+    watch(paths.scss, css);
+    watch(paths.js, javascript);
+    watch(paths.imagenes, imagenes);
+    watch(paths.imagenes, versionWebp);
 }
 
 // Exportación de tareas
 export const buildCss = css;
-export const buildJs = javascript;
 export const watchFiles = watchArchivos;
 export default parallel(css, javascript, imagenes, versionWebp, watchArchivos);

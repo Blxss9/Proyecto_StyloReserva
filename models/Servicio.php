@@ -11,7 +11,6 @@ class Servicio extends ActiveRecord {
     public $nombre_servicio;
     public $precio;
     public $tiempo_estimado;
-
     public function __construct($args = [])
     {
         $this->id = $args['id'] ?? null;

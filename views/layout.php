@@ -15,11 +15,6 @@ $esError404 = $esError404 ?? false;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="/build/css/tailwind.css" rel="stylesheet">
     <link href="/build/css/app.css" rel="stylesheet">
-    <script
-        src="https://www.paypal.com/sdk/js?client-id=<?php echo PAYPAL_CLIENT_ID; ?>&currency=USD"
-        data-sdk-integration-source="button-factory">
-    </script>
-
     
     
 </head>
@@ -30,5 +25,9 @@ $esError404 = $esError404 ?? false;
         <script src="/build/js/flowbite.min.js"></script>
         <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
         <script src="/build/js/app.js"></script>
+        <!-- PayPal SDK -->
+        <script src="https://www.paypal.com/sdk/js?client-id=AUa62Zt1gzGinDA6u6Re7QiOwQdI-48mIPbt22UfSM75PfN99LlPkeNGrqNVqCEJHI4y2qRmP8feCMkH&currency=USD&components=buttons"></script>
+
+
     </body>
 </html>

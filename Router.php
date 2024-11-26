@@ -19,65 +19,42 @@ class Router
 
     public function comprobarRutas()
     {
+        
+        // Proteger Rutas...
         session_start();
-        
-        $currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+
+    
+        // $auth = $_SESSION['login'] ?? null;
+
+        $currentUrl = $_SERVER['PATH_INFO'] ?? '/';
         $method = $_SERVER['REQUEST_METHOD'];
-
-        // Separar la URL base de los parámetros GET
-        $splitURL = explode('?', $currentUrl);
-        $currentUrl = $splitURL[0];
-
-        // Agregar log para depuración
-        error_log('URL base: ' . $currentUrl);
-        error_log('Método HTTP: ' . $method);
-
-        // Verificar si es una ruta de API
-        $esRutaApi = strpos($currentUrl, '/api/') === 0;
-        
-        if ($esRutaApi) {
-            header('Content-Type: application/json');
-        }
 
         if ($method === 'GET') {
             $fn = $this->getRoutes[$currentUrl] ?? null;
-            error_log('Ruta encontrada en GET: ' . ($fn ? 'sí' : 'no'));
         } else {
             $fn = $this->postRoutes[$currentUrl] ?? null;
         }
 
+
         if ($fn) {
-            try {
-                call_user_func($fn, $this);
-            } catch (\Exception $e) {
-                error_log('Error en la ruta: ' . $e->getMessage());
-                if ($esRutaApi) {
-                    echo json_encode([
-                        'status' => 'error',
-                        'message' => $e->getMessage()
-                    ]);
-                } else {
-                    $this->render('error', [
-                        'titulo' => 'Error',
-                        'mensaje' => $e->getMessage()
-                    ]);
-                }
-            }
+            call_user_func($fn, $this);
         } else {
-            error_log('Ruta no encontrada: ' . $currentUrl);
-            if ($esRutaApi) {
-                http_response_code(404);
-                echo json_encode([
-                    'status' => 'error',
-                    'message' => 'Ruta no encontrada'
-                ]);
-            } else {
-                $this->render('error404', [
-                    'titulo' => 'Página No Encontrada',
-                    'esError404' => true
-                ]);
-            }
+            $titulo = "Página No Encontrada"; // Título para la página de error 404
+            $esError404 = true; // Define la variable para la vista error404
+
+            // Pasa ambas variables al render de error404
+            $this->render('error404', [
+                'titulo' => $titulo,
+                'esError404' => $esError404
+            ]);
         }
+
+        // if ( $fn ) {
+        //     // Call user fn va a llamar una función cuando no sabemos cual sera
+        //     call_user_func($fn, $this); // This es para pasar argumentos
+        // } else {
+        //     echo "Página no encontrada o ruta no válida";
+        // }
     }
 
     public function render($view, $datos = [])

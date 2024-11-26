@@ -29,17 +29,8 @@ class Usuario extends ActiveRecord {
         $this->admin = $args['admin'] ?? '0';
         $this->confirmado = $args['confirmado'] ?? '0';
         $this->token = $args['token'] ?? '';
-        
-        // Establecer fechas automáticamente
-        if(!isset($args['id'])) {
-            // Si es un nuevo usuario
-            $this->fecha_creacion = date('Y-m-d H:i:s');
-            $this->ultima_actualizacion = date('Y-m-d H:i:s');
-        } else {
-            // Si es una actualización
-            $this->fecha_creacion = $args['fecha_creacion'] ?? date('Y-m-d H:i:s');
-            $this->ultima_actualizacion = date('Y-m-d H:i:s');
-        }
+        $this->fecha_creacion = $args['fecha_creacion'] ?? '';
+        $this->ultima_actualizacion = $args['ultima_actualizacion'] ?? '';
     }
 
     // Validaciones
@@ -107,8 +98,8 @@ class Usuario extends ActiveRecord {
     public function validarPassword() {
         if (!$this->password) {
             self::$alertas['error'][] = 'El Password es obligatorio';
-        } elseif (!preg_match('/^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/', $this->password)) {
-            self::$alertas['error'][] = 'El Password debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial';
+        } elseif (strlen($this->password) < 6) {
+            self::$alertas['error'][] = 'El Password debe tener al menos 6 caracteres';
         }
 
         return self::$alertas;

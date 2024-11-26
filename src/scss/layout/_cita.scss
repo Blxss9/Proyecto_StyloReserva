@@ -68,3 +68,13 @@
     color: white;
     cursor: pointer;
 }
+
+/* Estilos para las opciones de pago seleccionadas */
+.payment-option input:checked + label {
+    border-color: #3B82F6;
+    background-color: #F8FAFC;
+}
+
+.payment-option input:checked + label .payment-check {
+    opacity: 1;
+}

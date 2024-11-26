@@ -44,14 +44,14 @@
             <!-- Seccion 1 Servicios     -->
             <div id="paso-1" class="seccion bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl">
                 <h2 class="text-2xl font-semibold mb-4 text-gray-800">Servicios Disponibles</h2>
-                <p class="text-center text-gray-600 mb-8">Selecciona los servicios que deseas agendar</p>
+                <p class="text-start text-gray-600 mb-8">Selecciona los servicios que deseas agendar</p>
                 <div id="servicios" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
             <!-- Seccion 2 Fecha y Hora -->
             <div id="paso-2" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Fecha y Hora</h2>
-                <p class="text-center text-gray-600 mb-6">Selecciona la fecha y hora de tu cita</p>
+                <p class="text-start text-gray-600 mb-6">Selecciona la fecha y hora de tu cita</p>
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="fecha">Fecha:</label>
@@ -80,51 +80,78 @@
             <!-- Seccion 3 Resumen -->
             <div id="paso-3" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Resumen</h2>
-                <p class="text-center text-gray-600 mb-6">Verifica que la información sea correcta</p>
+                <p class="text-start text-gray-600 mb-6">Verifica que la información sea correcta</p>
                 <div id="resumen-cita" class="space-y-4"></div>
             </div>
 
             <!-- Seccion 4 Pago -->
             <div id="paso-4" class="seccion hidden bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold mb-4">Pago</h2>
-                <p class="text-center text-gray-600 mb-6">Selecciona tu método de pago preferido</p>
+                <h2 class="text-2xl font-semibold mb-4">Método de Pago</h2>
+                <p class="text-start text-gray-600 mb-8">Selecciona cómo deseas realizar el pago</p>
                 
-                <!-- Acordeón de opciones de pago -->
-                <div class="space-y-4">
-                    <!-- Opción 1: Pago en establecimiento -->
-                    <div class="border rounded-lg">
-                        <button class="w-full px-4 py-3 text-left font-medium flex justify-between items-center focus:outline-none" 
-                                onclick="toggleAccordion('pago-establecimiento')">
-                            <span>Pago en establecimiento</span>
-                            <svg class="w-5 h-5 transform transition-transform" id="arrow-establecimiento" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
-                        <div id="pago-establecimiento" class="hidden px-4 pb-4">
-                            <p class="text-gray-600 mb-4">Realiza el pago directamente en nuestro local al momento de tu cita.</p>
-                            <button id="btn-agendar" 
-                                    class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
-                                Agendar Cita
-                            </button>
-                        </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Opción de pago en establecimiento -->
+                    <div class="payment-option relative">
+                        <input type="radio" name="payment-method" value="local" id="local" 
+                            class="absolute opacity-0 w-full h-full cursor-pointer z-10" 
+                            onchange="actualizarBotonConfirmar()">
+                        <label for="local" class="block p-6 bg-white border-2 rounded-xl cursor-pointer transition-all hover:shadow-lg hover:border-blue-500">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-store text-4xl text-blue-500"></i>
+                            </div>
+                            <div class="text-center">
+                                <h3 class="font-semibold text-lg mb-2">Pago en Establecimiento</h3>
+                                <p class="text-gray-600 text-sm">
+                                    Paga en efectivo o con tarjeta cuando llegues a tu cita
+                                </p>
+                                <div class="mt-4 flex justify-center space-x-2">
+                                    <i class="fas fa-money-bill-wave text-green-500"></i>
+                                    <i class="fas fa-credit-card text-gray-600"></i>
+                                </div>
+                            </div>
+                            <div class="absolute top-4 right-4 opacity-0 text-blue-500 transition-opacity payment-check">
+                                <i class="fas fa-check-circle text-xl"></i>
+                            </div>
+                        </label>
                     </div>
 
-                    <!-- Opción 2: Pago con PayPal -->
-                    <div class="border rounded-lg">
-                        <button class="w-full px-4 py-3 text-left font-medium flex justify-between items-center focus:outline-none"
-                                onclick="toggleAccordion('pago-paypal')">
-                            <span>Pago anticipado con PayPal</span>
-                            <svg class="w-5 h-5 transform transition-transform" id="arrow-paypal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
-                        <div id="pago-paypal" class="hidden px-4 pb-4">
-                            <p class="text-gray-600 mb-4">Realiza el pago ahora y asegura tu cita.</p>
-                            <div id="paypal-button-container" class="min-h-[150px]"></div>
-                            <p id="result-message" class="mt-4 text-center"></p>
-                        </div>
+                    <!-- Opción de PayPal -->
+                    <div class="payment-option relative">
+                        <input type="radio" name="payment-method" value="paypal" id="paypal" 
+                            class="absolute opacity-0 w-full h-full cursor-pointer z-10"
+                            onchange="actualizarBotonConfirmar()">
+                        <label for="paypal" class="block p-6 bg-white border-2 rounded-xl cursor-pointer transition-all hover:shadow-lg hover:border-blue-500">
+                            <div class="text-center mb-4">
+                                <i class="fab fa-paypal text-4xl text-[#003087]"></i>
+                            </div>
+                            <div class="text-center">
+                                <h3 class="font-semibold text-lg mb-2">Pago anticipado con PayPal</h3>
+                                <p class="text-gray-600 text-sm">
+                                    Paga ahora de forma segura con PayPal
+                                </p>
+                                <div class="mt-4 flex justify-center space-x-2">
+                                    <i class="fas fa-lock text-yellow-500"></i>
+                                    <i class="fas fa-shield-alt text-blue-500"></i>
+                                </div>
+                            </div>
+                            <div class="absolute top-4 right-4 opacity-0 text-blue-500 transition-opacity payment-check">
+                                <i class="fas fa-check-circle text-xl"></i>
+                            </div>
+                        </label>
                     </div>
                 </div>
+
+                <!-- Botón de confirmar pago -->
+                <div class="mt-8 text-center">
+                    <button id="confirmar-pago" 
+                        class="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed" 
+                        disabled>
+                        Confirmar Cita
+                    </button>
+                </div>
+
+                <!-- Contenedor para el botón de PayPal -->
+                <div id="paypal-button-container" class="hidden mt-8 max-w-md mx-auto"></div>
             </div>
 
             <!-- Botones de navegación -->

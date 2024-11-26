@@ -10,25 +10,40 @@ const cita = {
     servicios: []
 }
 
+function cargarDatosGuardados() {
+    const citaGuardada = localStorage.getItem('cita');
+    const pasoGuardado = localStorage.getItem('paso');
+    
+    if (citaGuardada) {
+        const citaObj = JSON.parse(citaGuardada);
+        Object.assign(cita, citaObj);
+    }
+    
+    if (pasoGuardado) {
+        paso = parseInt(pasoGuardado);
+        mostrarSeccion();
+        mostrarResumen();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    cargarDatosGuardados();
     iniciarApp();
 });
 
 function iniciarApp() {
-    mostrarSeccion(); // Muestra y oculta las secciones
-    tabs(); // Cambia la sección cuando se presionen los tabs
-    botonesPaginador(); // Agrega o quita los botones del paginador
+    mostrarSeccion();
+    tabs();
+    botonesPaginador();
     paginaSiguiente();
     paginaAnterior();
     
-    consultarAPI(); // Consulta la API en el backend de PHP
+    consultarAPI();
     
-    idCliente(); // Añade el id del cliente al objeto de cita
-    nombreCliente(); // Añade el nombre del cliente al objeto de cita
-    seleccionarFecha(); // Añade la fecha de la cita en el objeto
-    seleccionarHora(); // Añade la hora de la cita en el objeto
-    
-    mostrarResumen(); // Muestra el resumen de la cita
+    idCliente();
+    nombreCliente();
+    seleccionarFecha();
+    seleccionarHora();
 }
 
 async function consultarAPI() {
@@ -70,13 +85,20 @@ function mostrarServicios(servicios) {
         servicioDiv.classList.add('servicio');
         servicioDiv.dataset.idServicio = id;
 
+        // Verificar si el servicio está en la cita guardada
+        const estaSeleccionado = cita.servicios.some(servicioGuardado => servicioGuardado.id === id);
+        if (estaSeleccionado) {
+            servicioDiv.classList.add('seleccionado');
+        }
+
         servicioDiv.innerHTML = `
             <p class="nombre-servicio">${nombre_servicio}</p>
             <p class="precio-servicio">$${precioFormateado}</p>
-            <p class="tiempo-servicio">Duración: ${tiempoFormateado}</p>
+            <p class="tiempo-servicio text-sm text-gray-600">Duración: ${tiempoFormateado}</p>
         `;
 
         servicioDiv.onclick = () => seleccionarServicio(servicio);
+
         contenedorServicios.appendChild(servicioDiv);
     });
 }
@@ -129,15 +151,21 @@ function botonesPaginador() {
     if(!btnAnterior || !btnSiguiente) return;
 
     if(paso === 1) {
+        // Ocultar el botón anterior en el paso 1
         btnAnterior.classList.add('hidden');
     } else {
         btnAnterior.classList.remove('hidden');
+        btnAnterior.classList.remove('opacity-50');
+        btnAnterior.disabled = false;
     }
 
     if(paso === 4) {
+        // Ocultar el botón siguiente en el paso 4
         btnSiguiente.classList.add('hidden');
     } else {
         btnSiguiente.classList.remove('hidden');
+        btnSiguiente.classList.remove('opacity-50');
+        btnSiguiente.disabled = false;
         btnSiguiente.textContent = 'Siguiente »';
     }
 }
@@ -175,6 +203,8 @@ function mostrarSeccion() {
     if(progreso) {
         progreso.style.width = `${(paso / pasoFinal) * 100}%`;
     }
+    
+    localStorage.setItem('paso', paso);
 }
 
 function mostrarAlerta(mensaje, tipo) {
@@ -227,6 +257,125 @@ function tabs() {
     });
 }
 
+function actualizarBotonConfirmar() {
+    const metodoPagoSeleccionado = document.querySelector('input[name="payment-method"]:checked');
+    const botonConfirmar = document.getElementById('confirmar-pago');
+    
+    botonConfirmar.disabled = !metodoPagoSeleccionado;
+
+    // Actualizar visual de las opciones seleccionadas
+    document.querySelectorAll('.payment-option').forEach(option => {
+        const check = option.querySelector('.payment-check');
+        if (option.querySelector('input').checked) {
+            check.classList.add('opacity-100');
+            option.querySelector('label').classList.add('border-blue-500');
+        } else {
+            check.classList.remove('opacity-100');
+            option.querySelector('label').classList.remove('border-blue-500');
+        }
+    });
+
+    // Agregar el evento click al botón de confirmar
+    botonConfirmar.onclick = async () => {
+        // Deshabilitar el botón inmediatamente
+        botonConfirmar.disabled = true;
+        botonConfirmar.textContent = 'Procesando...';
+        
+        // Deshabilitar las opciones de pago
+        document.querySelectorAll('input[name="payment-method"]').forEach(input => {
+            input.disabled = true;
+        });
+
+        const metodoPago = document.querySelector('input[name="payment-method"]:checked').value;
+        
+        if (metodoPago === 'local') {
+            try {
+                // Mostrar modal de confirmación con SweetAlert2
+                const resultado = await Swal.fire({
+                    title: '¿Confirmar cita?',
+                    html: `
+                        <p class="mb-4">Has seleccionado pago en establecimiento.</p>
+                        <p class="text-sm text-gray-600">
+                            Recuerda que deberás realizar el pago al momento de llegar a tu cita.
+                        </p>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, agendar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+
+                if (resultado.isConfirmed) {
+                    // Preparar los datos para enviar
+                    const datos = new FormData();
+                    datos.append('fecha', cita.fecha);
+                    datos.append('hora', cita.hora);
+                    datos.append('usuarioId', cita.id);
+                    datos.append('servicios', cita.servicios.map(servicio => servicio.id));
+                    datos.append('pago', metodoPago);
+                    datos.append('estado', 'pendiente');
+
+                    // Realizar la petición para guardar la cita
+                    const url = '/api/citas';
+                    const respuesta = await fetch(url, {
+                        method: 'POST',
+                        body: datos
+                    });
+                    const resultado = await respuesta.json();
+
+                    if(resultado.resultado) {
+                        // Limpiar el LocalStorage inmediatamente
+                        localStorage.removeItem('cita');
+                        localStorage.removeItem('paso');
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Cita Confirmada!',
+                            text: 'Tu cita ha sido agendada correctamente',
+                            confirmButtonText: 'OK',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false
+                        }).then(() => {
+                            window.location.href = '/';
+                        });
+                    }
+                } else {
+                    // Si el usuario cancela, reactivar el botón y las opciones
+                    botonConfirmar.disabled = false;
+                    botonConfirmar.textContent = 'Confirmar Cita';
+                    document.querySelectorAll('input[name="payment-method"]').forEach(input => {
+                        input.disabled = false;
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un error al guardar la cita',
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then(() => {
+                    // Reactivar el botón y las opciones en caso de error
+                    botonConfirmar.disabled = false;
+                    botonConfirmar.textContent = 'Confirmar Cita';
+                    document.querySelectorAll('input[name="payment-method"]').forEach(input => {
+                        input.disabled = false;
+                    });
+                });
+            }
+        } else if (metodoPago === 'paypal') {
+            // Lógica para PayPal
+            document.querySelector('#paypal-button-container').classList.remove('hidden');
+        }
+    };
+}
+
 function validarServicios() {
     if(cita.servicios.length === 0) {
         mostrarAlerta('Debes seleccionar al menos un servicio', 'error');
@@ -273,7 +422,7 @@ function seleccionarServicio(servicio) {
         divServicio.classList.add('seleccionado');
     }
     
-    // Actualizar el resumen cada vez que se selecciona o deselecciona un servicio
+    localStorage.setItem('cita', JSON.stringify(cita));
     mostrarResumen();
 }
 
@@ -298,10 +447,7 @@ function seleccionarFecha() {
     const inputFecha = document.querySelector('#fecha');
     const horasDisponibles = document.querySelector('#horas-disponibles');
     
-    if(!inputFecha || !horasDisponibles) {
-        console.error('No se encontraron los elementos necesarios');
-        return;
-    }
+    if(!inputFecha || !horasDisponibles) return;
     
     // Establecer la fecha mínima como hoy
     const hoy = new Date();
@@ -312,9 +458,16 @@ function seleccionarFecha() {
     
     inputFecha.min = fechaMinima;
     
+    // Si hay una fecha guardada, establecerla
+    if(cita.fecha) {
+        inputFecha.value = cita.fecha;
+        mostrarHorasDisponibles();
+    }
+    
     inputFecha.addEventListener('input', function(e) {
-        const fechaSeleccionada = new Date(e.target.value + 'T00:00:00');
-        const fechaHoy = new Date(fechaMinima + 'T00:00:00');
+        const [añoSel, mesSel, diaSel] = e.target.value.split('-');
+        const fechaSeleccionada = new Date(añoSel, mesSel - 1, diaSel);
+        const fechaHoy = new Date(año, mes - 1, dia);
         
         if(fechaSeleccionada < fechaHoy) {
             e.target.value = '';
@@ -323,7 +476,7 @@ function seleccionarFecha() {
             cita.fecha = '';
             cita.hora = '';
         } else {
-            const dia = fechaSeleccionada.getUTCDay();
+            const dia = fechaSeleccionada.getDay();
             
             if([6, 0].includes(dia)) {
                 e.target.value = '';
@@ -336,8 +489,8 @@ function seleccionarFecha() {
                 mostrarHorasDisponibles();
             }
         }
-        // Actualizar el resumen cuando se selecciona una fecha
         mostrarResumen();
+        localStorage.setItem('cita', JSON.stringify(cita));
     });
 }
 
@@ -387,7 +540,7 @@ function mostrarHorasDisponibles() {
                 this.classList.add('bg-blue-500', 'text-white');
                 cita.hora = hora;
                 
-                // Actualizar el resumen cuando se selecciona una hora
+                localStorage.setItem('cita', JSON.stringify(cita));
                 mostrarResumen();
             };
             
@@ -411,21 +564,27 @@ function seleccionarHora() {
 }
 
 function formatearTiempo(minutos) {
-    if (minutos >= 60) {
-        const horas = Math.floor(minutos / 60);
-        const minutosRestantes = minutos % 60;
-        
-        if (minutosRestantes === 0) {
-            return `${horas} ${horas === 1 ? 'hora' : 'horas'}`;
-        } else {
-            return `${horas} ${horas === 1 ? 'hora' : 'horas'} y ${minutosRestantes} ${minutosRestantes === 1 ? 'minuto' : 'minutos'}`;
-        }
+    const horas = Math.floor(minutos / 60);
+    const minutosRestantes = minutos % 60;
+    
+    let resultado = '';
+    
+    if (horas > 0) {
+        resultado += `${horas} ${horas === 1 ? 'hora' : 'horas'}`;
     }
-    return `${minutos} ${minutos === 1 ? 'minuto' : 'minutos'}`;
+    
+    if (minutosRestantes > 0) {
+        if (horas > 0) resultado += ' y ';
+        resultado += `${minutosRestantes} ${minutosRestantes === 1 ? 'minuto' : 'minutos'}`;
+    }
+    
+    return resultado || '0 minutos';
 }
 
 function mostrarResumen() {
     const resumen = document.querySelector('#resumen-cita');
+
+    if(!resumen) return;
 
     // Limpiar el contenido
     while(resumen.firstChild) {
@@ -434,6 +593,10 @@ function mostrarResumen() {
 
     // Verificar si hay servicios seleccionados y datos completos
     if(Object.values(cita).includes('') || cita.servicios.length === 0) {
+        const mensajeError = document.createElement('P');
+        mensajeError.classList.add('text-center', 'text-gray-600', 'mt-5');
+        mensajeError.textContent = 'Faltan datos por completar';
+        resumen.appendChild(mensajeError);
         return;
     }
 
@@ -458,36 +621,53 @@ function mostrarResumen() {
     tituloServicios.classList.add('font-bold', 'text-lg', 'mb-3');
     contenedorServicios.appendChild(tituloServicios);
 
+    // Variables para calcular totales
+    let tiempoTotal = 0;
+    let precioTotal = 0;
+
     // Iterando y mostrando los servicios
     servicios.forEach(servicio => {
         const { nombre_servicio, precio, tiempo_estimado } = servicio;
         const servicioParrafo = document.createElement('P');
+        
+        // Sumar al tiempo total
+        tiempoTotal += parseInt(tiempo_estimado);
+        // Sumar al precio total
+        precioTotal += parseFloat(precio);
+        
+        // Formatear el precio en formato CLP
         const precioFormateado = new Intl.NumberFormat('es-CL', {
             style: 'currency',
             currency: 'CLP'
         }).format(precio);
+        
+        // Formatear el tiempo estimado
         const tiempoFormateado = formatearTiempo(parseInt(tiempo_estimado));
-        servicioParrafo.textContent = `${nombre_servicio} - ${tiempoFormateado} - ${precioFormateado}`;
+        
+        servicioParrafo.textContent = `${nombre_servicio} - ${precioFormateado} (${tiempoFormateado})`;
         contenedorServicios.appendChild(servicioParrafo);
     });
 
-    // Calcular y mostrar el tiempo total
-    const tiempoTotal = servicios.reduce((total, servicio) => total + parseInt(servicio.tiempo_estimado), 0);
-    const tiempoParrafo = document.createElement('P');
+    // Agregar tiempo total estimado con formato
+    const tiempoTotalParrafo = document.createElement('P');
     const tiempoTotalFormateado = formatearTiempo(tiempoTotal);
-    tiempoParrafo.innerHTML = `<span class="font-bold">Tiempo Total:</span> ${tiempoTotalFormateado}`;
-    tiempoParrafo.classList.add('text-lg', 'mt-3');
+    tiempoTotalParrafo.innerHTML = `<span class="font-bold">Tiempo Total Estimado:</span> ${tiempoTotalFormateado}`;
+    tiempoTotalParrafo.classList.add('bg-blue-50', 'rounded-lg', 'text-lg', 'mt-4');
 
-    // Formatear la fecha
-    const fechaObj = new Date(fecha);
+    // Modificar la parte de formateo de fecha
+    const [año, mes, dia] = fecha.split('-');
+    
+    // Crear la fecha sin UTC
+    const fechaObj = new Date(año, mes - 1, dia);
+    
     const opciones = { 
         weekday: 'long', 
         year: 'numeric', 
         month: 'long', 
         day: 'numeric'
     };
+    
     const fechaFormateada = fechaObj.toLocaleDateString('es-CL', opciones);
-    // Capitalizar primera letra
     const fechaCapitalizada = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
 
     const fechaCita = document.createElement('P');
@@ -499,311 +679,34 @@ function mostrarResumen() {
     horaCita.classList.add('text-lg');
 
     // Calcular y mostrar el total
-    const total = servicios.reduce((total, servicio) => total + parseFloat(servicio.precio), 0);
     const totalFormateado = new Intl.NumberFormat('es-CL', {
         style: 'currency',
         currency: 'CLP'
-    }).format(total);
+    }).format(precioTotal);
     
     const totalParrafo = document.createElement('P');
-    totalParrafo.innerHTML = `<span class="font-bold">Total:</span> ${totalFormateado}`;
-    totalParrafo.classList.add('text-xl', 'mt-6');
+    totalParrafo.innerHTML = `<span class="font-bold">Total a Pagar:</span> ${totalFormateado}`;
+    totalParrafo.classList.add('bg-gray-100', 'p-4', 'rounded-lg', 'text-lg', 'mt-6', 'text-center');
 
     // Agregar al contenedor principal
     contenedorResumen.appendChild(nombreCliente);
     contenedorResumen.appendChild(contenedorServicios);
+    contenedorResumen.appendChild(tiempoTotalParrafo);
     contenedorResumen.appendChild(fechaCita);
     contenedorResumen.appendChild(horaCita);
-    contenedorResumen.appendChild(tiempoParrafo);
     contenedorResumen.appendChild(totalParrafo);
 
     // Agregar al resumen
     resumen.appendChild(contenedorResumen);
-}
 
-function toggleAccordion(id) {
-    const content = document.getElementById(id);
-    const arrow = document.getElementById(`arrow-${id.split('-')[1]}`);
-    
-    // Oculta todos los contenidos
-    document.querySelectorAll('[id^="pago-"]').forEach(elem => {
-        if (elem.id !== id) {
-            elem.classList.add('hidden');
-        }
-    });
-    
-    // Muestra/oculta el contenido seleccionado
-    content.classList.toggle('hidden');
-    
-    // Rota la flecha
-    if (content.classList.contains('hidden')) {
-        arrow.style.transform = 'rotate(0deg)';
-    } else {
-        arrow.style.transform = 'rotate(180deg)';
-        // Reinicializa PayPal si es necesario
-        if (id === 'pago-paypal' && !content.classList.contains('hidden')) {
-            const paypalContainer = document.getElementById('paypal-button-container');
-            paypalContainer.innerHTML = ''; // Limpia el contenedor
-            initPayPal();
+    // Habilitar el botón de confirmar si estamos en el paso 3
+    if(paso === 3) {
+        const btnSiguiente = document.querySelector('#siguiente');
+        if(btnSiguiente) {
+            btnSiguiente.classList.remove('opacity-50');
+            btnSiguiente.disabled = false;
         }
     }
 }
 
-// Función para inicializar PayPal
-function initPayPal() {
-    if (window.paypal) {
-        paypal.Buttons({
-            createOrder: async () => {
-                try {
-                    const response = await fetch('/api/orders', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            servicios: cita.servicios,
-                            fecha: cita.fecha,
-                            hora: cita.hora,
-                            usuarioId: cita.id
-                        })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Error al crear la orden');
-                    }
-
-                    const data = await response.json();
-                    return data.id;
-                } catch (error) {
-                    console.error('Error:', error);
-                    mostrarAlerta('Error al procesar el pago', 'error');
-                }
-            },
-            onApprove: async (data) => {
-                try {
-                    const response = await fetch(`/api/orders/capture/${data.orderID}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Error en la captura del pago');
-                    }
-
-                    const resultado = await response.json();
-                    
-                    if (resultado.status === 'success') {
-                        // Mostrar alerta con opciones
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Pago Exitoso!',
-                            text: 'Tu cita ha sido agendada y pagada correctamente',
-                            showCancelButton: true,
-                            confirmButtonText: 'Ver Comprobante',
-                            cancelButtonText: 'Nueva Cita',
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#6b7280'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                // Ir al comprobante
-                                window.location.href = resultado.comprobanteUrl;
-                            } else {
-                                // Recargar la página para nueva cita
-                                window.location.reload();
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error.message
-                    });
-                }
-            },
-            onError: (err) => {
-                console.error('Error PayPal:', err);
-                mostrarAlerta('Error en el proceso de pago', 'error');
-            }
-        }).render('#paypal-button-container');
-    } else {
-        console.error('PayPal SDK no está cargado');
-        mostrarAlerta('Error al cargar PayPal', 'error');
-    }
-}
-
-function mostrarComprobante(datos) {
-    const modalHTML = `
-        <div id="modal-comprobante" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                <div class="mt-3 text-center">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">Comprobante de Pago</h3>
-                    <div class="mt-2 px-7 py-3">
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 mb-2">
-                                <span class="font-bold">Número de Orden:</span> 
-                                ${datos.ordenId}
-                            </p>
-                            <p class="text-sm text-gray-600 mb-2">
-                                <span class="font-bold">Fecha:</span> 
-                                ${datos.fecha}
-                            </p>
-                            <p class="text-sm text-gray-600 mb-2">
-                                <span class="font-bold">Hora:</span> 
-                                ${datos.hora}
-                            </p>
-                            <p class="text-sm text-gray-600 mb-2">
-                                <span class="font-bold">Total Pagado:</span> 
-                                ${datos.total}
-                            </p>
-                            <div class="mt-3">
-                                <h4 class="font-bold text-sm mb-2">Servicios:</h4>
-                                ${datos.servicios.map(servicio => `
-                                    <p class="text-sm text-gray-600">
-                                        ${servicio.nombre} - ${servicio.precio}
-                                    </p>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="items-center px-4 py-3">
-                        <button id="btn-descargar" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                            Descargar PDF
-                        </button>
-                        <button id="btn-cerrar" class="mt-3 px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
-                            Cerrar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    // Agregar el modal al DOM
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-    // Agregar event listeners
-    document.getElementById('btn-cerrar').addEventListener('click', () => {
-        document.getElementById('modal-comprobante').remove();
-        window.location.reload();
-    });
-
-    document.getElementById('btn-descargar').addEventListener('click', () => {
-        descargarComprobantePDF(datos);
-    });
-}
-
-// Inicializar PayPal cuando se carga la página
-document.addEventListener('DOMContentLoaded', function() {
-    // ... resto del código de inicialización ...
-    
-    // Inicializar PayPal si estamos en el paso de pago
-    if (paso === 4) {
-        initPayPal();
-    }
-});
-
-// Configurar el botón de agendar
-document.getElementById('btn-agendar')?.addEventListener('click', async () => {
-    // Mostrar modal de confirmación
-    Swal.fire({
-        title: '¿Confirmar Cita?',
-        html: `
-            <div class="text-left">
-                <p class="mb-2"><strong>Fecha:</strong> ${formatearFecha(cita.fecha)}</p>
-                <p class="mb-2"><strong>Hora:</strong> ${cita.hora}</p>
-                <p class="mb-2"><strong>Servicios:</strong></p>
-                <ul class="list-disc pl-5">
-                    ${cita.servicios.map(servicio => 
-                        `<li>${servicio.nombre_servicio} - ${formatearPrecio(servicio.precio)}</li>`
-                    ).join('')}
-                </ul>
-                <p class="mt-2"><strong>Total:</strong> ${formatearPrecio(calcularTotal(cita.servicios))}</p>
-            </div>
-        `,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Sí, Confirmar',
-        cancelButtonText: 'Cancelar'
-    }).then(async (result) => {
-        if (result.isConfirmed) {
-            try {
-                const response = await fetch('/api/citas', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ...cita,
-                        servicios: cita.servicios.map(s => s.id).join(','),
-                        pago: 'PENDING',
-                        estado: 'pendiente'
-                    })
-                });
-
-                const resultado = await response.json();
-                
-                if(resultado.resultado) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Cita Agendada!',
-                        text: 'Tu cita ha sido agendada correctamente, nos contactaremos contigo para confirmar tu asistencia.',
-                        showDenyButton: false,
-                        showCancelButton: false,
-                        confirmButtonText: 'Nueva Cita',
-                        confirmButtonColor: '#3085d6',
-                        footer: '<a href="/" class="text-gray-500 hover:text-gray-700">Volver al inicio</a>'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Recargar para nueva cita
-                            window.location.reload();
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error(error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Hubo un error al agendar la cita'
-                });
-            }
-        }
-    });
-});
-
-// Función auxiliar para formatear la fecha
-function formatearFecha(fecha) {
-    const opciones = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
-    
-    let fechaFormateada = new Date(fecha).toLocaleDateString('es-ES', opciones);
-    // Capitalizar la primera letra
-    return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
-}
-
-// Función auxiliar para formatear precio en CLP
-function formatearPrecio(precio) {
-    return new Intl.NumberFormat('es-CL', {
-        style: 'currency',
-        currency: 'CLP',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(precio);
-}
-
-// Función auxiliar para calcular el total
-function calcularTotal(servicios) {
-    return servicios.reduce((total, servicio) => 
-        total + parseFloat(servicio.precio), 0
-    );
-}
+// ... Resto de las funciones existentes ...

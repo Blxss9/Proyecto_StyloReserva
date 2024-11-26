@@ -28,7 +28,7 @@ class Usuario extends ActiveRecord {
         $this->telefono = $args['telefono'] ?? '';
         $this->admin = $args['admin'] ?? '0';
         $this->confirmado = $args['confirmado'] ?? '0';
-        $this->token = $args['token'] ?? '';
+        $this->token = $args['token'] ?? ''; 
         
         // Establecer fechas automáticamente
         if(!isset($args['id'])) {

@@ -28,7 +28,55 @@
 
             <?php include_once __DIR__ . "/../templates/alertas.php"; ?>
 
-            <?php if(!$error): ?>
+            <?php if(isset($passwordActualizado) && $passwordActualizado): ?>
+                <!-- Modal de éxito -->
+                <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-gray-800 p-8 rounded-lg shadow-xl max-w-md w-full mx-4">
+                        <div class="text-center">
+                            <!-- Icono de éxito -->
+                            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+                                <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            
+                            <h3 class="text-xl font-medium text-white mb-4">¡Contraseña Actualizada!</h3>
+                            <p class="text-gray-300 mb-6">Tu contraseña ha sido actualizada correctamente. Serás redirigido al login en <span id="countdown">3</span> segundos.</p>
+                            
+                            <button id="okButton" class="w-full bg-green-600 text-white rounded-lg px-4 py-2 hover:bg-green-700 transition-colors">
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        let countdown = 3;
+                        const countdownDisplay = document.getElementById('countdown');
+                        const modal = document.getElementById('successModal');
+                        const okButton = document.getElementById('okButton');
+
+                        // Manejar clic en el botón OK
+                        okButton.addEventListener('click', function() {
+                            window.location.href = '/login';
+                        });
+
+                        // Iniciar cuenta regresiva
+                        const timer = setInterval(function() {
+                            countdown--;
+                            countdownDisplay.textContent = countdown;
+                            
+                            if (countdown <= 0) {
+                                clearInterval(timer);
+                                window.location.href = '/login';
+                            }
+                        }, 1000);
+                    });
+                </script>
+            <?php endif; ?>
+
+            <?php if(!$error && !$passwordActualizado): ?>
                 <!-- Formulario modernizado -->
                 <form id="formRecuperarPassword" method="POST" class="space-y-6">
                     <!-- Campo de Password -->
@@ -48,7 +96,7 @@
                                 </svg>
                             </button>
                         </div>
-                        <p class="text-xs text-gray-500 mt-2">La contraseña debe tener al menos 8 caracteres</p>
+                        
                     </div>
 
                     <!-- Botón de Submit -->

@@ -102,42 +102,81 @@ class LoginController {
         
     }
 
-    public static function recuperar(Router $router) {
+    // public static function recuperar(Router $router) {
         
+    //     $alertas = [];
+    //     $error = false;
+
+    //     $token = s($_GET['token']);
+
+    //     $usuario = Usuario::where('token', $token);
+
+    //     if(empty($usuario)) {
+    //         Usuario::setAlerta('error', 'Token no válido');
+    //         $error = true;
+    //     }
+
+    //     if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         $password = new Usuario($_POST);
+    //         $alertas = $password->validarPassword();
+
+    //         if(empty($alertas)){
+    //             $usuario->password = null;
+    //             $usuario->password = $password->password;
+    //             $usuario->hashPassword();
+    //             $usuario->token = null;
+
+    //             $resultado = $usuario->guardar();
+    //             if($resultado) {
+    //                 header('Location: /login');
+    //             }
+
+    //         }
+    //     }
+
+    //     $alertas = Usuario::getAlertas();
+    //     $router->render('auth/recuperar-password', [
+    //         'alertas' => $alertas,
+    //         'error' => $error
+    //     ]);
+    // }
+
+    public static function recuperar(Router $router) {
         $alertas = [];
         $error = false;
-
+        $passwordActualizado = false; // Nueva variable
+    
         $token = s($_GET['token']);
-
         $usuario = Usuario::where('token', $token);
-
+    
         if(empty($usuario)) {
             Usuario::setAlerta('error', 'Token no válido');
             $error = true;
         }
-
+    
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $password = new Usuario($_POST);
             $alertas = $password->validarPassword();
-
+    
             if(empty($alertas)){
                 $usuario->password = null;
                 $usuario->password = $password->password;
                 $usuario->hashPassword();
                 $usuario->token = null;
-
+    
                 $resultado = $usuario->guardar();
                 if($resultado) {
-                    header('Location: /login');
+                    $passwordActualizado = true; // Marcamos como actualizado
+                    Usuario::setAlerta('exito', 'Contraseña actualizada correctamente');
                 }
-
             }
         }
-
+    
         $alertas = Usuario::getAlertas();
         $router->render('auth/recuperar-password', [
             'alertas' => $alertas,
-            'error' => $error
+            'error' => $error,
+            'passwordActualizado' => $passwordActualizado // Pasamos la variable a la vista
         ]);
     }
 

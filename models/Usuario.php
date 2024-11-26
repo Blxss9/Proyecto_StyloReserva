@@ -106,9 +106,9 @@ class Usuario extends ActiveRecord {
 
     public function validarPassword() {
         if (!$this->password) {
-            self::$alertas['error'][] = 'El Password es obligatorio';
-        } elseif (strlen($this->password) < 6) {
-            self::$alertas['error'][] = 'El Password debe tener al menos 6 caracteres';
+            self::$alertas['error'][] = 'El Password es Obligatorio';
+        } elseif (!preg_match('/^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/', $this->password)) {
+            self::$alertas['error'][] = 'El Password debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial';
         }
 
         return self::$alertas;

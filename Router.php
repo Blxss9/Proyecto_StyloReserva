@@ -21,7 +21,8 @@ class Router
     {
         session_start();
         
-        $currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+        // $currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+        $currentUrl = strtok($_SERVER['REQUEST_URI'], '?') ?? '/';
         $method = $_SERVER['REQUEST_METHOD'];
 
         // Verificar si es una ruta de API

@@ -260,4 +260,83 @@ class APIController {
             ]);
         }
     }
+
+    public static function crearServicio() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $servicio = new Servicio($_POST);
+                
+                // Validar
+                $alertas = $servicio->validar();
+                
+                if(empty($alertas)) {
+                    $resultado = $servicio->guardar();
+                    echo json_encode([
+                        'tipo' => 'exito',
+                        'mensaje' => 'Servicio creado correctamente',
+                        'id' => $resultado['id']
+                    ]);
+                } else {
+                    echo json_encode([
+                        'tipo' => 'error',
+                        'mensaje' => $alertas['error'][0] // Enviamos el primer error
+                    ]);
+                }
+            } catch (\Exception $e) {
+                echo json_encode([
+                    'tipo' => 'error',
+                    'mensaje' => 'Error al crear el servicio'
+                ]);
+            }
+        }
+    }
+
+    public static function actualizarServicio() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $servicio = Servicio::find($_POST['id']);
+                $servicio->sincronizar($_POST);
+                
+                // Validar
+                $alertas = $servicio->validar();
+                
+                if(empty($alertas)) {
+                    $resultado = $servicio->guardar();
+                    echo json_encode([
+                        'tipo' => 'exito',
+                        'mensaje' => 'Servicio actualizado correctamente'
+                    ]);
+                } else {
+                    echo json_encode([
+                        'tipo' => 'error',
+                        'mensaje' => $alertas['error'][0] // Enviamos el primer error
+                    ]);
+                }
+            } catch (\Exception $e) {
+                echo json_encode([
+                    'tipo' => 'error',
+                    'mensaje' => 'Error al actualizar el servicio'
+                ]);
+            }
+        }
+    }
+
+    public static function eliminarServicio() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $servicio = Servicio::find($_POST['id']);
+                $resultado = $servicio->eliminar();
+
+                echo json_encode([
+                    'tipo' => 'exito',
+                    'mensaje' => 'Servicio eliminado correctamente'
+                ]);
+            } catch (\Exception $e) {
+                echo json_encode([
+                    'tipo' => 'error',
+                    'mensaje' => 'Error al eliminar el servicio'
+                ]);
+            }
+        }
+    }
 }

@@ -53,6 +53,12 @@ $router->post('/api/eliminar', [APIController::class, 'eliminar']);
 $router->post('/api/orders', [APIController::class, 'createOrder']);
 $router->post('/api/orders/capture/:id', [APIController::class, 'captureOrder']);
 
+// API de Servicios
+$router->post('/api/servicios/crear', [APIController::class, 'crearServicio']);
+$router->post('/api/servicios/actualizar', [APIController::class, 'actualizarServicio']);
+$router->post('/api/servicios/eliminar', [APIController::class, 'eliminarServicio']);
+$router->get('/api/servicios/:id', [APIController::class, 'obtenerServicio']);
+
 // Area Privada Admin
 $router->get('/admin', [AdminController::class, 'index']);
 $router->post('/api/citas/estado', [AdminController::class, 'actualizarEstado']);

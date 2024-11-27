@@ -131,9 +131,7 @@ function gestionarServicios() {
     // Nuevo servicio
     const btnNuevoServicio = document.querySelector('#nuevo-servicio');
     if(btnNuevoServicio) {
-        btnNuevoServicio.addEventListener('click', function() {
-            mostrarFormularioServicio();
-        });
+        btnNuevoServicio.addEventListener('click', mostrarFormularioServicio);
     }
 
     // Editar servicio
@@ -150,9 +148,137 @@ function gestionarServicios() {
     btnsEliminar.forEach(btn => {
         btn.addEventListener('click', function() {
             const id = this.dataset.id;
-            eliminarServicio(id);
+            confirmarEliminarServicio(id);
         });
     });
+}
+
+function mostrarFormularioServicio(servicio = {}) {
+    Swal.fire({
+        title: servicio.id ? 'Editar Servicio' : 'Nuevo Servicio',
+        html: `
+            <form id="formulario-servicio" class="space-y-4">
+                <input type="hidden" name="id" value="${servicio.id || ''}">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre del Servicio</label>
+                    <input type="text" name="nombre_servicio" 
+                           class="mt-1 block w-full rounded-md border-gray-300" 
+                           value="${servicio.nombre_servicio || ''}" 
+                           required 
+                           minlength="3"
+                           
+                           title="Solo se permiten letras y espacios">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Precio</label>
+                    <input type="number" name="precio" 
+                           class="mt-1 block w-full rounded-md border-gray-300" 
+                           value="${servicio.precio || ''}" 
+                           required 
+                           min="3000"
+                           max="100000"
+                           step="1">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Tiempo Estimado (minutos)</label>
+                    <input type="number" name="tiempo_estimado" 
+                           class="mt-1 block w-full rounded-md border-gray-300" 
+                           value="${servicio.tiempo_estimado || ''}" 
+                           required 
+                           min="1"
+                           step="1">
+                </div>
+            </form>
+        `,
+        showCancelButton: true,
+        confirmButtonText: servicio.id ? 'Actualizar' : 'Crear',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const form = document.getElementById('formulario-servicio');
+            if(!form.checkValidity()) {
+                form.reportValidity();
+                return false;
+            }
+            const formData = new FormData(form);
+            return guardarServicio(formData, servicio.id);
+        }
+    });
+}
+
+async function guardarServicio(formData, id) {
+    try {
+        const url = id ? '/api/servicios/actualizar' : '/api/servicios/crear';
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData
+        });
+        const resultado = await response.json();
+
+        if(resultado.tipo === 'exito') {
+            Swal.fire('¡Éxito!', resultado.mensaje, 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            Swal.fire('Error', resultado.mensaje, 'error');
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire('Error', 'Hubo un error al procesar la solicitud', 'error');
+    }
+}
+
+async function editarServicio(id) {
+    try {
+        const response = await fetch(`/api/servicios/${id}`);
+        const servicio = await response.json();
+        mostrarFormularioServicio(servicio);
+    } catch (error) {
+        console.error(error);
+        Swal.fire('Error', 'No se pudo cargar el servicio', 'error');
+    }
+}
+
+function confirmarEliminarServicio(id) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción no se puede revertir",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            eliminarServicio(id);
+        }
+    });
+}
+
+async function eliminarServicio(id) {
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
+
+        const response = await fetch('/api/servicios/eliminar', {
+            method: 'POST',
+            body: formData
+        });
+        const resultado = await response.json();
+
+        if(resultado.tipo === 'exito') {
+            Swal.fire('¡Eliminado!', resultado.mensaje, 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            Swal.fire('Error', resultado.mensaje, 'error');
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire('Error', 'Hubo un error al eliminar el servicio', 'error');
+    }
 }
 
 

@@ -28,12 +28,18 @@ class AdminController {
             $citas = $todasLasCitas;
         }
 
+        // Obtener servicios y usuarios para las otras pestañas
+        $servicios = Servicio::all();
+        $usuarios = Usuario::all();
+
         $router->render('admin/index', [
             'nombre' => $_SESSION['nombre'],
             'citas' => $citas,
             'todasLasCitas' => $todasLasCitas,
             'fecha' => $fecha,
-            'busqueda' => $consulta
+            'busqueda' => $consulta,
+            'servicios' => $servicios,
+            'usuarios' => $usuarios
         ]);
     }
 

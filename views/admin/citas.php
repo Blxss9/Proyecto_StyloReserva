@@ -127,7 +127,6 @@
                             <span class="estado-badge px-3 py-1 rounded-full text-sm font-medium
                                 <?php echo match($cita->estado) {
                                     'pendiente' => 'bg-yellow-100 text-yellow-800',
-                                    'confirmada' => 'bg-blue-100 text-blue-800',
                                     'completada' => 'bg-green-100 text-green-800',
                                     'cancelada' => 'bg-red-100 text-red-800',
                                     default => 'bg-gray-100 text-gray-800'
@@ -169,7 +168,6 @@
                                 data-cita-id="<?php echo $cita->id; ?>"
                             >
                                 <option value="pendiente" <?php echo $cita->estado === 'pendiente' ? 'selected' : ''; ?>>Pendiente</option>
-                                <option value="confirmada" <?php echo $cita->estado === 'confirmada' ? 'selected' : ''; ?>>Confirmada</option>
                                 <option value="completada" <?php echo $cita->estado === 'completada' ? 'selected' : ''; ?>>Completada</option>
                                 <option value="cancelada" <?php echo $cita->estado === 'cancelada' ? 'selected' : ''; ?>>Cancelada</option>
                             </select>

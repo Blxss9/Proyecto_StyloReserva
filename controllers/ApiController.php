@@ -365,4 +365,68 @@ class APIController {
             echo json_encode(['error' => 'Usuario no encontrado']);
         }
     }
+
+    public static function actualizarUsuario() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            isAdmin();
+
+            try {
+                // Obtener y validar el usuario
+                $usuario = Usuario::find($_POST['id']);
+                if(!$usuario) {
+                    echo json_encode(['tipo' => 'error', 'mensaje' => 'Usuario no encontrado']);
+                    return;
+                }
+
+                // Verificar que no sea admin
+                if($usuario->admin) {
+                    echo json_encode(['tipo' => 'error', 'mensaje' => 'No se puede editar un usuario administrador']);
+                    return;
+                }
+
+                // Actualizar campos incluyendo el estado de confirmación
+                $usuario->sincronizar([
+                    'nombre' => $_POST['nombre'],
+                    'apellido' => $_POST['apellido'],
+                    'email' => $_POST['email'],
+                    'telefono' => $_POST['telefono'],
+                    'confirmado' => $_POST['confirmado']
+                ]);
+
+                // Validar
+                $alertas = $usuario->validarEdicion();
+                
+                if(empty($alertas)) {
+                    // Si se está confirmando la cuenta, eliminar el token
+                    if($_POST['confirmado'] === "1") {
+                        $usuario->token = null;
+                    }
+                    
+                    $resultado = $usuario->guardar();
+                    
+                    if($resultado) {
+                        echo json_encode([
+                            'tipo' => 'exito',
+                            'mensaje' => 'Usuario actualizado correctamente'
+                        ]);
+                    } else {
+                        echo json_encode([
+                            'tipo' => 'error',
+                            'mensaje' => 'Error al actualizar el usuario'
+                        ]);
+                    }
+                } else {
+                    echo json_encode([
+                        'tipo' => 'error',
+                        'mensaje' => $alertas['error'][0]
+                    ]);
+                }
+            } catch (\Exception $e) {
+                echo json_encode([
+                    'tipo' => 'error',
+                    'mensaje' => 'Error al actualizar el usuario: ' . $e->getMessage()
+                ]);
+            }
+        }
+    }
 }

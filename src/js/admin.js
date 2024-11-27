@@ -326,6 +326,126 @@ function gestionarUsuarios() {
             }
         });
     });
+
+    // Editar usuario
+    const btnsEditar = document.querySelectorAll('.editar-usuario');
+    btnsEditar.forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const id = this.dataset.id;
+            try {
+                const response = await fetch(`/api/usuarios?id=${id}`);
+                const usuario = await response.json();
+                
+                if(usuario) {
+                    mostrarFormularioUsuario(usuario);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo cargar la información del usuario'
+                });
+            }
+        });
+    });
+}
+
+function mostrarFormularioUsuario(usuario) {
+    Swal.fire({
+        title: 'Editar Usuario',
+        html: `
+            <form id="formulario-usuario" class="space-y-4">
+                <input type="hidden" name="id" value="${usuario.id}">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                    <input type="text" name="nombre" 
+                           class="mt-1 block w-full rounded-md border-gray-300" 
+                           value="${usuario.nombre || ''}" 
+                           required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Apellido</label>
+                    <input type="text" name="apellido" 
+                           class="mt-1 block w-full rounded-md border-gray-300" 
+                           value="${usuario.apellido || ''}" 
+                           required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" 
+                           class="mt-1 block w-full rounded-md border-gray-300" 
+                           value="${usuario.email || ''}" 
+                           required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+                    <input type="tel" name="telefono" 
+                           class="mt-1 block w-full rounded-md border-gray-300" 
+                           value="${usuario.telefono || ''}" 
+                           required 
+                           pattern="[0-9]{9}">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Estado de la cuenta</label>
+                    <select name="confirmado" 
+                            class="mt-1 block w-full rounded-md border-gray-300">
+                        <option value="0" ${!usuario.confirmado ? 'selected' : ''}>Pendiente</option>
+                        <option value="1" ${usuario.confirmado ? 'selected' : ''}>Confirmada</option>
+                    </select>
+                </div>
+            </form>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Actualizar',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const form = document.getElementById('formulario-usuario');
+            if(!form.checkValidity()) {
+                form.reportValidity();
+                return false;
+            }
+            const formData = new FormData(form);
+            return actualizarUsuario(formData);
+        }
+    });
+}
+
+async function actualizarUsuario(formData) {
+    try {
+        const response = await fetch('/api/usuarios/actualizar', {
+            method: 'POST',
+            body: formData
+        });
+        const resultado = await response.json();
+
+        if(resultado.tipo === 'exito') {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Usuario actualizado!',
+                text: resultado.mensaje,
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: resultado.mensaje
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al actualizar el usuario'
+        });
+    }
 }
 
 

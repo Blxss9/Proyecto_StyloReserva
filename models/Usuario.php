@@ -152,4 +152,32 @@ class Usuario extends ActiveRecord {
         $this->confirmado = 1;
         $this->token = null;
     }
+
+    public function validarEdicion() {
+        if (!$this->nombre) {
+            self::$alertas['error'][] = 'El Nombre es Obligatorio';
+        } elseif (preg_match('/\d/', $this->nombre)) {
+            self::$alertas['error'][] = 'El Nombre no puede contener números';
+        }
+
+        if (!$this->apellido) {
+            self::$alertas['error'][] = 'El Apellido es Obligatorio';
+        } elseif (preg_match('/\d/', $this->apellido)) {
+            self::$alertas['error'][] = 'El Apellido no puede contener números';
+        }
+
+        if (!$this->email) {
+            self::$alertas['error'][] = 'El Email es Obligatorio';
+        } elseif (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            self::$alertas['error'][] = 'El Email no es válido';
+        }
+        
+        if (!$this->telefono) {
+            self::$alertas['error'][] = 'El Teléfono es Obligatorio';
+        } elseif (!preg_match('/^\d{9}$/', $this->telefono)) {
+            self::$alertas['error'][] = 'El Teléfono debe contener exactamente 9 dígitos';
+        }
+
+        return self::$alertas;
+    }
 }

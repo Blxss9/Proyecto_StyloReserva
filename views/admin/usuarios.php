@@ -37,6 +37,7 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             <button class="ver-usuario text-blue-600 hover:text-blue-900 mr-3" data-id="<?php echo $usuario->id; ?>">Ver Detalles</button>
                             <?php if(!$usuario->admin) { ?>
+                                <button class="editar-usuario text-yellow-600 hover:text-yellow-900 mr-3" data-id="<?php echo $usuario->id; ?>">Editar</button>
                                 <button class="eliminar-usuario text-red-600 hover:text-red-900" data-id="<?php echo $usuario->id; ?>">Eliminar</button>
                             <?php } ?>
                         </td>

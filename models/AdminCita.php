@@ -108,7 +108,8 @@ class AdminCita extends ActiveRecord {
     public static function actualizarEstado($id, $estado) {
         $query = "UPDATE citas SET estado = ? WHERE id = ? LIMIT 1";
         $stmt = self::$db->prepare($query);
-        return $stmt->execute([$estado, $id]);
+        $stmt->bind_param("si", $estado, $id);
+        return $stmt->execute();
     }
 
     public static function buscarPorFechaYCliente($fecha, $busqueda) {

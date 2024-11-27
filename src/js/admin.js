@@ -281,4 +281,51 @@ async function eliminarServicio(id) {
     }
 }
 
+function gestionarUsuarios() {
+    // Botones Ver Detalles
+    const btnsVerDetalles = document.querySelectorAll('.ver-usuario');
+    btnsVerDetalles.forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const id = this.dataset.id;
+            try {
+                const response = await fetch(`/api/usuarios?id=${id}`);
+                const usuario = await response.json();
+                
+                if(usuario) {
+                    // Validar que los datos existan antes de mostrarlos
+                    const nombreCompleto = `${usuario.nombre || ''} ${usuario.apellido || ''}`.trim();
+                    const fechaRegistro = usuario.fecha_creacion ? new Date(usuario.fecha_creacion).toLocaleDateString() : 'No disponible';
+                    const fechaActualizacion = usuario.ultima_actualizacion ? new Date(usuario.ultima_actualizacion).toLocaleDateString() : 'No disponible';
+
+                    Swal.fire({
+                        title: 'Detalles del Usuario',
+                        html: `
+                            <div class="text-left">
+                                <p class="mb-2"><strong>Nombre:</strong> ${nombreCompleto || 'No disponible'}</p>
+                                <p class="mb-2"><strong>Email:</strong> ${usuario.email || 'No disponible'}</p>
+                                <p class="mb-2"><strong>Teléfono:</strong> ${usuario.telefono || 'No disponible'}</p>
+                                <p class="mb-2"><strong>Estado:</strong> ${usuario.confirmado ? 'Confirmado' : 'Pendiente'}</p>
+                                <p class="mb-2"><strong>Rol:</strong> ${usuario.admin ? 'Administrador' : 'Cliente'}</p>
+                                <p class="mb-2"><strong>Fecha de registro:</strong> ${fechaRegistro}</p>
+                                <p class="mb-2"><strong>Última actualización:</strong> ${fechaActualizacion}</p>
+                            </div>
+                        `,
+                        confirmButtonText: 'Cerrar',
+                        customClass: {
+                            confirmButton: 'bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors'
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo cargar la información del usuario'
+                });
+            }
+        });
+    });
+}
+
 

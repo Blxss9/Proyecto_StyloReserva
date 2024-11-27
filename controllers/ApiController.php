@@ -5,6 +5,7 @@ namespace Controllers;
 use Model\Cita;
 use Model\CitaServicio;
 use Model\Servicio;
+use Model\Usuario;
 
 class APIController {
     public static function index() {
@@ -337,6 +338,31 @@ class APIController {
                     'mensaje' => 'Error al eliminar el servicio'
                 ]);
             }
+        }
+    }
+
+    public static function obtenerUsuario() {
+        if(!isset($_SESSION['admin'])) {
+            header('Location: /');
+            return;
+        }
+
+        $id = $_GET['id'] ?? '';
+        if(!$id) {
+            echo json_encode(['error' => 'ID no proporcionado']);
+            return;
+        }
+
+        $usuario = Usuario::find($id);
+        
+        if($usuario) {
+            // Asegurarse de que las fechas estén en formato correcto
+            $usuario->fecha_creacion = date('Y-m-d', strtotime($usuario->fecha_creacion));
+            $usuario->ultima_actualizacion = date('Y-m-d', strtotime($usuario->ultima_actualizacion));
+            
+            echo json_encode($usuario);
+        } else {
+            echo json_encode(['error' => 'Usuario no encontrado']);
         }
     }
 }

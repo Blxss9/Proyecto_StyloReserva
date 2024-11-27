@@ -1,0 +1,1 @@
+{"version":3,"sources":["admin.js"],"names":["console","log"],"mappings":"AAAAA,QAAQC,IAAI","file":"admin.js","sourcesContent":["console.log('admin.js');"]}

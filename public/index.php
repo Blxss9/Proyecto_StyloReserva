@@ -7,13 +7,12 @@ require_once __DIR__ . '/../includes/app.php';
 
 use Controllers\CitaController;
 use Controllers\LandingController;
+use Controllers\LoginController;
+use Controllers\APIController;
+use Controllers\AdminController;
 
 // Usa el enrutador de la aplicación
-use Controllers\LoginController;
 use MVC\Router;
-
-// Importar el APIController
-use Controllers\APIController;
 
 // Crea una nueva instancia del enrutador
 $router = new Router();
@@ -53,6 +52,10 @@ $router->post('/api/eliminar', [APIController::class, 'eliminar']);
 // API de PayPal
 $router->post('/api/orders', [APIController::class, 'createOrder']);
 $router->post('/api/orders/capture/:id', [APIController::class, 'captureOrder']);
+
+// Area Privada Admin
+$router->get('/admin', [AdminController::class, 'index']);
+$router->post('/api/citas/estado', [AdminController::class, 'actualizarEstado']);
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

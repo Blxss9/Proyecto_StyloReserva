@@ -23,7 +23,7 @@ class APIController {
             'hora' => $datos['hora'],
             'usuarioId' => $datos['id'],
             'pago' => $datos['pago'] ?? 'PENDING',
-            'estado' => $datos['estado'] ?? 'pendiente'
+            'estado' => ($datos['pago'] === 'COMPLETED') ? 'confirmada' : 'pendiente'
         ]);
         
         $resultado = $cita->guardar();

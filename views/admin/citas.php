@@ -1,5 +1,5 @@
 <!-- Dashboard Stats Generales -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center">
             <div class="p-3 rounded-full bg-purple-100 text-purple-500">
@@ -16,14 +16,28 @@
 
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center">
-            <div class="p-3 rounded-full bg-blue-100 text-blue-500">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-500">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
             </div>
             <div class="ml-4">
-                <h2 class="text-gray-600 text-sm">Pendientes</h2>
+                <h2 class="text-gray-600 text-sm">Citas Pendientes</h2>
                 <p class="text-2xl font-semibold text-gray-800"><?php echo count(array_filter($todasLasCitas, fn($cita) => $cita->estado === 'pendiente')); ?></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-500">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div class="ml-4">
+                <h2 class="text-gray-600 text-sm">Citas Confirmadas</h2>
+                <p class="text-2xl font-semibold text-gray-800"><?php echo count(array_filter($todasLasCitas, fn($cita) => $cita->estado === 'confirmada')); ?></p>
             </div>
         </div>
     </div>
@@ -113,6 +127,7 @@
                             <span class="estado-badge px-3 py-1 rounded-full text-sm font-medium
                                 <?php echo match($cita->estado) {
                                     'pendiente' => 'bg-yellow-100 text-yellow-800',
+                                    'confirmada' => 'bg-blue-100 text-blue-800',
                                     'completada' => 'bg-green-100 text-green-800',
                                     'cancelada' => 'bg-red-100 text-red-800',
                                     default => 'bg-gray-100 text-gray-800'
@@ -154,6 +169,7 @@
                                 data-cita-id="<?php echo $cita->id; ?>"
                             >
                                 <option value="pendiente" <?php echo $cita->estado === 'pendiente' ? 'selected' : ''; ?>>Pendiente</option>
+                                <option value="confirmada" <?php echo $cita->estado === 'confirmada' ? 'selected' : ''; ?>>Confirmada</option>
                                 <option value="completada" <?php echo $cita->estado === 'completada' ? 'selected' : ''; ?>>Completada</option>
                                 <option value="cancelada" <?php echo $cita->estado === 'cancelada' ? 'selected' : ''; ?>>Cancelada</option>
                             </select>

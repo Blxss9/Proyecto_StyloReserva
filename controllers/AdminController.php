@@ -41,18 +41,30 @@ class AdminController {
     }
 
     public static function actualizarEstado() {
-        isAdmin();
-
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            isAdmin();
+
             $id = $_POST['id'];
             $estado = $_POST['estado'];
 
-            if(!$id || !$estado) {
-                echo json_encode(['tipo' => 'error', 'mensaje' => 'Datos incompletos']);
+            // Validar estados permitidos
+            $estadosPermitidos = ['pendiente', 'confirmada', 'completada', 'cancelada'];
+            
+            if(!$id || !$estado || !in_array($estado, $estadosPermitidos)) {
+                echo json_encode(['tipo' => 'error', 'mensaje' => 'Datos inválidos']);
                 return;
             }
 
-            $resultado = AdminCita::actualizarEstado($id, $estado);
+            // Obtener la cita
+            $cita = AdminCita::find($id);
+            if(!$cita) {
+                echo json_encode(['tipo' => 'error', 'mensaje' => 'Cita no encontrada']);
+                return;
+            }
+
+            // Actualizar el estado
+            $cita->estado = $estado;
+            $resultado = $cita->guardar();
 
             if($resultado) {
                 echo json_encode(['tipo' => 'exito', 'mensaje' => 'Estado actualizado correctamente']);

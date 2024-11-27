@@ -33,59 +33,65 @@ function buscarPorFecha() {
 }
 
 function cambiarEstadoCita() {
-    const estados = document.querySelectorAll('.estado-cita');
-    estados.forEach(estado => {
-        estado.addEventListener('change', function(e) {
-            const citaId = e.target.dataset.citaId;
-            const nuevoEstado = e.target.value;
-            const estadoBadge = e.target.closest('.bg-white').querySelector('.estado-badge');
-
-            // Mostrar loading
-            Swal.fire({
-                title: 'Actualizando...',
-                text: 'Por favor espere',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            const datos = new FormData();
-            datos.append('id', citaId);
-            datos.append('estado', nuevoEstado);
+    const selectores = document.querySelectorAll('.estado-cita');
+    selectores.forEach(selector => {
+        selector.addEventListener('change', async function(e) {
+            const citaId = this.dataset.citaId;
+            const estado = this.value;
 
             try {
-                fetch('/api/citas/estado', {
+                const datos = new FormData();
+                datos.append('id', citaId);
+                datos.append('estado', estado);
+
+                const url = '/api/citas/estado';
+                const respuesta = await fetch(url, {
                     method: 'POST',
                     body: datos
-                })
-                .then(respuesta => respuesta.json())
-                .then(resultado => {
-                    if(resultado.tipo === 'exito') {
-                        // Actualizar el badge de estado
-                        const clases = {
-                            'pendiente': 'bg-yellow-100 text-yellow-800',
-                            'completada': 'bg-green-100 text-green-800',
-                            'cancelada': 'bg-red-100 text-red-800'
-                        };
-                        
-                        // Remover clases anteriores
-                        estadoBadge.className = 'estado-badge px-3 py-1 rounded-full text-sm font-medium';
-                        // Agregar nuevas clases
-                        estadoBadge.classList.add(...clases[nuevoEstado].split(' '));
-                        estadoBadge.textContent = nuevoEstado.charAt(0).toUpperCase() + nuevoEstado.slice(1);
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Estado Actualizado',
-                            text: 'El estado de la cita se actualizó correctamente',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    }
                 });
+
+                const resultado = await respuesta.json();
+
+                if(resultado.tipo === 'exito') {
+                    // Actualizar el badge de estado
+                    const citaElement = this.closest('.border');
+                    const badge = citaElement.querySelector('.estado-badge');
+                    
+                    // Remover clases anteriores
+                    badge.classList.remove(
+                        'bg-yellow-100', 'text-yellow-800',
+                        'bg-blue-100', 'text-blue-800',
+                        'bg-green-100', 'text-green-800',
+                        'bg-red-100', 'text-red-800'
+                    );
+                    
+                    // Agregar nuevas clases según el estado
+                    const clases = {
+                        'pendiente': ['bg-yellow-100', 'text-yellow-800'],
+                        'confirmada': ['bg-blue-100', 'text-blue-800'],
+                        'completada': ['bg-green-100', 'text-green-800'],
+                        'cancelada': ['bg-red-100', 'text-red-800']
+                    };
+                    
+                    badge.classList.add(...clases[estado]);
+                    badge.textContent = estado.charAt(0).toUpperCase() + estado.slice(1);
+
+                    // Mostrar mensaje de éxito
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Estado Actualizado',
+                        text: 'El estado de la cita se actualizó correctamente',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    // Recargar la página para actualizar los stats
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
             } catch (error) {
+                console.error(error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',

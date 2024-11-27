@@ -12,30 +12,28 @@ class AdminController {
         isAdmin();
 
         $fecha = $_GET['fecha'] ?? date('Y-m-d');
-        $fechas = explode('-', $fecha);
-
-        if(!checkdate($fechas[1], $fechas[2], $fechas[0])) {
-            header('Location: /404');
-        }
-
-        // Consultas para cada sección
         $consulta = $_GET['buscar'] ?? '';
-        if($consulta) {
+
+        // Obtener todas las citas para estadísticas generales
+        $todasLasCitas = AdminCita::all();
+        
+        // Filtrar citas según los parámetros
+        if($fecha && $consulta) {
+            $citas = AdminCita::buscarPorFechaYCliente($fecha, $consulta);
+        } elseif($fecha) {
+            $citas = AdminCita::citasPorFecha($fecha);
+        } elseif($consulta) {
             $citas = AdminCita::buscarPorCliente($consulta);
         } else {
-            $citas = AdminCita::citasPorFecha($fecha);
+            $citas = $todasLasCitas;
         }
-
-        $servicios = Servicio::all();
-        $usuarios = Usuario::all();
 
         $router->render('admin/index', [
             'nombre' => $_SESSION['nombre'],
             'citas' => $citas,
+            'todasLasCitas' => $todasLasCitas,
             'fecha' => $fecha,
-            'busqueda' => $consulta,
-            'servicios' => $servicios,
-            'usuarios' => $usuarios
+            'busqueda' => $consulta
         ]);
     }
 

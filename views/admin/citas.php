@@ -1,5 +1,19 @@
-<!-- Dashboard Stats -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<!-- Dashboard Stats Generales -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-purple-100 text-purple-500">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+            <div class="ml-4">
+                <h2 class="text-gray-600 text-sm">Total Citas</h2>
+                <p class="text-2xl font-semibold text-gray-800"><?php echo count($todasLasCitas); ?></p>
+            </div>
+        </div>
+    </div>
+
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center">
             <div class="p-3 rounded-full bg-blue-100 text-blue-500">
@@ -8,8 +22,8 @@
                 </svg>
             </div>
             <div class="ml-4">
-                <h2 class="text-gray-600 text-sm">Citas Pendientes</h2>
-                <p class="text-2xl font-semibold text-gray-800"><?php echo count(array_filter($citas, fn($cita) => $cita->estado === 'pendiente')); ?></p>
+                <h2 class="text-gray-600 text-sm">Pendientes</h2>
+                <p class="text-2xl font-semibold text-gray-800"><?php echo count(array_filter($todasLasCitas, fn($cita) => $cita->estado === 'pendiente')); ?></p>
             </div>
         </div>
     </div>
@@ -23,7 +37,7 @@
             </div>
             <div class="ml-4">
                 <h2 class="text-gray-600 text-sm">Citas Completadas</h2>
-                <p class="text-2xl font-semibold text-gray-800"><?php echo count(array_filter($citas, fn($cita) => $cita->estado === 'completada')); ?></p>
+                <p class="text-2xl font-semibold text-gray-800"><?php echo count(array_filter($todasLasCitas, fn($cita) => $cita->estado === 'completada')); ?></p>
             </div>
         </div>
     </div>
@@ -37,7 +51,7 @@
             </div>
             <div class="ml-4">
                 <h2 class="text-gray-600 text-sm">Citas Canceladas</h2>
-                <p class="text-2xl font-semibold text-gray-800"><?php echo count(array_filter($citas, fn($cita) => $cita->estado === 'cancelada')); ?></p>
+                <p class="text-2xl font-semibold text-gray-800"><?php echo count(array_filter($todasLasCitas, fn($cita) => $cita->estado === 'cancelada')); ?></p>
             </div>
         </div>
     </div>
@@ -56,9 +70,17 @@
                     placeholder="Buscar Cliente..."
                     value="<?php echo $busqueda; ?>"
                 >
+                <?php if($fecha): ?>
+                    <input type="hidden" name="fecha" value="<?php echo $fecha; ?>">
+                <?php endif; ?>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
                     Buscar
                 </button>
+                <?php if($fecha || $busqueda): ?>
+                    <a href="/admin" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
+                        Limpiar
+                    </a>
+                <?php endif; ?>
             </form>
         </div>
 

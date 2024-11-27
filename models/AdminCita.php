@@ -13,6 +13,13 @@ class AdminCita extends ActiveRecord {
     public $created_at;
     public $pago;
     public $estado;
+    public $cliente;
+    public $email;
+    public $telefono;
+    public $servicios;
+    public $total;
+
+    public static $ultimaConsulta;
 
     public function __construct($args = []) {
         $this->id = $args['id'] ?? null;
@@ -22,40 +29,78 @@ class AdminCita extends ActiveRecord {
         $this->created_at = $args['created_at'] ?? '';
         $this->pago = $args['pago'] ?? '';
         $this->estado = $args['estado'] ?? '';
+        
+        $this->cliente = $args['cliente'] ?? '';
+        $this->email = $args['email'] ?? '';
+        $this->telefono = $args['telefono'] ?? '';
+        $this->servicios = $args['servicios'] ?? '';
+        $this->total = $args['total'] ?? 0;
     }
 
     public static function citasPorFecha($fecha) {
-        $query = "SELECT citas.id, citas.hora, citas.fecha, citas.estado, citas.pago, ";
-        $query .= "CONCAT(usuarios.nombre, ' ', usuarios.apellido) as cliente, ";
-        $query .= "usuarios.email, usuarios.telefono, ";
-        $query .= "GROUP_CONCAT(DISTINCT servicios.nombre_servicio SEPARATOR ', ') as servicios, ";
-        $query .= "SUM(servicios.precio) as total ";
-        $query .= "FROM citas ";
-        $query .= "LEFT OUTER JOIN usuarios ON usuarios.id = citas.usuarioId ";
-        $query .= "LEFT OUTER JOIN citasServicios ON citasServicios.citaId = citas.id ";
-        $query .= "LEFT OUTER JOIN servicios ON servicios.id = citasServicios.servicioId ";
-        $query .= "WHERE fecha = '$fecha' ";
-        $query .= "GROUP BY citas.id ";
-        $query .= "ORDER BY hora";
+        self::$ultimaConsulta = "SELECT 
+            c.id, 
+            c.hora, 
+            c.fecha, 
+            CASE 
+                WHEN c.pago = 'PENDING' THEN 'pendiente'
+                WHEN c.pago = 'COMPLETED' THEN 'completado'
+                ELSE c.pago 
+            END as pago,
+            c.estado,
+            CONCAT(u.nombre, ' ', u.apellido) as cliente,
+            u.email,
+            u.telefono,
+            GROUP_CONCAT(DISTINCT s.nombre_servicio SEPARATOR ', ') as servicios,
+            SUM(s.precio) as total
+        FROM citas c
+        INNER JOIN usuarios u ON u.id = c.usuarioId
+        LEFT JOIN citasServicios cs ON cs.citaId = c.id
+        LEFT JOIN servicios s ON s.id = cs.servicioId
+        WHERE c.fecha = '$fecha'
+        GROUP BY 
+            c.id, 
+            c.hora, 
+            c.fecha, 
+            c.estado, 
+            c.pago,
+            cliente,
+            u.email,
+            u.telefono
+        ORDER BY c.hora";
 
-        return self::consultarSQL($query);
+        return self::consultarSQL(self::$ultimaConsulta);
     }
 
     public static function buscarPorCliente($busqueda) {
-        $query = "SELECT citas.id, citas.hora, citas.fecha, citas.estado, citas.pago, ";
-        $query .= "CONCAT(usuarios.nombre, ' ', usuarios.apellido) as cliente, ";
-        $query .= "usuarios.email, usuarios.telefono, ";
-        $query .= "GROUP_CONCAT(DISTINCT servicios.nombre_servicio SEPARATOR ', ') as servicios, ";
-        $query .= "SUM(servicios.precio) as total ";
-        $query .= "FROM citas ";
-        $query .= "LEFT OUTER JOIN usuarios ON usuarios.id = citas.usuarioId ";
-        $query .= "LEFT OUTER JOIN citasServicios ON citasServicios.citaId = citas.id ";
-        $query .= "LEFT OUTER JOIN servicios ON servicios.id = citasServicios.servicioId ";
-        $query .= "WHERE CONCAT(usuarios.nombre, ' ', usuarios.apellido) LIKE '%$busqueda%' ";
-        $query .= "OR usuarios.email LIKE '%$busqueda%' ";
-        $query .= "OR usuarios.telefono LIKE '%$busqueda%' ";
-        $query .= "GROUP BY citas.id ";
-        $query .= "ORDER BY fecha, hora";
+        $query = "SELECT 
+            c.id, 
+            c.hora, 
+            c.fecha, 
+            c.estado, 
+            c.pago,
+            CONCAT(u.nombre, ' ', u.apellido) as cliente,
+            u.email,
+            u.telefono,
+            GROUP_CONCAT(s.nombre_servicio SEPARATOR ', ') as servicios,
+            SUM(s.precio) as total
+        FROM citas c
+        INNER JOIN usuarios u ON u.id = c.usuarioId
+        LEFT JOIN citasServicios cs ON cs.citaId = c.id
+        LEFT JOIN servicios s ON s.id = cs.servicioId
+        WHERE CONCAT(u.nombre, ' ', u.apellido) LIKE '%$busqueda%'
+            OR u.email LIKE '%$busqueda%'
+            OR u.telefono LIKE '%$busqueda%'
+        GROUP BY 
+            c.id, 
+            c.hora, 
+            c.fecha, 
+            c.estado, 
+            c.pago,
+            cliente,
+            u.email,
+            u.telefono
+        ORDER BY c.fecha, c.hora";
 
         return self::consultarSQL($query);
     }
@@ -64,5 +109,73 @@ class AdminCita extends ActiveRecord {
         $query = "UPDATE citas SET estado = ? WHERE id = ? LIMIT 1";
         $stmt = self::$db->prepare($query);
         return $stmt->execute([$estado, $id]);
+    }
+
+    public static function buscarPorFechaYCliente($fecha, $busqueda) {
+        $query = "SELECT 
+            c.id, 
+            c.hora, 
+            c.fecha, 
+            c.estado, 
+            c.pago,
+            CONCAT(u.nombre, ' ', u.apellido) as cliente,
+            u.email,
+            u.telefono,
+            GROUP_CONCAT(s.nombre_servicio SEPARATOR ', ') as servicios,
+            SUM(s.precio) as total
+        FROM citas c
+        INNER JOIN usuarios u ON u.id = c.usuarioId
+        LEFT JOIN citasServicios cs ON cs.citaId = c.id
+        LEFT JOIN servicios s ON s.id = cs.servicioId
+        WHERE c.fecha = '$fecha'
+            AND (CONCAT(u.nombre, ' ', u.apellido) LIKE '%$busqueda%'
+            OR u.email LIKE '%$busqueda%'
+            OR u.telefono LIKE '%$busqueda%')
+        GROUP BY 
+            c.id, 
+            c.hora, 
+            c.fecha, 
+            c.estado, 
+            c.pago,
+            cliente,
+            u.email,
+            u.telefono
+        ORDER BY c.hora";
+
+        return self::consultarSQL($query);
+    }
+
+    public static function all() {
+        $query = "SELECT 
+            c.id, 
+            c.hora, 
+            c.fecha, 
+            CASE 
+                WHEN c.pago = 'PENDING' THEN 'pendiente'
+                WHEN c.pago = 'COMPLETED' THEN 'completado'
+                ELSE c.pago 
+            END as pago,
+            c.estado,
+            CONCAT(u.nombre, ' ', u.apellido) as cliente,
+            u.email,
+            u.telefono,
+            GROUP_CONCAT(DISTINCT s.nombre_servicio SEPARATOR ', ') as servicios,
+            SUM(s.precio) as total
+        FROM citas c
+        INNER JOIN usuarios u ON u.id = c.usuarioId
+        LEFT JOIN citasServicios cs ON cs.citaId = c.id
+        LEFT JOIN servicios s ON s.id = cs.servicioId
+        GROUP BY 
+            c.id, 
+            c.hora, 
+            c.fecha, 
+            c.estado, 
+            c.pago,
+            cliente,
+            u.email,
+            u.telefono
+        ORDER BY c.fecha, c.hora";
+
+        return self::consultarSQL($query);
     }
 }

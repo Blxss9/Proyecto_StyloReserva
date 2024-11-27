@@ -11,7 +11,7 @@ class AdminController {
     public static function index(Router $router) {
         isAdmin();
 
-        $fecha = $_GET['fecha'] ?? date('Y-m-d');
+        $fecha = $_GET['fecha'] ?? '';
         $consulta = $_GET['buscar'] ?? '';
 
         // Obtener todas las citas para estadísticas generales
@@ -25,12 +25,9 @@ class AdminController {
         } elseif($consulta) {
             $citas = AdminCita::buscarPorCliente($consulta);
         } else {
-            $citas = $todasLasCitas;
+            // Si no hay filtros, mostrar todas las citas ordenadas por fecha y hora
+            $citas = AdminCita::all(); // Asumiendo que el método all() incluye el ORDER BY
         }
-
-        // Obtener servicios y usuarios para las otras pestañas
-        $servicios = Servicio::all();
-        $usuarios = Usuario::all();
 
         $router->render('admin/index', [
             'nombre' => $_SESSION['nombre'],
@@ -38,8 +35,8 @@ class AdminController {
             'todasLasCitas' => $todasLasCitas,
             'fecha' => $fecha,
             'busqueda' => $consulta,
-            'servicios' => $servicios,
-            'usuarios' => $usuarios
+            'servicios' => Servicio::all(),
+            'usuarios' => Usuario::all()
         ]);
     }
 

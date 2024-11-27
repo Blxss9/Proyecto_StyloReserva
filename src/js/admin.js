@@ -17,6 +17,18 @@ function buscarPorFecha() {
             const fechaSeleccionada = e.target.value;
             window.location = `?fecha=${fechaSeleccionada}`;
         });
+
+        // Agregar evento al botón limpiar
+        const btnLimpiar = document.querySelector('a[href="/admin"]');
+        if(btnLimpiar) {
+            btnLimpiar.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Limpiar el input de fecha
+                fechaInput.value = '';
+                // Redirigir a admin sin parámetros
+                window.location = '/admin';
+            });
+        }
     }
 }
 

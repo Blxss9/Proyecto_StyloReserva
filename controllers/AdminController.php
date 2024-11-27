@@ -4,6 +4,8 @@ namespace Controllers;
 
 use Model\AdminCita;
 use MVC\Router;
+use Model\Servicio;
+use Model\Usuario;
 
 class AdminController {
     public static function index(Router $router) {
@@ -16,7 +18,7 @@ class AdminController {
             header('Location: /404');
         }
 
-        // Consultar la base de datos
+        // Consultas para cada sección
         $consulta = $_GET['buscar'] ?? '';
         if($consulta) {
             $citas = AdminCita::buscarPorCliente($consulta);
@@ -24,11 +26,16 @@ class AdminController {
             $citas = AdminCita::citasPorFecha($fecha);
         }
 
+        $servicios = Servicio::all();
+        $usuarios = Usuario::all();
+
         $router->render('admin/index', [
             'nombre' => $_SESSION['nombre'],
             'citas' => $citas,
             'fecha' => $fecha,
-            'busqueda' => $consulta
+            'busqueda' => $consulta,
+            'servicios' => $servicios,
+            'usuarios' => $usuarios
         ]);
     }
 

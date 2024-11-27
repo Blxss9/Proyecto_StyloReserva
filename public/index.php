@@ -62,6 +62,7 @@ $router->get('/api/servicios/:id', [APIController::class, 'obtenerServicio']);
 // API de Usuarios
 $router->get('/api/usuarios', [APIController::class, 'obtenerUsuario']);
 $router->post('/api/usuarios/actualizar', [APIController::class, 'actualizarUsuario']);
+$router->post('/api/usuarios/eliminar', [APIController::class, 'eliminarUsuario']);
 
 // Area Privada Admin
 $router->get('/admin', [AdminController::class, 'index']);

@@ -6,6 +6,7 @@ use Model\Cita;
 use Model\CitaServicio;
 use Model\Servicio;
 use Model\Usuario;
+use Model\ActiveRecord;
 
 class APIController {
     public static function index() {
@@ -425,6 +426,68 @@ class APIController {
                 echo json_encode([
                     'tipo' => 'error',
                     'mensaje' => 'Error al actualizar el usuario: ' . $e->getMessage()
+                ]);
+            }
+        }
+    }
+
+    public static function eliminarUsuario() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            isAdmin();
+            
+            $id = $_POST['id'] ?? '';
+            
+            if(!$id) {
+                echo json_encode(['tipo' => 'error', 'mensaje' => 'ID de usuario no válido']);
+                return;
+            }
+
+            // Obtener el usuario
+            $usuario = Usuario::find($id);
+            
+            if(!$usuario) {
+                echo json_encode(['tipo' => 'error', 'mensaje' => 'Usuario no encontrado']);
+                return;
+            }
+
+            // Verificar que no sea admin
+            if($usuario->admin) {
+                echo json_encode(['tipo' => 'error', 'mensaje' => 'No se puede eliminar un usuario administrador']);
+                return;
+            }
+
+            try {
+                // Eliminar las citas asociadas usando el modelo Cita
+                $citas = Cita::whereAll('usuarioId', $id);
+                if($citas) {
+                    foreach($citas as $cita) {
+                        // Eliminar los servicios asociados a la cita
+                        $citaServicios = CitaServicio::whereAll('citaId', $cita->id);
+                        if($citaServicios) {
+                            foreach($citaServicios as $citaServicio) {
+                                $citaServicio->eliminar();
+                            }
+                        }
+                        // Eliminar la cita
+                        $cita->eliminar();
+                    }
+                }
+
+                // Eliminar el usuario
+                $resultado = $usuario->eliminar();
+
+                if($resultado) {
+                    echo json_encode([
+                        'tipo' => 'exito',
+                        'mensaje' => 'Usuario eliminado correctamente'
+                    ]);
+                } else {
+                    throw new \Exception('Error al eliminar el usuario');
+                }
+            } catch(\Exception $e) {
+                echo json_encode([
+                    'tipo' => 'error',
+                    'mensaje' => 'Error al eliminar el usuario: ' . $e->getMessage()
                 ]);
             }
         }

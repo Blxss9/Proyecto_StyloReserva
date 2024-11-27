@@ -137,4 +137,10 @@ class ActiveRecord {
         $query = "DELETE FROM " . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
         return self::$db->query($query);
     }
+
+    public static function whereAll($columna, $valor) {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE " . $columna . " = '" . self::$db->escape_string($valor) . "'";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
 }

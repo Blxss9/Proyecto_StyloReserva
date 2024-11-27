@@ -349,6 +349,29 @@ function gestionarUsuarios() {
             }
         });
     });
+
+    // Eliminar usuario
+    const btnsEliminar = document.querySelectorAll('.eliminar-usuario');
+    btnsEliminar.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción eliminará al usuario y todas sus citas. No podrás revertir esto.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    eliminarUsuario(id);
+                }
+            });
+        });
+    });
 }
 
 function mostrarFormularioUsuario(usuario) {
@@ -444,6 +467,47 @@ async function actualizarUsuario(formData) {
             icon: 'error',
             title: 'Error',
             text: 'Hubo un error al actualizar el usuario'
+        });
+    }
+}
+
+async function eliminarUsuario(id) {
+    try {
+        const datos = new FormData();
+        datos.append('id', id);
+
+        const response = await fetch('/api/usuarios/eliminar', {
+            method: 'POST',
+            body: datos
+        });
+        const resultado = await response.json();
+
+        if(resultado.tipo === 'exito') {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Usuario eliminado!',
+                text: resultado.mensaje,
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            // Recargar la página después de 1.5 segundos
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: resultado.mensaje
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al eliminar el usuario'
         });
     }
 }

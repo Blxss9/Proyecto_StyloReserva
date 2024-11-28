@@ -3,12 +3,165 @@
 
 <div class="bg-gray-100 min-h-screen">
     <!-- Header del Panel -->
-    <div class="bg-white shadow-md mb-8">
-        <div class="max-w-7xl mx-auto px-4 py-6">
-            <h1 class="text-3xl font-bold text-gray-800">Panel de Administración</h1>
-            <p class="text-gray-600">Bienvenido, <?php echo $nombre; ?></p>
+    <header class="admin-header">
+        <div class="admin-header-container">
+            <div class="admin-header-left">
+                <div class="admin-logo">
+                    <i class="fas fa-cut"></i>
+                    <span>StyloReserva</span>
+                </div>
+            </div>
+            
+            <div class="admin-header-right">
+                <div class="admin-user">
+                    <span class="admin-user-name"><?php echo $_SESSION['nombre'] ?? ''; ?></span>
+                    <div class="admin-user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                <a href="/logout" class="admin-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </div>
         </div>
-    </div>
+    </header>
+
+    <style>
+        .admin-header {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header-left {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .admin-logo i {
+            color: #00b09b;
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .admin-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4a5568;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .admin-nav a:hover {
+            background: #f7fafc;
+            color: #00b09b;
+        }
+
+        .admin-nav a.active {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+        }
+
+        .admin-header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-user-name {
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .admin-user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .admin-logout {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e53e3e;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .admin-logout:hover {
+            background: #fff5f5;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header-container {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .admin-header-left {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .admin-nav {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+
+            .admin-nav a span {
+                display: none;
+            }
+
+            .admin-header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
 
     <div class="max-w-7xl mx-auto px-4">
         <!-- Tabs de Navegación -->

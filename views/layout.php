@@ -15,6 +15,7 @@ $esError404 = $esError404 ?? false;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="/build/css/tailwind.css" rel="stylesheet">
     <link href="/build/css/app.css" rel="stylesheet">
+    
     <script
         src="https://www.paypal.com/sdk/js?client-id=<?php echo PAYPAL_CLIENT_ID; ?>&currency=USD"
         data-sdk-integration-source="button-factory">

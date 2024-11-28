@@ -7,6 +7,11 @@
             Sigue los pasos para agendar tu cita
         </h2>
         
+        <a href="/logout"
+            class="absolute top-4 right-4 bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform hover:-translate-y-1 hover:scale-110 hover:bg-red-700 focus:ring focus:ring-red-300 focus:outline-none">
+            Cerrar Sesión
+        </a>
+
 
         <div id="app">
             <!-- Campos ocultos para ID y nombre del cliente -->

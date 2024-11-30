@@ -168,6 +168,7 @@
                                 data-cita-id="<?php echo $cita->id; ?>"
                             >
                                 <option value="pendiente" <?php echo $cita->estado === 'pendiente' ? 'selected' : ''; ?>>Pendiente</option>
+                                <option value="confirmada" <?php echo $cita->estado === 'confirmada' ? 'selected' : ''; ?>>Confirmada</option>
                                 <option value="completada" <?php echo $cita->estado === 'completada' ? 'selected' : ''; ?>>Completada</option>
                                 <option value="cancelada" <?php echo $cita->estado === 'cancelada' ? 'selected' : ''; ?>>Cancelada</option>
                             </select>

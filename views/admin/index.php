@@ -8,7 +8,7 @@
             <div class="admin-header-left">
                 <div class="admin-logo">
                     <i class="fas fa-cut"></i>
-                    <span>StyloReserva</span>
+                    <span>StyloReserva | Panel de Administración</span>
                 </div>
             </div>
             

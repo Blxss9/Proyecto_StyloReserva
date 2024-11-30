@@ -447,7 +447,7 @@ function mostrarResumen() {
 
     // Nombre del cliente
     const nombreCliente = document.createElement('P');
-    nombreCliente.innerHTML = `<span class="font-bold">Nombre:</span> ${nombre}`;
+    nombreCliente.innerHTML = `<span class="font-bold">Cliente:</span> ${nombre}`;
     nombreCliente.classList.add('text-lg');
 
     // Contenedor de servicios

@@ -77,7 +77,14 @@
 
             <!-- Seccion 2 Fecha y Hora -->
             <div id="paso-2" class="seccion hidden bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold mb-4">Fecha y Hora</h2>
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800 flex items-center">
+                    <span class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </span>
+                    Fecha y Hora
+                </h2>
                 <p class="text-start text-gray-600 mb-6">Selecciona la fecha y hora de tu cita</p>
                 
                 <div class="mb-4">
@@ -106,14 +113,28 @@
 
             <!-- Seccion 3 Resumen -->
             <div id="paso-3" class="seccion hidden bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold mb-4">Resumen</h2>
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800 flex items-center">
+                    <span class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                    </span>
+                    Resumen
+                </h2>
                 <p class="text-start text-gray-600 mb-6">Verifica que la información sea correcta</p>
                 <div id="resumen-cita" class="space-y-4"></div>
             </div>
 
             <!-- Seccion 4 Pago -->
             <div id="paso-4" class="seccion hidden bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-semibold mb-4">Pago</h2>
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800 flex items-center">
+                    <span class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                        </svg>
+                    </span>
+                    Pago
+                </h2>
                 <p class="text-start text-gray-600 mb-6">Selecciona tu método de pago preferido</p>
                 
                 <!-- Acordeón de opciones de pago -->

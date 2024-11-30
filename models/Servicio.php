@@ -21,6 +21,7 @@ class Servicio extends ActiveRecord {
     }
 
     public function validar() {
+        
         if(!$this->nombre_servicio) {
             self::$alertas['error'][] = 'El nombre del servicio es obligatorio';
         }

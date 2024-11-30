@@ -20,43 +20,65 @@
             
             <!-- Progress Bar -->
             <div class="mb-12">
-                <div class="flex justify-between">
-                    <div class="w-1/4 text-center relative">
-                        <button data-paso="1" class="step-button w-12 h-12 rounded-full bg-blue-500 text-white font-bold mb-3 mx-auto transform hover:scale-105 transition-transform">1</button>
-                        <span class="text-sm font-medium">Servicios</span>
+                <div class="flex justify-between relative">
+                    <!-- Línea de conexión entre pasos -->
+                    <div class="absolute top-6 left-0 right-0 h-1 bg-gray-200">
+                        <div id="progress" class="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-500 rounded-full"></div>
                     </div>
-                    <div class="w-1/4 text-center">
-                        <button data-paso="2" class="step-button w-10 h-10 rounded-full bg-gray-300 text-gray-600 font-bold mb-2 mx-auto">2</button>
-                        <span class="text-sm">Fecha y Hora</span>
+                    
+                    <!-- Paso 1 -->
+                    <div class="w-1/4 text-center relative z-10">
+                        <button data-paso="1" class="step-button w-12 h-12 rounded-full bg-blue-600 text-gray-400 font-bold mb-3 mx-auto transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                            <span>1</span>
+                        </button>
+                        <span class="text-sm font-medium text-gray-400">Servicios</span>
                     </div>
-                    <div class="w-1/4 text-center">
-                        <button data-paso="3" class="step-button w-10 h-10 rounded-full bg-gray-300 text-gray-600 font-bold mb-2 mx-auto">3</button>
-                        <span class="text-sm">Resumen</span>
+
+                    <!-- Paso 2 -->
+                    <div class="w-1/4 text-center relative z-10">
+                        <button data-paso="2" class="step-button w-12 h-12 rounded-full bg-gray-200 text-gray-400 font-bold mb-3 mx-auto transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                            <span>2</span>
+                        </button>
+                        <span class="text-sm font-medium text-gray-400">Fecha y Hora</span>
                     </div>
-                    <div class="w-1/4 text-center">
-                        <button data-paso="4" class="step-button w-10 h-10 rounded-full bg-gray-300 text-gray-600 font-bold mb-2 mx-auto">4</button>
-                        <span class="text-sm">Pago</span>
+
+                    <!-- Paso 3 -->
+                    <div class="w-1/4 text-center relative z-10">
+                        <button data-paso="3" class="step-button w-12 h-12 rounded-full bg-gray-200 text-gray-400 font-bold mb-3 mx-auto transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                            <span>3</span>
+                        </button>
+                        <span class="text-sm font-medium text-gray-400">Resumen</span>
                     </div>
-                </div>
-                <div class="relative pt-4">
-                    <div class="overflow-hidden h-3 mb-4 text-xs flex rounded-full bg-gray-200">
-                        <div id="progress" class="w-1/4 shadow-lg flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-500"></div>
+
+                    <!-- Paso 4 -->
+                    <div class="w-1/4 text-center relative z-10">
+                        <button data-paso="4" class="step-button w-12 h-12 rounded-full bg-gray-200 text-gray-400 font-bold mb-3 mx-auto transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                            <span>4</span>
+                        </button>
+                        <span class="text-sm font-medium text-gray-400">Pago</span>
                     </div>
                 </div>
             </div>
 
             <!-- Secciones -->
             <!-- Seccion 1 Servicios     -->
-            <div id="paso-1" class="seccion bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl">
-                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Servicios Disponibles</h2>
-                <p class="text-center text-gray-600 mb-8">Selecciona los servicios que deseas agendar</p>
+            <div id="paso-1" class="seccion bg-white rounded-2xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl border border-gray-100">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800 flex items-center">
+                    <span class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </span>
+                    Servicios Disponibles
+                </h2>
+                <p class="text-start text-gray-600 mb-8">Selecciona los servicios que deseas agendar</p>
                 <div id="servicios" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
             <!-- Seccion 2 Fecha y Hora -->
             <div id="paso-2" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Fecha y Hora</h2>
-                <p class="text-center text-gray-600 mb-6">Selecciona la fecha y hora de tu cita</p>
+                <p class="text-start text-gray-600 mb-6">Selecciona la fecha y hora de tu cita</p>
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="fecha">Fecha:</label>
@@ -85,14 +107,14 @@
             <!-- Seccion 3 Resumen -->
             <div id="paso-3" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Resumen</h2>
-                <p class="text-center text-gray-600 mb-6">Verifica que la información sea correcta</p>
+                <p class="text-start text-gray-600 mb-6">Verifica que la información sea correcta</p>
                 <div id="resumen-cita" class="space-y-4"></div>
             </div>
 
             <!-- Seccion 4 Pago -->
             <div id="paso-4" class="seccion hidden bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-semibold mb-4">Pago</h2>
-                <p class="text-center text-gray-600 mb-6">Selecciona tu método de pago preferido</p>
+                <p class="text-start text-gray-600 mb-6">Selecciona tu método de pago preferido</p>
                 
                 <!-- Acordeón de opciones de pago -->
                 <div class="space-y-4">
@@ -133,15 +155,36 @@
             </div>
 
             <!-- Botones de navegación -->
-            <div class="flex justify-between mt-8 gap-4">
-                <button id="anterior" class="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all transform hover:-translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none">
-                    &laquo; Anterior
-                </button>
-                <button id="siguiente" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all transform hover:translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none">
-                    Siguiente &raquo;
-                </button>
+            <div class="fixed bottom-0 left-0 right-0 bg-white bg-opacity-95 shadow-lg border-t border-gray-100 p-4">
+                <div class="max-w-4xl mx-auto flex justify-between items-center gap-4">
+                    <button id="anterior" 
+                            class="flex-1 md:flex-none px-8 py-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 
+                                   transition-all duration-300 transform hover:-translate-x-1 
+                                   disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none 
+                                   shadow-md hover:shadow-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        Anterior
+                    </button>
+                    
+                    <button id="siguiente" 
+                            class="flex-1 md:flex-none px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 
+                                   text-white rounded-lg hover:from-blue-600 hover:to-blue-700 
+                                   transition-all duration-300 transform hover:translate-x-1 
+                                   disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none 
+                                   shadow-md hover:shadow-lg flex items-center justify-center">
+                        <span>Siguiente</span>
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Añadir padding al final del contenido principal para evitar que los botones fijos solapen contenido -->
+<div class="pb-24"></div>
 

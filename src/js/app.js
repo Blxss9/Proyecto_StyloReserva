@@ -156,24 +156,26 @@ function mostrarSeccion() {
         seccion.classList.remove('hidden');
     }
     
-    // Quita la clase "actual" al tab anterior
-    const tabAnterior = document.querySelector('.step-button.bg-blue-500');
-    if(tabAnterior) {
-        tabAnterior.classList.remove('bg-blue-500', 'text-white');
-        tabAnterior.classList.add('bg-gray-300', 'text-gray-600');
-    }
+    // Actualizar todos los botones de paso
+    const botones = document.querySelectorAll('.step-button');
+    botones.forEach((boton, index) => {
+        const pasoBoton = index + 1;
+        
+        // Resetear clases
+        boton.classList.remove('bg-blue-600', 'text-white', 'bg-gray-200', 'text-gray-400');
+        
+        // Solo colorear el botón del paso actual
+        if (pasoBoton === paso) {
+            boton.classList.add('bg-blue-600', 'text-white');
+        } else {
+            boton.classList.add('bg-gray-200', 'text-gray-400');
+        }
+    });
     
-    // Resalta el tab actual
-    const tab = document.querySelector(`[data-paso="${paso}"]`);
-    if(tab) {
-        tab.classList.remove('bg-gray-300', 'text-gray-600');
-        tab.classList.add('bg-blue-500', 'text-white');
-    }
-    
-    // Actualizar la barra de progreso
+    // Actualizar la barra de progreso con animación suave
     const progreso = document.querySelector('#progress');
     if(progreso) {
-        progreso.style.width = `${(paso / pasoFinal) * 100}%`;
+        progreso.style.width = `${((paso - 1) / (pasoFinal - 1)) * 100}%`;
     }
 }
 
@@ -807,3 +809,4 @@ function calcularTotal(servicios) {
         total + parseFloat(servicio.precio), 0
     );
 }
+

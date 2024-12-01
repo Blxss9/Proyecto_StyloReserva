@@ -370,10 +370,19 @@ function mostrarHorasDisponibles() {
         
         contenedor.innerHTML = '';
         
-        horas[periodo].forEach(hora => {
+        horas[periodo].forEach(async (hora) => {
             const boton = document.createElement('BUTTON');
             boton.type = 'button';
             boton.classList.add('px-4', 'py-2', 'text-sm', 'border', 'rounded', 'hover:bg-blue-500', 'hover:text-white');
+            
+            // Verificar disponibilidad
+            const disponible = await verificarDisponibilidad(cita.fecha, hora);
+            
+            if (!disponible) {
+                boton.classList.add('bg-gray-200', 'cursor-not-allowed', 'opacity-50');
+                boton.disabled = true;
+                boton.title = 'Horario no disponible';
+            }
             
             if(cita.hora === hora) {
                 boton.classList.add('bg-blue-500', 'text-white');
@@ -382,20 +391,43 @@ function mostrarHorasDisponibles() {
             boton.textContent = hora;
             
             boton.onclick = function() {
-                document.querySelectorAll('button[type="button"]').forEach(btn => {
-                    btn.classList.remove('bg-blue-500', 'text-white');
-                });
-                
-                this.classList.add('bg-blue-500', 'text-white');
-                cita.hora = hora;
-                
-                // Actualizar el resumen cuando se selecciona una hora
-                mostrarResumen();
+                if (disponible) {
+                    document.querySelectorAll('button[type="button"]').forEach(btn => {
+                        btn.classList.remove('bg-blue-500', 'text-white');
+                    });
+                    
+                    this.classList.add('bg-blue-500', 'text-white');
+                    cita.hora = hora;
+                    
+                    mostrarResumen();
+                }
             };
             
             contenedor.appendChild(boton);
         });
     });
+}
+
+// Función para verificar disponibilidad
+async function verificarDisponibilidad(fecha, hora) {
+    try {
+        const url = `/api/disponibilidad?fecha=${fecha}&hora=${hora}`;
+        console.log('Verificando disponibilidad para:', { fecha, hora });
+        
+        const respuesta = await fetch(url);
+        const resultado = await respuesta.json();
+        console.log('Respuesta del servidor:', resultado);
+        
+        if (resultado.error) {
+            console.error('Error:', resultado.error);
+            return false;
+        }
+        
+        return resultado.disponible;
+    } catch (error) {
+        console.error('Error al verificar disponibilidad:', error);
+        return false;
+    }
 }
 
 function seleccionarHora() {
@@ -481,12 +513,13 @@ function mostrarResumen() {
     tiempoParrafo.classList.add('text-lg', 'mt-3');
 
     // Formatear la fecha
-    const fechaObj = new Date(fecha);
+    const fechaObj = new Date(fecha + 'T00:00:00');  // Añadir T00:00:00 para forzar hora local
     const opciones = { 
         weekday: 'long', 
         year: 'numeric', 
         month: 'long', 
-        day: 'numeric'
+        day: 'numeric',
+        timeZone: 'America/Santiago'  // Especificar zona horaria de Chile
     };
     const fechaFormateada = fechaObj.toLocaleDateString('es-CL', opciones);
     // Capitalizar primera letra
@@ -785,11 +818,11 @@ function formatearFecha(fecha) {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
+        timeZone: 'America/Santiago'  // Especificar zona horaria de Chile
     };
     
-    let fechaFormateada = new Date(fecha).toLocaleDateString('es-ES', opciones);
-    // Capitalizar la primera letra
+    let fechaFormateada = new Date(fecha + 'T00:00:00').toLocaleDateString('es-ES', opciones);
     return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
 }
 

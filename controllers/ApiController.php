@@ -492,4 +492,33 @@ class APIController {
             }
         }
     }
+
+    public static function verificarDisponibilidad() {
+        header('Content-Type: application/json');
+        
+        try {
+            $fecha = $_GET['fecha'] ?? '';
+            $hora = $_GET['hora'] ?? '';
+            
+            error_log("Verificando disponibilidad para fecha: $fecha, hora: $hora");
+            
+            if(empty($fecha) || empty($hora)) {
+                throw new \Exception('Fecha y hora son requeridas');
+            }
+            
+            $disponible = Cita::verificarDisponibilidad($fecha, $hora);
+            
+            echo json_encode([
+                'disponible' => $disponible,
+                'mensaje' => $disponible ? 'Horario disponible' : 'Este horario ya está reservado'
+            ]);
+            
+        } catch (\Exception $e) {
+            error_log("Error en verificarDisponibilidad: " . $e->getMessage());
+            echo json_encode([
+                'disponible' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 }

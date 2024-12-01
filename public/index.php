@@ -48,6 +48,7 @@ $router->get('/comprobante', [CitaController::class, 'comprobante']);
 $router->get('/api/servicios', [APIController::class, 'index']);
 $router->post('/api/citas', [APIController::class, 'guardar']);
 $router->post('/api/eliminar', [APIController::class, 'eliminar']);
+$router->get('/api/disponibilidad', [APIController::class, 'verificarDisponibilidad']);
 
 // API de PayPal
 $router->post('/api/orders', [APIController::class, 'createOrder']);

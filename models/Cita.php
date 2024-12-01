@@ -24,4 +24,13 @@ class Cita extends ActiveRecord {
         $this->pago = $args['pago'] ?? '';
         $this->estado = $args['estado'] ?? '';
     }
+
+    public static function verificarDisponibilidad($fecha, $hora) {
+        $query = "SELECT id FROM " . static::$tabla . 
+                " WHERE fecha = '" . s($fecha) . "' AND hora = '" . s($hora) . "'" .
+                " AND (estado = 'confirmada' OR estado = 'pendiente')";
+        
+        $resultado = static::SQL($query);
+        return empty($resultado);
+    }
 }

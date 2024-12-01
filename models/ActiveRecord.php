@@ -143,4 +143,18 @@ class ActiveRecord {
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
+
+    public static function SQL($query) {
+        $resultado = self::$db->query($query);
+        
+        $array = [];
+        if($resultado) {
+            while($registro = $resultado->fetch_assoc()) {
+                $array[] = $registro;
+            }
+            $resultado->free();
+        }
+        
+        return $array;
+    }
 }

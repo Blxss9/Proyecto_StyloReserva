@@ -164,18 +164,19 @@ function mostrarSeccion() {
         // Resetear clases
         boton.classList.remove('bg-blue-600', 'text-white', 'bg-gray-200', 'text-gray-400');
         
-        // Solo colorear el botón del paso actual
-        if (pasoBoton === paso) {
+        // Colorear los botones completados y el actual
+        if (pasoBoton <= paso) {
             boton.classList.add('bg-blue-600', 'text-white');
         } else {
             boton.classList.add('bg-gray-200', 'text-gray-400');
         }
     });
     
-    // Actualizar la barra de progreso con animación suave
+    // Actualizar la barra de progreso
     const progreso = document.querySelector('#progress');
     if(progreso) {
-        progreso.style.width = `${((paso - 1) / (pasoFinal - 1)) * 100}%`;
+        const porcentaje = ((paso) / pasoFinal) * 100;
+        progreso.style.width = `${porcentaje}%`;
     }
 }
 

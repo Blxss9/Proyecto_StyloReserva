@@ -23,39 +23,52 @@
                 <div class="flex justify-between relative">
                     <!-- Línea de conexión entre pasos -->
                     <div class="absolute top-6 left-0 right-0 h-1 bg-gray-200">
-                        <div id="progress" class="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-500 rounded-full"></div>
+                        <div id="progress" class="h-full bg-blue-600 transition-all duration-500 rounded-full" 
+                             style="width: 0%"></div>
                     </div>
                     
                     <!-- Paso 1 -->
                     <div class="w-1/4 text-center relative z-10">
-                        <button data-paso="1" class="step-button w-12 h-12 rounded-full bg-blue-600 text-gray-400 font-bold mb-3 mx-auto transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                        <button data-paso="1" 
+                                class="step-button w-12 h-12 rounded-full bg-blue-600 text-white font-bold mb-3 mx-auto 
+                                       transform hover:scale-105 transition-all duration-300 shadow-md 
+                                       flex items-center justify-center">
                             <span>1</span>
                         </button>
-                        <span class="text-sm font-medium text-gray-400">Servicios</span>
+                        <span class="text-sm font-medium text-gray-600">Servicios</span>
                     </div>
 
                     <!-- Paso 2 -->
                     <div class="w-1/4 text-center relative z-10">
-                        <button data-paso="2" class="step-button w-12 h-12 rounded-full bg-gray-200 text-gray-400 font-bold mb-3 mx-auto transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                        <button data-paso="2" 
+                                class="step-button w-12 h-12 rounded-full bg-gray-200 text-gray-400 font-bold mb-3 mx-auto 
+                                       transform hover:scale-105 transition-all duration-300 shadow-md 
+                                       flex items-center justify-center">
                             <span>2</span>
                         </button>
-                        <span class="text-sm font-medium text-gray-400">Fecha y Hora</span>
+                        <span class="text-sm font-medium text-gray-600">Fecha y Hora</span>
                     </div>
 
                     <!-- Paso 3 -->
                     <div class="w-1/4 text-center relative z-10">
-                        <button data-paso="3" class="step-button w-12 h-12 rounded-full bg-gray-200 text-gray-400 font-bold mb-3 mx-auto transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                        <button data-paso="3" 
+                                class="step-button w-12 h-12 rounded-full bg-gray-200 text-gray-400 font-bold mb-3 mx-auto 
+                                       transform hover:scale-105 transition-all duration-300 shadow-md 
+                                       flex items-center justify-center">
                             <span>3</span>
                         </button>
-                        <span class="text-sm font-medium text-gray-400">Resumen</span>
+                        <span class="text-sm font-medium text-gray-600">Resumen</span>
                     </div>
 
                     <!-- Paso 4 -->
                     <div class="w-1/4 text-center relative z-10">
-                        <button data-paso="4" class="step-button w-12 h-12 rounded-full bg-gray-200 text-gray-400 font-bold mb-3 mx-auto transform hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
+                        <button data-paso="4" 
+                                class="step-button w-12 h-12 rounded-full bg-gray-200 text-gray-400 font-bold mb-3 mx-auto 
+                                       transform hover:scale-105 transition-all duration-300 shadow-md 
+                                       flex items-center justify-center">
                             <span>4</span>
                         </button>
-                        <span class="text-sm font-medium text-gray-400">Pago</span>
+                        <span class="text-sm font-medium text-gray-600">Pago</span>
                     </div>
                 </div>
             </div>

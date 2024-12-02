@@ -10,7 +10,7 @@
           <img src="/build/img/logo.svg" alt="logo_barberia" class="h-20">
           </a>
 
-          <span class="ml-2 text-white text-xl font-bold">Stylo Reserva</span>
+          <span class="ml-2 text-white text-xl font-bold">Elite Barbershop</span>
         </div>
 
         <!-- Desktop Menu -->
@@ -104,7 +104,7 @@
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Horarios de Atención</h2>
                 <ul class="text-gray-700">
                     <li>Lunes a Viernes: 9:00 AM - 8:00 PM</li>
-                    <li>Sábado: 9:00 AM - 6:00 PM</li>
+                    <li>Sábado: Cerrado</li>
                     <li>Domingo: Cerrado</li>
                 </ul>
                 <button id="closeModal" class="mt-6 bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600 transition-colors">Cerrar</button>
@@ -159,211 +159,271 @@
         </div>
       
 
-        <!-- Sección de Servicios -->
-<section id="seccionServicios"  class="py-24 mt-64 bg-white w-full rounded-lg">
-    <div class="container mx-auto px-8 sm:px-10 lg:px-16">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-amber-500 mb-4">Nuestros Servicios</h2>
-            <p class="text-gray-600 text-lg">Conoce los servicios que ofrecemos para tu cuidado personal.</p>
-        </div>
-        <!-- Contenedor del slider con bordes curvos -->
-        <div class="relative overflow-hidden rounded-lg shadow-lg flex justify-center">
-            <div class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory max-w-4xl" id="serviceSlider">
-                <!-- Tarjeta de servicio -->
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
-                    <div class="text-center mb-4">
-                        <i class="fa-solid fa-cut text-amber-500 text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Tratamiento Capilar</h3>
-                    <p class="text-gray-600 text-center">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                </div>
-                <!-- Repite esta estructura para más servicios -->
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
-                    <div class="text-center mb-4">
-                        <i class="fa-solid fa-diamond text-amber-500 text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Coloración Capilar</h3>
-                    <p class="text-gray-600 text-center">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                </div>
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
-                    <div class="text-center mb-4">
-                        <i class="fa-solid fa-diamond text-amber-500 text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Degradados</h3>
-                    <p class="text-gray-600 text-center">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                </div>
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
-                    <div class="text-center mb-4">
-                        <i class="fa-solid fa-diamond text-amber-500 text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Corte barba</h3>
-                    <p class="text-gray-600 text-center">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                </div>
-                <div class="flex-none w-80 bg-gray-100 rounded-lg shadow-lg p-6 m-2 snap-center service-card">
-                    <div class="text-center mb-4">
-                        <i class="fa-solid fa-scissors text-amber-500 text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Corte de Cabello</h3>
-                    <p class="text-gray-600 text-center">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                </div>
-            </div>
-            <!-- Flecha Izquierda -->
-            <button id="prevSlide" class="absolute top-1/2 transform -translate-y-1/2 left-2 bg-gray-200 rounded-full p-2 shadow hover:bg-gray-300">
-                <i class="fa-solid fa-chevron-left text-gray-600"></i>
-            </button>
-            <!-- Flecha Derecha -->
-            <button id="nextSlide" class="absolute top-1/2 transform -translate-y-1/2 right-2 bg-gray-200 rounded-full p-2 shadow hover:bg-gray-300">
-                <i class="fa-solid fa-chevron-right text-gray-600"></i>
-            </button>
-        </div>
-    </div>
-</section>
-
-<!-- Estilos adicionales -->
-<style>
-    #serviceSlider::-webkit-scrollbar {
-        display: none; /* Ocultar la barra de desplazamiento */
-    }
-</style>
-
-<!-- Script para flechas de navegación en bucle -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const slider = document.getElementById('serviceSlider');
-    const serviceCards = document.querySelectorAll('.service-card');
-    const nextButton = document.getElementById('nextSlide');
-    const prevButton = document.getElementById('prevSlide');
-    let currentIndex = 0;
-    const cardWidth = serviceCards[0].offsetWidth + 16; // Ajuste por margen/padding
-
-    // Función para mover el slider
-    function moveSlider(index) {
-        slider.scrollTo({
-            left: index * cardWidth,
-            behavior: 'smooth'
-        });
-    }
-
-    // Navegación con botones
-    nextButton.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % serviceCards.length;
-        moveSlider(currentIndex);
-    });
-
-    prevButton.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + serviceCards.length) % serviceCards.length;
-        moveSlider(currentIndex);
-    });
-
-    // Animación automática
-    setInterval(() => {
-        currentIndex = (currentIndex + 1) % serviceCards.length;
-        moveSlider(currentIndex);
-    }, 3000); // Intervalo de 3 segundos para la animación automática
-});
-
-</script>
+        
 
 
 
 <!-- Sección Nosotros -->
-<section id="seccionNosotros" class="py-24 bg-gray-100 w-full mt-12 rounded-lg shadow-lg">
+<section id="seccionNosotros" class="py-24 bg-gradient-to-br from-gray-900 to-black w-full mt-60 rounded-lg shadow-2xl">
     <div class="container mx-auto px-8 sm:px-10 lg:px-16">
+        <!-- Título de la sección -->
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold text-amber-500 mb-4">Sobre Nosotros</h2>
+            <p class="text-gray-300 text-xl">Tradición y excelencia en barbería desde 1998</p>
+        </div>
+
         <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <!-- Imagen con overlay de video -->
-            <div class="relative w-full h-auto flex justify-center lg:justify-start">
-                <img src="/build/img/barberia2.jpg" alt="Barbería" class="rounded-lg shadow-lg w-3/4 lg:w-full">
+            <!-- Columna de imágenes -->
+            <div class="relative w-full h-auto space-y-4 lg:space-y-8">
+                <!-- Imagen principal -->
+                <div class="relative overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                    <img src="/build/img/barberia2.jpg" alt="Barbería" class="w-full h-auto object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                </div>
+                
+                <!-- Grid de estadísticas -->
+                <div class="grid grid-cols-3 gap-4 mt-8">
+                    <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl text-center transform hover:scale-105 transition-all duration-300">
+                        <span class="text-amber-500 text-3xl font-bold block">25+</span>
+                        <span class="text-gray-300 text-sm">Años de<br>Experiencia</span>
+                    </div>
+                    <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl text-center transform hover:scale-105 transition-all duration-300">
+                        <span class="text-amber-500 text-3xl font-bold block">5000+</span>
+                        <span class="text-gray-300 text-sm">Clientes<br>Satisfechos</span>
+                    </div>
+                    <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl text-center transform hover:scale-105 transition-all duration-300">
+                        <span class="text-amber-500 text-3xl font-bold block">4.9</span>
+                        <span class="text-gray-300 text-sm">Calificación<br>Promedio</span>
+                    </div>
+                </div>
             </div>
-            <!-- Texto -->
-            <div class="flex flex-col justify-center">
-                <h2 class="text-4xl font-bold text-amber-500 mb-6">Sobre Nosotros</h2>
-                <p class="text-gray-600 text-lg mb-8 leading-relaxed">
-                    En Barbería Elite, llevamos 25 años perfeccionando el arte del cuidado masculino. Nuestro compromiso es ofrecer un servicio de excelencia que combine tradición y modernidad, asegurando que cada cliente viva una experiencia única.
-                </p>
-                <a href="#contact" class="bg-amber-500 text-white py-3 px-8 rounded-full font-semibold hover:bg-amber-600 transition-colors">Contáctanos</a>
+
+            <!-- Columna de texto -->
+            <div class="flex flex-col space-y-8">
+                <div class="space-y-6">
+                    <!-- Misión -->
+                    <div class="bg-gray-800/30 backdrop-blur-sm p-6 rounded-xl transform hover:scale-105 transition-all duration-300">
+                        <h3 class="text-2xl font-bold text-amber-500 mb-4 flex items-center">
+                            <i class="fa-solid fa-bullseye mr-3"></i>
+                            Nuestra Misión
+                        </h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Brindar servicios de barbería excepcionales que no solo mejoren la apariencia de nuestros clientes, sino que también eleven su confianza y bienestar personal.
+                        </p>
+                    </div>
+
+                    <!-- Visión -->
+                    <div class="bg-gray-800/30 backdrop-blur-sm p-6 rounded-xl transform hover:scale-105 transition-all duration-300">
+                        <h3 class="text-2xl font-bold text-amber-500 mb-4 flex items-center">
+                            <i class="fa-solid fa-eye mr-3"></i>
+                            Nuestra Visión
+                        </h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Ser reconocidos como la barbería líder en innovación y calidad, estableciendo nuevos estándares en el cuidado personal masculino.
+                        </p>
+                    </div>
+
+                    <!-- Valores -->
+                    <div class="bg-gray-800/30 backdrop-blur-sm p-6 rounded-xl transform hover:scale-105 transition-all duration-300">
+                        <h3 class="text-2xl font-bold text-amber-500 mb-4 flex items-center">
+                            <i class="fa-solid fa-star mr-3"></i>
+                            Nuestros Valores
+                        </h3>
+                        <ul class="text-gray-300 grid grid-cols-2 gap-4">
+                            <li class="flex items-center">
+                                <i class="fa-solid fa-check text-amber-500 mr-2"></i>
+                                Excelencia
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa-solid fa-check text-amber-500 mr-2"></i>
+                                Profesionalismo
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa-solid fa-check text-amber-500 mr-2"></i>
+                                Innovación
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa-solid fa-check text-amber-500 mr-2"></i>
+                                Compromiso
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Botón de acción -->
+                <div class="text-center lg:text-left">
+                    <a href="#seccionContacto" 
+                       class="inline-flex items-center px-8 py-3 bg-amber-500 text-black rounded-full font-semibold hover:bg-amber-400 transition-colors duration-300 transform hover:scale-105">
+                        <i class="fa-solid fa-calendar-check mr-2"></i>
+                        Agenda tu Cita
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-
+<!-- Script para animaciones -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const seccionNosotros = document.getElementById('seccionNosotros');
-        
-        const observer = new IntersectionObserver(entries => {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                  seccionNosotros.classList.remove('opacity-0', 'translate-y-10');
-                  seccionNosotros.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
                 }
             });
         }, {
-            threshold: 0.1 // Se activa cuando el 10% de la sección es visible
+            threshold: 0.1
         });
 
-        observer.observe(seccionNosotros);
+        // Observar todos los elementos animables
+        document.querySelectorAll('#seccionNosotros .transform').forEach(el => {
+            el.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700');
+            observer.observe(el);
+        });
     });
 </script>
 
 <!-- Sección de Precios -->
-<section id="seccionPrecios" class="py-24 bg-white rounded-lg mt-12">
+<section id="seccionPrecios" class="py-24 bg-gradient-to-br from-gray-900 to-black rounded-lg mt-12">
     <div class="container mx-auto px-8 sm:px-10 lg:px-16 text-center">
-        <h2 class="text-4xl font-bold text-amber-600 mb-4">Nuestros Precios</h2>
-        <p class="text-gray-600 text-lg mb-12">Descubre nuestros servicios y tarifas exclusivas para ...</p>
+        <h2 class="text-5xl font-bold text-amber-500 mb-4 opacity-0 transform translate-y-4 transition-all duration-700" data-animate>Nuestros Precios</h2>
+        <p class="text-gray-300 text-xl mb-16 opacity-0 transform translate-y-4 transition-all duration-700 delay-100" data-animate>Descubre nuestros servicios premium diseñados para ti</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Tarjeta de Servicio 1 -->
-            <div class="relative rounded-lg shadow-lg overflow-hidden bg-cover bg-center p-6" style="background-image: url('/build/img/hair-wash.jpg');">
-                <div class="absolute inset-0 bg-black opacity-70"></div>
-                <div class="relative z-10 text-center text-white">
-                    <h3 class="text-3xl font-bold mb-4">Lavado de Cabello</h3>
-                    <hr class="border-gray-500 mb-4">
-                    <ul class="space-y-2 mb-6">
-                        <li id="precioLavado1" class="flex justify-between"><span>Lavado Básico</span><span>$10</span></li>
-                        <li id="precioLavado2" class="flex justify-between"><span>Lavado y Masaje</span><span>$15</span></li>
-                        <li id="precioLavado3" class="flex justify-between"><span>Hidratante </span><span>$20</span></li>
-                        <li id="precioLavado4" class="flex justify-between"><span>Lavado y Estilo</span><span>$18</span></li>
-                    </ul>
-                    <a href="/login" class="bg-amber-600 text-black px-6 py-2 rounded-full font-semibold hover:bg-amber-700 transition-colors">Agendar Cita</a>
+            <div class="relative group opacity-0 transform translate-y-8 transition-all duration-700 delay-200 hover:-translate-y-2" data-animate>
+                <div class="absolute inset-0 bg-amber-500 rounded-lg blur opacity-0 group-hover:opacity-40 transition-all duration-500"></div>
+                <div class="relative rounded-lg overflow-hidden backdrop-blur-sm bg-black/40 border border-gray-700 group-hover:border-amber-500 transition-all duration-500 ease-out transform">
+                    <div class="p-8">
+                        <div class="h-16 w-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-shower text-2xl text-amber-500"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-6">Lavado de Cabello</h3>
+                        <ul class="space-y-4 mb-8">
+                            <li id="precioLavado1" class="flex justify-between text-gray-300">
+                                <span>Lavado Básico</span>
+                                <span class="font-bold text-amber-500">$10.000</span>
+                            </li>
+                            <li id="precioLavado2" class="flex justify-between text-gray-300">
+                                <span>Lavado y Masaje</span>
+                                <span class="font-bold text-amber-500">$15.000</span>
+                            </li>
+                            <li id="precioLavado3" class="flex justify-between text-gray-300">
+                                <span>Hidratante</span>
+                                <span class="font-bold text-amber-500">$20.000</span>
+                            </li>
+                            <li id="precioLavado4" class="flex justify-between text-gray-300">
+                                <span>Lavado y Estilo</span>
+                                <span class="font-bold text-amber-500">$18.000</span>
+                            </li>
+                        </ul>
+                        <a href="/login" class="inline-flex items-center justify-center w-full px-6 py-3 bg-amber-500 text-black rounded-full font-semibold hover:bg-amber-400 transition-colors group-hover:scale-105 duration-300">
+                            <i class="fas fa-calendar-check mr-2"></i>
+                            Agendar Cita
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- Tarjeta de Servicio 2 -->
-            <div class="relative rounded-lg shadow-lg overflow-hidden bg-cover bg-center p-6" style="background-image: url('/build/img/hair-cutting.jpg');">
-                <div class="absolute inset-0 bg-black opacity-70"></div>
-                <div class="relative z-10 text-center text-white">
-                    <h3 class="text-3xl font-bold mb-4">Corte de Cabello</h3>
-                    <hr class="border-gray-500 mb-4">
-                    <ul class="space-y-2 mb-6">
-                        <li id="precioCorte1" class="flex justify-between"><span>Corte Clásico</span><span>$20</span></li>
-                        <li id="precioCorte2" class="flex justify-between"><span>Corte Moderno</span><span>$25</span></li>
-                        <li id="precioCorte3" class="flex justify-between"><span>Corte con Diseño</span><span>$30</span></li>
-                        <li id="precioCorte4" class="flex justify-between"><span>Recorte y Estilo</span><span>$22</span></li>
-                    </ul>
-                    <a href="/login" class="bg-amber-600 text-black px-6 py-2 rounded-full font-semibold hover:bg-amber-700 transition-colors">Agendar Cita</a>
+            <div class="relative group opacity-0 transform translate-y-8 transition-all duration-700 delay-300 hover:-translate-y-2" data-animate>
+                <div class="absolute inset-0 bg-amber-500 rounded-lg blur opacity-0 group-hover:opacity-40 transition-all duration-500"></div>
+                <div class="relative rounded-lg overflow-hidden backdrop-blur-sm bg-black/40 border border-gray-700 group-hover:border-amber-500 transition-all duration-500 ease-out transform">
+                    <div class="absolute top-0 right-0 bg-amber-500 text-black px-4 py-1 rounded-bl-lg font-semibold">
+                        Más Popular
+                    </div>
+                    <div class="p-8">
+                        <div class="h-16 w-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-cut text-2xl text-amber-500"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-6">Corte de Cabello</h3>
+                        <ul class="space-y-4 mb-8">
+                            <li id="precioCorte1" class="flex justify-between text-gray-300">
+                                <span>Corte Clásico</span>
+                                <span class="font-bold text-amber-500">$20.000</span>
+                            </li>
+                            <li id="precioCorte2" class="flex justify-between text-gray-300">
+                                <span>Corte Moderno</span>
+                                <span class="font-bold text-amber-500">$25.000</span>
+                            </li>
+                            <li id="precioCorte3" class="flex justify-between text-gray-300">
+                                <span>Corte con Diseño</span>
+                                <span class="font-bold text-amber-500">$30.000</span>
+                            </li>
+                            <li id="precioCorte4" class="flex justify-between text-gray-300">
+                                <span>Recorte y Estilo</span>
+                                <span class="font-bold text-amber-500">$22.000</span>
+                            </li>
+                        </ul>
+                        <a href="/login" class="inline-flex items-center justify-center w-full px-6 py-3 bg-amber-500 text-black rounded-full font-semibold hover:bg-amber-400 transition-colors group-hover:scale-105 duration-300">
+                            <i class="fas fa-calendar-check mr-2"></i>
+                            Agendar Cita
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- Tarjeta de Servicio 3 -->
-            <div class="relative rounded-lg shadow-lg overflow-hidden bg-cover bg-center p-6" style="background-image: url('/build/img/hair-trimming.jpg');">
-                <div class="absolute inset-0 bg-black opacity-70"></div>
-                <div class="relative z-10 text-center text-white">
-                    <h3 class="text-3xl font-bold mb-4">Recorte de Barba</h3>
-                    <hr class="border-gray-500 mb-4">
-                    <ul class="space-y-2 mb-6">
-                        <li id="precioBarba1" class="flex justify-between"><span>Recorte Básico</span><span>$12</span></li>
-                        <li id="precioBarba2" class="flex justify-between"><span>Recorte Full</span><span>$15</span></li>
-                        <li id="precioBarba3" class="flex justify-between"><span>Afeitado Clásico</span><span>$18</span></li>
-                        <li id="precioBarba4" class="flex justify-between"><span>Estilo de Barba</span><span>$20</span></li>
-                    </ul>
-                    <a href="/login" class="bg-amber-600 text-black px-6 py-2 rounded-full font-semibold hover:bg-amber-700 transition-colors">Agendar Cita</a>
+            <div class="relative group opacity-0 transform translate-y-8 transition-all duration-700 delay-400 hover:-translate-y-2" data-animate>
+                <div class="absolute inset-0 bg-amber-500 rounded-lg blur opacity-0 group-hover:opacity-40 transition-all duration-500"></div>
+                <div class="relative rounded-lg overflow-hidden backdrop-blur-sm bg-black/40 border border-gray-700 group-hover:border-amber-500 transition-all duration-500 ease-out transform">
+                    <div class="p-8">
+                        <div class="h-16 w-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-wand-magic-sparkles text-2xl text-amber-500"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-6">Recorte de Barba</h3>
+                        <ul class="space-y-4 mb-8">
+                            <li id="precioBarba1" class="flex justify-between text-gray-300">
+                                <span>Recorte Básico</span>
+                                <span class="font-bold text-amber-500">$12.000</span>
+                            </li>
+                            <li id="precioBarba2" class="flex justify-between text-gray-300">
+                                <span>Recorte Full</span>
+                                <span class="font-bold text-amber-500">$15.000</span>
+                            </li>
+                            <li id="precioBarba3" class="flex justify-between text-gray-300">
+                                <span>Afeitado Clásico</span>
+                                <span class="font-bold text-amber-500">$18.000</span>
+                            </li>
+                            <li id="precioBarba4" class="flex justify-between text-gray-300">
+                                <span>Estilo de Barba</span>
+                                <span class="font-bold text-amber-500">$20.000</span>
+                            </li>
+                        </ul>
+                        <a href="/login" class="inline-flex items-center justify-center w-full px-6 py-3 bg-amber-500 text-black rounded-full font-semibold hover:bg-amber-400 transition-colors group-hover:scale-105 duration-300">
+                            <i class="fas fa-calendar-check mr-2"></i>
+                            Agendar Cita
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+<!-- Script para las animaciones -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.remove('opacity-0', 'translate-y-4', 'translate-y-8');
+                entry.target.classList.add('opacity-100', 'translate-y-0');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    // Observar todos los elementos con data-animate
+    document.querySelectorAll('[data-animate]').forEach(element => {
+        observer.observe(element);
+    });
+});
+</script>
 
 <!-- Sección de Testimonios -->
 <section id="testimonials" class="py-24 bg-gray-900 text-white mt-12 rounded-lg">
@@ -464,7 +524,7 @@
         <div class="lg:col-span-2">
             <div class="flex items-center mb-6">
                 <img src="/build/img/logo.svg" alt="logo_barberia" class="h-12">
-                <span class="ml-3 text-2xl font-bold text-amber-500">StyloReserva</span>
+                <span class="ml-3 text-2xl font-bold text-amber-500">Elite Barbershop</span>
             </div>
             <p class="text-gray-400 mb-6">
                 Expertos en el arte del cuidado masculino. Ofrecemos servicios de primera calidad para que luzcas tu mejor versión.
@@ -542,7 +602,7 @@
     <!-- Línea divisoria -->
     <div class="max-w-7xl mx-auto border-t border-gray-800 mt-12 pt-8">
         <p class="text-center text-gray-400 text-sm">
-            © 2024 StyloReserva. Todos los derechos reservados.
+            © 2024 Elite Barbershop. Todos los derechos reservados.
         </p>
     </div>
   </footer>

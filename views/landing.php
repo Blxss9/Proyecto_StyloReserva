@@ -44,8 +44,9 @@
 
   <div class="relative min-h-screen">
     <!-- Background Image with Overlay -->
-    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat object-cover" style="background-image: url('/build/img/barberia1.jpg');">
-      <div class="absolute inset-0 bg-black/60"></div>
+    <div class="fixed inset-0 w-full h-full">
+        <img src="/build/img/barberia1.jpg" alt="Fondo barbería" class="absolute inset-0 w-full h-full object-cover object-center" />
+        <div class="absolute inset-0 bg-black/60"></div>
     </div>
 
     <!-- Content -->

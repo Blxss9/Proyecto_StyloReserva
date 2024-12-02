@@ -1910,6 +1910,11 @@ input[type="range"]::-ms-fill-lower {
      object-fit: cover;
 }
 
+.object-center {
+  -o-object-position: center;
+     object-position: center;
+}
+
 .p-2 {
   padding: 0.5rem;
 }

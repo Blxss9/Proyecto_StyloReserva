@@ -1,15 +1,36 @@
-<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8">
+<div class="min-h-screen py-8">
     <div class="max-w-4xl mx-auto px-4">
-        <h1 class="text-4xl font-bold text-center mb-0 text-gray-800 animate-fade-in" value="<?php echo $nombre; ?>">
+        <h1 class="text-4xl font-bold text-center mb-0 text-white animate-fade-in" value="<?php echo $nombre; ?>">
             ¡Bienvenido <?php echo $nombre; ?>!
         </h1>
-        <h2 class="text-2xl font-medium text-center text-gray-600 mb-12 mt-2">
+        <h2 class="text-2xl font-medium text-center text-white mb-12 mt-2">
             Sigue los pasos para agendar tu cita
         </h2>
         
+        <!-- Botón Volver -->
+        <a href="/"
+            class="absolute top-4 left-4 bg-gradient-to-r from-blue-500 to-blue-600 
+                   text-white text-sm md:text-base font-semibold py-1.5 md:py-2 px-3 md:px-4 rounded-lg 
+                   shadow-md flex items-center gap-1.5 md:gap-2">
+            <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span class="hidden sm:inline">Volver</span>
+            <span class="sm:hidden">←</span>
+        </a>
+
+        <!-- Botón Cerrar Sesión -->
         <a href="/logout"
-            class="absolute top-4 right-4 bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform hover:-translate-y-1 hover:scale-110 hover:bg-red-700 focus:ring focus:ring-red-300 focus:outline-none">
-            Cerrar Sesión
+            class="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-red-600 
+                   text-white text-sm md:text-base font-semibold py-1.5 md:py-2 px-3 md:px-4 rounded-lg 
+                   shadow-md flex items-center gap-1.5 md:gap-2">
+            <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span class="hidden sm:inline">Cerrar Sesión</span>
+            <span class="sm:hidden">Salir</span>
         </a>
 
 
@@ -35,7 +56,7 @@
                                        flex items-center justify-center">
                             <span>1</span>
                         </button>
-                        <span class="text-sm font-medium text-gray-600">Servicios</span>
+                        <span class="text-sm font-medium text-white">Servicios</span>
                     </div>
 
                     <!-- Paso 2 -->
@@ -46,7 +67,7 @@
                                        flex items-center justify-center">
                             <span>2</span>
                         </button>
-                        <span class="text-sm font-medium text-gray-600">Fecha y Hora</span>
+                        <span class="text-sm font-medium text-white">Fecha y Hora</span>
                     </div>
 
                     <!-- Paso 3 -->
@@ -57,7 +78,7 @@
                                        flex items-center justify-center">
                             <span>3</span>
                         </button>
-                        <span class="text-sm font-medium text-gray-600">Resumen</span>
+                        <span class="text-sm font-medium text-white">Resumen</span>
                     </div>
 
                     <!-- Paso 4 -->
@@ -68,7 +89,7 @@
                                        flex items-center justify-center">
                             <span>4</span>
                         </button>
-                        <span class="text-sm font-medium text-gray-600">Pago</span>
+                        <span class="text-sm font-medium text-white">Pago</span>
                     </div>
                 </div>
             </div>

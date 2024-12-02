@@ -436,61 +436,205 @@ document.addEventListener('DOMContentLoaded', function() {
         <!-- Contenedor del carrusel -->
         <div class="relative overflow-hidden rounded-lg shadow-lg">
             <div id="testimonialSlider" class="flex overflow-hidden scroll-smooth snap-x snap-mandatory">
-                <!-- Tarjeta de testimonio -->
-                <div class="flex-none w-full md:w-1/3 bg-gray-800 rounded-lg p-6 mx-2 snap-center testimonial-card">
-                    <p class="text-gray-300 italic mb-4">"El mejor servicio que he recibido. Definitivamente volveré. El personal es muy profesional y atento."</p>
-                    <h3 class="text-lg font-bold text-amber-500">John Doe</h3>
-                </div>
-                <div class="flex-none w-full md:w-1/3 bg-gray-800 rounded-lg p-6 mx-2 snap-center testimonial-card">
-                    <p class="text-gray-300 italic mb-4">"Excelente ambiente y atención al detalle. Recomendado para cualquiera que busque un cambio de estilo."</p>
-                    <h3 class="text-lg font-bold text-amber-500">Jane Smith</h3>
-                </div>
-                <div class="flex-none w-full md:w-1/3 bg-gray-800 rounded-lg p-6 mx-2 snap-center testimonial-card">
-                    <p class="text-gray-300 italic mb-4">"Un lugar increíble, el servicio es de primera y los resultados siempre superan mis expectativas."</p>
-                    <h3 class="text-lg font-bold text-amber-500">Alex Brown</h3>
-                </div>
-                <div class="flex-none w-full md:w-1/3 bg-gray-800 rounded-lg p-6 mx-2 snap-center testimonial-card">
-                    <p class="text-gray-300 italic mb-4">"Un lugar increíble, el servicio es de primera y los resultados siempre superan mis expectativas."</p>
-                    <h3 class="text-lg font-bold text-amber-500">Nicola Montero</h3>
-                </div>
+                <!-- Los testimonios se cargarán dinámicamente aquí -->
             </div>
         </div>
+
+        <!-- Formulario de Testimonios -->
+        <?php if(isset($_SESSION['login'])) : ?>
+            <div class="max-w-2xl mx-auto mt-16 bg-gray-800 p-8 rounded-lg shadow-xl">
+                <h3 class="text-2xl font-bold text-amber-500 mb-6">Deja tu Testimonio</h3>
+                
+                <form id="testimonioForm" class="space-y-6">
+                    <div>
+                        <label for="contenido" class="block text-gray-300 mb-2">Tu Experiencia</label>
+                        <textarea 
+                            id="contenido" 
+                            name="contenido" 
+                            rows="4" 
+                            class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:outline-none focus:border-amber-500"
+                            placeholder="Cuéntanos tu experiencia..."
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-300 mb-2">Calificación</label>
+                        <div class="flex space-x-2">
+                            <?php for($i = 1; $i <= 5; $i++) : ?>
+                                <button 
+                                    type="button"
+                                    class="estrella text-gray-400 text-2xl hover:text-amber-500 transition-colors"
+                                    data-valor="<?php echo $i; ?>"
+                                >★</button>
+                            <?php endfor; ?>
+                        </div>
+                        <input type="hidden" id="calificacion" name="calificacion" value="">
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        class="w-full bg-amber-500 text-black py-3 px-6 rounded-lg font-bold hover:bg-amber-400 transition-colors"
+                    >
+                        Enviar Testimonio
+                    </button>
+                </form>
+            </div>
+        <?php else : ?>
+            <div class="text-center mt-16">
+                <p class="text-gray-400">
+                    ¿Quieres compartir tu experiencia? 
+                    <a href="/login?redirect=/#testimonials" class="text-amber-500 hover:text-amber-400">Inicia sesión</a>
+                </p>
+            </div>
+        <?php endif; ?>
     </div>
 </section>
 
-<!-- JavaScript para animación del carrusel -->
+<!-- Script para las estrellas del formulario -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const slider = document.getElementById('testimonialSlider');
-    const testimonialCards = document.querySelectorAll('.testimonial-card');
-    const cardWidth = testimonialCards[0].offsetWidth + 16; // Ajuste por margen/padding
-    let currentPosition = 0;
+document.addEventListener('DOMContentLoaded', function() {
+    const estrellas = document.querySelectorAll('.estrella');
+    const calificacionInput = document.getElementById('calificacion');
 
-    // Clonar los elementos para crear la ilusión de bucle infinito
-    testimonialCards.forEach(card => {
-        const clone = card.cloneNode(true);
-        slider.appendChild(clone);
+    estrellas.forEach(estrella => {
+        estrella.addEventListener('click', function() {
+            const valor = this.dataset.valor;
+            calificacionInput.value = valor;
+
+            // Actualizar visualización de estrellas
+            estrellas.forEach(e => {
+                const valorEstrella = e.dataset.valor;
+                if (valorEstrella <= valor) {
+                    e.classList.remove('text-gray-400');
+                    e.classList.add('text-amber-500');
+                } else {
+                    e.classList.remove('text-amber-500');
+                    e.classList.add('text-gray-400');
+                }
+            });
+        });
     });
+});
+</script>
 
-    // Función para mover el carrusel de manera continua
+<!-- Script para cargar y mostrar testimonios -->
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+    const slider = document.getElementById('testimonialSlider');
+    
+    // Función para cargar testimonios
+    async function cargarTestimonios() {
+        try {
+            const response = await fetch('/api/testimonios');
+            const testimonios = await response.json();
+            
+            // Limpiar slider
+            slider.innerHTML = '';
+            
+            // Agregar testimonios
+            testimonios.forEach(testimonio => {
+                const card = document.createElement('div');
+                card.className = 'flex-none w-full md:w-1/3 bg-gray-800 rounded-lg p-6 mx-2 snap-center testimonial-card';
+                
+                // Crear estrellas basadas en la calificación
+                const estrellas = '★'.repeat(testimonio.calificacion) + '☆'.repeat(5 - testimonio.calificacion);
+                
+                card.innerHTML = `
+                    <div class="text-amber-500 mb-2">${estrellas}</div>
+                    <p class="text-gray-300 italic mb-4">"${testimonio.contenido}"</p>
+                    <h3 class="text-lg font-bold text-amber-500">${testimonio.nombre} ${testimonio.apellido}</h3>
+                    <p class="text-sm text-gray-400">${new Date(testimonio.fecha_creacion).toLocaleDateString()}</p>
+                `;
+                
+                slider.appendChild(card);
+            });
+
+            // Clonar los primeros elementos para el carrusel infinito
+            const cards = document.querySelectorAll('.testimonial-card');
+            cards.forEach(card => {
+                const clone = card.cloneNode(true);
+                slider.appendChild(clone);
+            });
+
+        } catch (error) {
+            console.error('Error al cargar testimonios:', error);
+        }
+    }
+
+    // Cargar testimonios iniciales
+    await cargarTestimonios();
+
+    // Actualizar testimonios cuando se envía uno nuevo
+    if(document.getElementById('testimonioForm')) {
+        document.getElementById('testimonioForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const datos = {
+                contenido: document.getElementById('contenido').value,
+                calificacion: document.getElementById('calificacion').value
+            };
+
+            try {
+                const response = await fetch('/api/testimonios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+
+                const resultado = await response.json();
+
+                if(resultado.tipo === 'exito') {
+                    // Limpiar formulario
+                    this.reset();
+                    document.querySelectorAll('.estrella').forEach(e => {
+                        e.classList.remove('text-amber-500');
+                        e.classList.add('text-gray-400');
+                    });
+                    
+                    // Recargar testimonios
+                    await cargarTestimonios();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Gracias!',
+                        text: 'Tu testimonio ha sido guardado correctamente'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: resultado.mensaje
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un error al enviar el testimonio'
+                });
+            }
+        });
+    }
+
+    // Animación del carrusel
+    let currentPosition = 0;
     function animateSlider() {
-        currentPosition += 0.8; // Velocidad de desplazamiento, ajustable
+        currentPosition += 0.8;
         slider.scrollLeft = currentPosition;
 
-        // Clonar el primer elemento al final si se alcanza el último clon visible
-        if (currentPosition >= slider.scrollWidth - slider.offsetWidth) {
-            currentPosition = 0; // Reiniciar la posición al principio para mantener el desplazamiento continuo
+        if (currentPosition >= slider.scrollWidth / 2) {
+            currentPosition = 0;
         }
 
         requestAnimationFrame(animateSlider);
     }
 
-    // Iniciar la animación
     animateSlider();
 });
 </script>
-
-
 
 <!-- Sección de Contacto -->
 <section id="seccionContacto" class="text-gray-900 body-font relative rounded-lg ">

@@ -17,39 +17,50 @@ class LoginController {
 
     public static function login(Router $router) {
         $alertas = [];
-        $auth = new Usuario;
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $auth = new Usuario($_POST);
             $alertas = $auth->validarLogin();
-
-            if (empty($alertas)) {
+            
+            if(empty($alertas)) {
+                // Comprobar que exista el usuario
                 $usuario = Usuario::where('email', $auth->email);
 
-                if ($usuario) {
-                    if ($usuario->comprobarPasswordAndVerificado($auth->password)) {
-                        if (session_status() === PHP_SESSION_NONE) {
-                            session_start();
-                        }
+                if($usuario) {
+                    // Verificar el password
+                    if($usuario->comprobarPasswordAndVerificado($auth->password)) {
+                        // Autenticar el usuario
+                        session_start();
 
                         $_SESSION['id'] = $usuario->id;
                         $_SESSION['nombre'] = $usuario->nombre . " " . $usuario->apellido;
                         $_SESSION['email'] = $usuario->email;
-                        $_SESSION['admin'] = $usuario->admin;
                         $_SESSION['login'] = true;
 
-                        $redirect = $usuario->admin === "1" ? '/admin' : '/cita';
-                        header("Location: $redirect");
-                        exit;
+                        // Redirección
+                        if(isset($_GET['redirect'])) {
+                            header('Location: ' . $_GET['redirect']);
+                        } else {
+                            // Si no hay redirección específica, usar la ruta por defecto
+                            if($usuario->admin === "1") {
+                                $_SESSION['admin'] = $usuario->admin ?? null;
+                                header('Location: /admin');
+                            } else {
+                                header('Location: /cita');
+                            }
+                        }
                     }
+                } else {
+                    Usuario::setAlerta('error', 'Usuario no encontrado');
                 }
-                Usuario::setAlerta('error', 'Usuario o contraseña incorrectos');
             }
         }
 
         $alertas = Usuario::getAlertas();
+        
         $router->render('auth/login', [
-            'alertas' => $alertas
+            'alertas' => $alertas,
+            'redirect' => $_GET['redirect'] ?? null
         ]);
     }
 

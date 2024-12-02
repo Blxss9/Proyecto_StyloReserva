@@ -69,5 +69,7 @@ $router->post('/api/usuarios/eliminar', [APIController::class, 'eliminarUsuario'
 $router->get('/admin', [AdminController::class, 'index']);
 $router->post('/api/citas/estado', [AdminController::class, 'actualizarEstado']);
 
+$router->post('/api/testimonios', [APIController::class, 'guardarTestimonio']);
+$router->get('/api/testimonios', [APIController::class, 'obtenerTestimonios']);
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

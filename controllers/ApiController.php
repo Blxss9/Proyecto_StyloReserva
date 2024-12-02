@@ -7,6 +7,7 @@ use Model\CitaServicio;
 use Model\Servicio;
 use Model\Usuario;
 use Model\ActiveRecord;
+use Model\Testimonio;
 
 class APIController {
     public static function index() {
@@ -517,6 +518,64 @@ class APIController {
             error_log("Error en verificarDisponibilidad: " . $e->getMessage());
             echo json_encode([
                 'disponible' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public static function guardarTestimonio() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $datos = json_decode(file_get_contents('php://input'), true);
+            
+            try {
+                // Verificar que el usuario esté autenticado
+                if(!isset($_SESSION['id'])) {
+                    throw new \Exception('Usuario no autenticado');
+                }
+
+                $testimonio = new Testimonio([
+                    'usuario_id' => $_SESSION['id'],
+                    'contenido' => $datos['contenido'],
+                    'calificacion' => $datos['calificacion']
+                ]);
+
+                // Validar
+                $alertas = $testimonio->validar();
+                
+                if(empty($alertas)) {
+                    $resultado = $testimonio->guardar();
+                    echo json_encode([
+                        'tipo' => 'exito',
+                        'mensaje' => 'Testimonio guardado correctamente'
+                    ]);
+                } else {
+                    echo json_encode([
+                        'tipo' => 'error',
+                        'mensaje' => $alertas['error'][0]
+                    ]);
+                }
+            } catch (\Exception $e) {
+                echo json_encode([
+                    'tipo' => 'error',
+                    'mensaje' => $e->getMessage()
+                ]);
+            }
+        }
+    }
+
+    public static function obtenerTestimonios() {
+        try {
+            $testimonios = Testimonio::SQL("
+                SELECT t.*, u.nombre, u.apellido 
+                FROM testimonios t 
+                INNER JOIN usuarios u ON t.usuario_id = u.id 
+                ORDER BY t.fecha_creacion DESC 
+                LIMIT 10
+            ");
+            
+            echo json_encode($testimonios);
+        } catch (\Exception $e) {
+            echo json_encode([
                 'error' => $e->getMessage()
             ]);
         }

@@ -33,7 +33,7 @@
                 <?php include_once __DIR__ . "/../templates/alertas.php"; ?>
 
                 <!-- Formulario modernizado -->
-                <form id="formLogin" action="/login" method="POST" class="space-y-6">
+                <form id="formLogin" action="/login<?php echo isset($redirect) ? '?redirect=' . $redirect : ''; ?>" method="POST" class="space-y-6">
                     <!-- Campo de Email -->
                     <div class="form-group">
                         <label for="email" class="block text-sm text-gray-400 mb-1">Correo Electrónico</label>

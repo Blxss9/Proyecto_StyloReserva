@@ -253,7 +253,7 @@
 
                 <!-- Botón de acción -->
                 <div class="text-center lg:text-left">
-                    <a href="#seccionContacto" 
+                    <a href="/login" 
                        class="inline-flex items-center px-8 py-3 bg-amber-500 text-black rounded-full font-semibold hover:bg-amber-400 transition-colors duration-300 transform hover:scale-105">
                         <i class="fa-solid fa-calendar-check mr-2"></i>
                         Agenda tu Cita
@@ -637,26 +637,101 @@ document.addEventListener('DOMContentLoaded', async function() {
 </script>
 
 <!-- Sección de Contacto -->
-<section id="seccionContacto" class="text-gray-900 body-font relative rounded-lg ">
-<div class="absolute inset-0 bg-gray-100 rounded-lg" bis_skin_checked="1">
-    <iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="map" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=INACAP+Puente+Alto+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.6);"></iframe>
-  </div>
-  <div class="container px-5 py-24 mx-auto flex mt-12 rounded-lg" bis_skin_checked="1">
-    <div class="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md" bis_skin_checked="1">
-      <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Contactanos!</h2>
-      <p class="leading-relaxed mb-5 text-gray-600">Post-ironic portland shabby chic echo park, banjo fashion axe</p>
-      <div class="relative mb-4" bis_skin_checked="1">
-        <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
-        <input type="email" id="email" name="email" class="w-full bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-      </div>
-      <div class="relative mb-4" bis_skin_checked="1">
-        <label for="message" class="leading-7 text-sm text-gray-600">Mensaje</label>
-        <textarea id="message" name="message" class="w-full bg-white rounded border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
-      </div>
-      <button class="text-white bg-yellow-500 border-0 py-2 px-6 focus:outline-none hover:bg-yellow-600 rounded text-lg">Enviar</button>
-      <p class="text-xs text-gray-500 mt-3">Chicharrones blog helvetica normcore iceland tousled brook viral artisan.</p>
+<section id="seccionContacto" class="py-24 bg-gradient-to-br from-gray-900 to-black relative mt-12 rounded-lg">
+    <div class="container mx-auto px-8">
+        <!-- Encabezado -->
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold text-amber-500 mb-4">Contáctanos</h2>
+            <p class="text-gray-300 text-xl">Estamos aquí para responder tus preguntas</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
+            <!-- Formulario de Contacto -->
+            <div class="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-gray-700 transform hover:scale-[1.02] transition-all duration-300">
+                <h3 class="text-2xl font-bold text-amber-500 mb-6">Envíanos un mensaje</h3>
+                <form class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-300 mb-2">Nombre</label>
+                            <input type="text" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Email</label>
+                            <input type="email" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">Asunto</label>
+                        <input type="text" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2">Mensaje</label>
+                        <textarea rows="4" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition-colors"></textarea>
+                    </div>
+                    <button class="w-full bg-amber-500 text-black py-3 px-6 rounded-lg font-bold hover:bg-amber-400 transition-colors flex items-center justify-center">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        Enviar Mensaje
+                    </button>
+                </form>
+            </div>
+
+            <!-- Información de Contacto -->
+            <div class="space-y-8">
+                <!-- Tarjeta de Ubicación -->
+                <div class="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-gray-700 transform hover:scale-[1.02] transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="bg-amber-500/10 p-4 rounded-full mr-4">
+                            <i class="fas fa-map-marker-alt text-2xl text-amber-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Ubicación</h4>
+                            <p class="text-gray-300">Av. Concha y Toro 2730, 8150215 Puente Alto</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Teléfono -->
+                <div class="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-gray-700 transform hover:scale-[1.02] transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="bg-amber-500/10 p-4 rounded-full mr-4">
+                            <i class="fas fa-phone text-2xl text-amber-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Teléfono</h4>
+                            <p class="text-gray-300">+56 9 8765 4321</p>
+                            <p class="text-gray-300">+56 2 2345 6789</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Email -->
+                <div class="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-gray-700 transform hover:scale-[1.02] transition-all duration-300">
+                    <div class="flex items-start">
+                        <div class="bg-amber-500/10 p-4 rounded-full mr-4">
+                            <i class="fas fa-envelope text-2xl text-amber-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Email</h4>
+                            <p class="text-gray-300">info@elitebarbershop.cl</p>
+                            <p class="text-gray-300">contacto@elitebarbershop.cl</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mapa -->
+                <div class="rounded-xl overflow-hidden h-[300px] border border-gray-700">
+                    <iframe 
+                        src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=INACAP+Puente+Alto&ie=UTF8&t=&z=14&iwloc=B&output=embed" 
+                        width="100%" 
+                        height="100%" 
+                        frameborder="0" 
+                        style="border:0; filter: grayscale(1) contrast(1.2);" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </section>
 
       </div>

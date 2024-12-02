@@ -17,7 +17,7 @@
         <div class="hidden md:block">
           <div class="m-2 flex items-center space-x-8 font-bold">
             <a href="/" class="text-white hover:text-amber-500 transition-colors">Inicio</a>
-            <a href="#seccionServicios" class="text-white hover:text-amber-500 transition-colors">Servicios</a>
+            <a href="#seccionPrecios" class="text-white hover:text-amber-500 transition-colors">Servicios</a>
             <a href="#seccionNosotros" class="text-white hover:text-amber-500 transition-colors">Nosotros</a>
             <a href="#seccionContacto" class="text-white hover:text-amber-500 transition-colors">Contacto</a>
           </div>
@@ -289,8 +289,8 @@
 <!-- Sección de Precios -->
 <section id="seccionPrecios" class="py-24 bg-gradient-to-br from-gray-900 to-black rounded-lg mt-12">
     <div class="container mx-auto px-8 sm:px-10 lg:px-16 text-center">
-        <h2 class="text-5xl font-bold text-amber-500 mb-4 opacity-0 transform translate-y-4 transition-all duration-700" data-animate>Nuestros Precios</h2>
-        <p class="text-gray-300 text-xl mb-16 opacity-0 transform translate-y-4 transition-all duration-700 delay-100" data-animate>Descubre nuestros servicios premium diseñados para ti</p>
+        <h2 class="text-5xl font-bold text-amber-500 mb-4 opacity-0 transform translate-y-4 transition-all duration-700" data-animate>Nuestros Servicios</h2>
+        <p class="text-gray-300 text-xl mb-16 opacity-0 transform translate-y-4 transition-all duration-700 delay-100" data-animate>Descubre nuestros servicios y precios premium diseñados para ti</p>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Tarjeta de Servicio 1 -->

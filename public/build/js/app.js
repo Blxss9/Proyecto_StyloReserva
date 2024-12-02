@@ -361,6 +361,11 @@ function mostrarHorasDisponibles() {
         noche: ['18:20', '19:10']
     };
 
+    // Obtener la fecha seleccionada y la fecha actual
+    const fechaSeleccionada = new Date(cita.fecha + 'T00:00:00');
+    const ahora = new Date();
+    const esHoy = fechaSeleccionada.toDateString() === ahora.toDateString();
+
     // Limpiar contenedores
     ['mañana', 'tarde', 'noche'].forEach(periodo => {
         const contenedor = document.querySelector(`#horas-${periodo}`);
@@ -376,13 +381,20 @@ function mostrarHorasDisponibles() {
             boton.type = 'button';
             boton.classList.add('px-4', 'py-2', 'text-sm', 'border', 'rounded', 'hover:bg-blue-500', 'hover:text-white');
             
-            // Verificar disponibilidad
-            const disponible = await verificarDisponibilidad(cita.fecha, hora);
+            // Verificar si la hora ya pasó (solo si es hoy)
+            const [horaNum, minutos] = hora.split(':');
+            const horaComparar = new Date(fechaSeleccionada);
+            horaComparar.setHours(parseInt(horaNum), parseInt(minutos), 0);
             
-            if (!disponible) {
+            const horaYaPaso = esHoy && horaComparar <= ahora;
+            
+            // Verificar disponibilidad solo si la hora no ha pasado
+            const disponible = !horaYaPaso && await verificarDisponibilidad(cita.fecha, hora);
+            
+            if (!disponible || horaYaPaso) {
                 boton.classList.add('bg-gray-200', 'cursor-not-allowed', 'opacity-50');
                 boton.disabled = true;
-                boton.title = 'Horario no disponible';
+                boton.title = horaYaPaso ? 'Esta hora ya pasó' : 'Horario no disponible';
             }
             
             if(cita.hora === hora) {
@@ -392,7 +404,7 @@ function mostrarHorasDisponibles() {
             boton.textContent = hora;
             
             boton.onclick = function() {
-                if (disponible) {
+                if (disponible && !horaYaPaso) {
                     document.querySelectorAll('button[type="button"]').forEach(btn => {
                         btn.classList.remove('bg-blue-500', 'text-white');
                     });

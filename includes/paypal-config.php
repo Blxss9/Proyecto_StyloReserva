@@ -1,11 +1,9 @@
 <?php
 
-// Credenciales de PayPal
-define('PAYPAL_CLIENT_ID', 'AUa62Zt1gzGinDA6u6Re7QiOwQdI-48mIPbt22UfSM75PfN99LlPkeNGrqNVqCEJHI4y2qRmP8feCMkH');
-define('PAYPAL_CLIENT_SECRET', 'EAVbuyD0UUORvNXHw_QOR0G7mxDN5ulwo7Yn9IfQiQ-p7-aeTfjG8hNt_o-rsHcxS1P7YCwnJ-o2u4mZ');
-
-// URL de la API (usa sandbox para pruebas)
-define('PAYPAL_API_URL', 'https://api-m.sandbox.paypal.com'); // Cambia a https://api-m.paypal.com en producción
+// Credenciales de PayPal desde variables de entorno
+define('PAYPAL_CLIENT_ID', $_ENV['PAYPAL_CLIENT_ID']);
+define('PAYPAL_CLIENT_SECRET', $_ENV['PAYPAL_SECRET_ID']);
+define('PAYPAL_API_URL', $_ENV['PAYPAL_API_URL']);
 
 // Función para obtener el token de acceso
 function getPayPalAccessToken() {

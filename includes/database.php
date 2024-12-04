@@ -1,6 +1,10 @@
 <?php
 
-$db = mysqli_connect('localhost', 'root', '', 'app_styloreserva');
+$db = mysqli_connect($_ENV['DB_HOST'], 
+    $_ENV['DB_USER'], 
+    $_ENV['DB_PASS'], 
+    $_ENV['DB_NAME']
+);
 
 
 if (!$db) {
@@ -9,11 +13,6 @@ if (!$db) {
     echo "error de depuración: " . mysqli_connect_error();
     exit;
 }
-
-
-
-// Conexión a la base de datos
-$db = mysqli_connect('localhost', 'root', '', 'app_styloreserva');
 
 if (!$db) {
     echo "Error: No se pudo conectar a MySQL.";

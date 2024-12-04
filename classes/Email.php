@@ -21,11 +21,11 @@ class Email{
         // Looking to send emails in production? Check out our Email API/SMTP product!
         $mail = new PHPMailer();
         $mail->isSMTP();
-        $mail->Host = 'sandbox.smtp.mailtrap.io';
+        $mail->Host = $_ENV['EMAIL_HOST'];
         $mail->SMTPAuth = true;
-        $mail->Port = 2525;
-        $mail->Username = '40c8d967edec2a';
-        $mail->Password = '7b3ffb2dad7a1a';
+        $mail->Port = $_ENV['EMAIL_PORT'];
+        $mail->Username = $_ENV['EMAIL_USER'];
+        $mail->Password = $_ENV['EMAIL_PASS'];
 
         $mail->setFrom('email@styloreserva.cl');
         $mail->addAddress('email@styloreserva.cl', 'StyloReserva.cl');
@@ -37,7 +37,7 @@ class Email{
 
         $contenido = '<html>';
         $contenido .= "<p><strong>Hola " . $this->nombre . "</strong> Has creado tu cuenta en StyloReserva, debes confirmar tu cuenta en el siguiente enlace</p>";
-        $contenido .= "<p>Presiona aquí: <a href='http://localhost:5000/confirmar-cuenta?token=" . $this->token . "'>Confirmar Cuenta</a></p>";
+        $contenido .= "<p>Presiona aquí: <a href='" . $_ENV['APP_URL'] . "/confirmar-cuenta?token=" . $this->token . "'>Confirmar Cuenta</a></p>";
 
         $contenido .= "<p>Si no has sido tú, ignora este mensaje</p>";
         $contenido .= '</html>';
@@ -53,11 +53,11 @@ class Email{
         // Looking to send emails in production? Check out our Email API/SMTP product!
         $mail = new PHPMailer();
         $mail->isSMTP();
-        $mail->Host = 'sandbox.smtp.mailtrap.io';
+        $mail->Host = $_ENV['EMAIL_HOST'];
         $mail->SMTPAuth = true;
-        $mail->Port = 2525;
-        $mail->Username = '40c8d967edec2a';
-        $mail->Password = '7b3ffb2dad7a1a';
+        $mail->Port = $_ENV['EMAIL_PORT'];
+        $mail->Username = $_ENV['EMAIL_USER'];
+        $mail->Password = $_ENV['EMAIL_PASS'];
 
         $mail->setFrom('email@styloreserva.cl');
         $mail->addAddress('email@styloreserva.cl', 'StyloReserva.cl');
@@ -69,7 +69,7 @@ class Email{
 
         $contenido = '<html>';
         $contenido .= "<p><strong>Hola " . $this->nombre . "</strong> has solicitado reestablecer tu password, sigue el siguiente enlace para hacerlo. </p>";
-        $contenido .= "<p>Presiona aquí: <a href='http://localhost:5000/recuperar?token=" . $this->token . "'>Reestablecer Contraseña</a></p>";
+        $contenido .= "<p>Presiona aquí: <a href='" . $_ENV['APP_URL'] . "/recuperar?token=" . $this->token . "'>Reestablecer Contraseña</a></p>";
 
         $contenido .= "<p>Si tu no solicitaste este cambio, ignora este mensaje</p>";
         $contenido .= '</html>';

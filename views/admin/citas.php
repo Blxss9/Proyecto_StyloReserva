@@ -1,5 +1,5 @@
 <!-- Dashboard Stats Generales -->
-<div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center">
             <div class="p-3 rounded-full bg-purple-100 text-purple-500">
@@ -72,11 +72,11 @@
 </div>
 
 <!-- Filtros y Búsqueda -->
-<div class="bg-white rounded-lg shadow-md p-6 mb-6">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+<div class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-6">
+    <div class="flex flex-col gap-4">
         <!-- Buscador -->
-        <div class="md:w-1/3">
-            <form class="flex gap-2">
+        <div class="w-full">
+            <form class="flex flex-col sm:flex-row gap-2">
                 <input 
                     type="text" 
                     name="buscar" 
@@ -84,22 +84,21 @@
                     placeholder="Buscar Cliente..."
                     value="<?php echo $busqueda; ?>"
                 >
-                <?php if($fecha): ?>
-                    <input type="hidden" name="fecha" value="<?php echo $fecha; ?>">
-                <?php endif; ?>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                    Buscar
-                </button>
-                <?php if($fecha || $busqueda): ?>
-                    <a href="/admin" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
-                        Limpiar
-                    </a>
-                <?php endif; ?>
+                <div class="flex gap-2">
+                    <button type="submit" class="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                        Buscar
+                    </button>
+                    <?php if($fecha || $busqueda): ?>
+                        <a href="/admin" class="w-full sm:w-auto text-center bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
+                            Limpiar
+                        </a>
+                    <?php endif; ?>
+                </div>
             </form>
         </div>
 
         <!-- Selector de fecha -->
-        <div class="md:w-1/3">
+        <div class="w-full">
             <input 
                 type="date" 
                 id="fecha"
@@ -115,7 +114,7 @@
     <?php if(count($citas) === 0) { ?>
         <p class="text-center py-10 text-gray-600">No hay citas para esta fecha</p>
     <?php } else { ?>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
             <?php foreach($citas as $cita) { ?>
                 <div class="border rounded-lg overflow-hidden">
                     <!-- Cabecera de la cita -->

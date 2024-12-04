@@ -1,9 +1,14 @@
 @use 'base/variables' as v;
 
-.citas{
+.citas {
     list-style: none;
     padding: 0;
-    li{
+    
+    @media (max-width: 768px) {
+        margin: 0 1rem;
+    }
+
+    li {
         padding: 1rem;
         border-top: 1px solid v.$blanco;
 
@@ -13,13 +18,13 @@
         }
 
         span,
-        .servicio{
+        .servicio {
             font-weight: v.$regular;
             color: v.$blanco;
         }
-        &:hover{
+
+        &:hover {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
-            
     }
 }

@@ -165,33 +165,45 @@
 
     <div class="max-w-7xl mx-auto px-4">
         <!-- Tabs de Navegación -->
-        <div class="mb-8 border-b border-gray-200">
-            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+        <div class="mb-8 border-b border-gray-200 overflow-x-auto">
+            <nav class="flex min-w-max space-x-4 sm:space-x-8 px-4 sm:px-0" aria-label="Tabs">
                 <button 
-                    class="tab-btn border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm active" 
+                    class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                           hover:text-gray-700 hover:border-gray-300
+                           border-blue-500 text-blue-600 active" 
                     data-tab="citas">
-                    Gestión de Citas
+                    <i class="fas fa-calendar-alt sm:mr-2"></i>
+                    <span class="hidden sm:inline">Gestión de Citas</span>
                 </button>
                 <button 
-                    class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" 
+                    class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                           border-transparent text-gray-500
+                           hover:text-gray-700 hover:border-gray-300" 
                     data-tab="servicios">
-                    Gestión de Servicios
+                    <i class="fas fa-cut sm:mr-2"></i>
+                    <span class="hidden sm:inline">Gestión de Servicios</span>
                 </button>
                 <button 
-                    class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" 
+                    class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                           border-transparent text-gray-500
+                           hover:text-gray-700 hover:border-gray-300" 
                     data-tab="usuarios">
-                    Gestión de Usuarios
+                    <i class="fas fa-users sm:mr-2"></i>
+                    <span class="hidden sm:inline">Gestión de Usuarios</span>
                 </button>
                 <button 
-                    class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" 
+                    class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                           border-transparent text-gray-500
+                           hover:text-gray-700 hover:border-gray-300" 
                     data-tab="estadisticas">
-                    Análisis y Estadísticas
+                    <i class="fas fa-chart-line sm:mr-2"></i>
+                    <span class="hidden sm:inline">Análisis y Estadísticas</span>
                 </button>
             </nav>
         </div>
 
         <!-- Contenido de las Tabs -->
-        <div id="tab-contents">
+        <div id="tab-contents" class="px-4 sm:px-0">
             <!-- Tab Citas -->
             <div class="tab-content" id="citas-tab">
                 <?php include __DIR__ . '/citas.php'; ?>
